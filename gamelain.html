@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Henny+Penny&family=Protest+Revolution&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik+Spray+Paint&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Protest Revolution', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #1e1b4b, #1e3a8a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 380px;
+      padding: 24px;
+    }
+
+    .logo {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 20px;
+      object-fit: contain;
+    }
+
+    h1 {
+      font-size: 50px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px;
+      opacity: 0.85;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.9);
+      color: #1e3a8a;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.3);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- optional logo -->
+    <img src="logo.png" alt="Logo" class="logo">
+
+    <h1>Coming Soon</h1>
+
+    <p>
+      nanti coy, pas sempro gw lanjutin dah
+    </p>
+
+    <button class="btn" onclick="location.href='index.html'">
+      Kembali ke Beranda
+    </button>
+
+  </div>
+
+</body>
+</html>

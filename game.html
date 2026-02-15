@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Haikatalyst Board Game</title>
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+
+<div id="startPopup" class="overlay">
+  <div class="glass popup-card">
+    <h2>Pilih Jumlah Pemain</h2>
+    <select id="playerCount">
+      <option value="2">2 Pemain</option>
+      <option value="3">3 Pemain</option>
+      <option value="4">4 Pemain</option>
+    </select>
+    <button id="startBtn">Mulai</button>
+  </div>
+</div>
+
+<!-- GAME AREA -->
+<div class="game-container"></div>
+  <div id="board"></div>
+
+  <div id="control">
+    <div id="info">Tekan Mulai</div>
+    <div id="dice">🎲</div>
+    <button id="rollBtn" disabled>Roll Dadu</button>
+    <button id="openTutorial">Cara Bermain</button>
+  </div>
+</div>
+
+<div id="instructionPopup" class="overlay hidden">
+  <div class="btn-group">
+    <div class="glass popup-card">
+  <h3>Instruksi Blok</h3>
+  <input id="instructionText" placeholder="Tulis instruksi">
+  <input id="instructionMove" type="number" placeholder="Efek langkah">
+
+      <button id="saveInstruction">Simpan</button>
+      <button id="closeInstruction">Batal</button>
+    </div>
+  </div>
+</div>
+
+<div id="tutorialPopup" class="overlay hidden">
+  <div class="popup-card">
+    <h3>Cara Bermain</h3>
+
+    <ul style="text-align:left; font-size:14px; line-height:1.6;">
+      <li>Tekan Roll Dadu untuk bergerak</li>
+      <li>Pion maju sesuai angka dadu</li>
+      <li>Pemain dapat menambahkan instruksi pada blok mana saja</li>
+      <li>Jika berhenti di blok berinstruksi, jalankan perintahnya</li>
+      <li>Pemain pertama yang mencapai blok terakhir menang</li>
+    </ul>
+
+    <button id="closeTutorial">Tutup</button>
+  </div>
+</div>
+
+<div id="customPopup" class="overlay hidden">
+  <div class="popup-card">
+    <h3 id="popupTitle">Instruksi</h3>
+    <p id="popupMessage"></p>
+    <button id="popupOk">OK</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

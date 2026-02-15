@@ -1,0 +1,8 @@
+14 Februari 2026:
+- buat boardnya jadi ketengah (rapih sih kayaknya)
+- notif popup ketika nginjek blok instruksi udah gak muncul dari atas tapi dari tengah dan designnya gak polos hitam lagi 
+- nambahin button "cara bermain" di game.html
+
+16 Februari 2026:
+- nambahin efek glow setiap pion nginjek blok
+- buat animasi pion jalan ngesot alias udah gak teleport lagi

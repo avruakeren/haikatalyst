@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haikatalyst: website yang isinya banya game</title>
+
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #c6c7f1, #9da2e1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgb(240, 245, 255);
+            text-align: center;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 380px;
+            padding: 24px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 18px;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 36px;
+            font-weight: 600;
+
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            margin: 14px 0;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.35);
+            background: rgba(255,255,255,0.9);
+            color: #1e3a8a;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+
+            transition:
+                transform 0.12s ease-out,
+                box-shadow 0.12s ease-out;
+        }
+
+        .btn.secondary {
+            background: rgba(255,255,255,0.88);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.28);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(29, 32, 122, 0.5);
+        }
+
+        /* POPUP */
+        #overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: 32px;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 380px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 20px;
+            padding: 22px;
+            color: #1e3a8a;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .popup p {
+            font-size: 14.5px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+        <!-- LOGO -->
+        <img src="logo.png" alt="logo terkeren yang pernah ada" class="logo" style="width: 300px; height: 300px;">
+
+        <h1>Haikatalyst Board Game</h1>
+
+        <button class="btn" onclick="location.href='game.html'">
+            Play
+        </button>
+
+        <button class="btn secondary" onclick="openPopup()">
+            Tentang Game
+        </button>
+
+        <button class="btn secondary" onclick="location.href='developer.html'">
+            Profil Pengembang
+        
+        <button class="btn secondary" onclick="location.href='gamelain.html'">
+            Game Lainnya
+        </button>
+        
+    </div>
+
+    <!-- POPUP -->
+    <div id="overlay"></div>
+    <div class="popup" id="popup">
+        <p>
+            Haikatalyst Board Game merupakan permainan papan digital
+            yang dimana pemain bisa menambahkan instruksi di dalamnya sehingga permainan menjadi lebih interaktif dan menarik (harusnya).
+        </p>
+
+        <button class="btn" onclick="closePopup()">
+            Tutup
+        </button>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
