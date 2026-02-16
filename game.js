@@ -9,7 +9,10 @@ const logList = document.getElementById('logList');
 
 const startPopup = document.getElementById('startPopup');
 const startBtn = document.getElementById('startBtn');
-const playerCountSelect = document.getElementById('playerCount');
+const playerSelect = document.getElementById('playerSelect');
+const playerSelectTrigger = document.getElementById('playerSelectTrigger');
+const playerSelectMenu = document.getElementById('playerSelectMenu');
+const playerSelectLabel = document.getElementById('playerSelectLabel');
 
 const instructionPopup = document.getElementById('instructionPopup');
 const instructionText = document.getElementById('instructionText');
@@ -34,7 +37,7 @@ let pendingPlayer = null;
 let pendingMove = 0;
 
 const totalBlocks = 100;
-const colors = ['#ff5d73', '#ffd166', '#06d6a0', '#6ecbff'];
+const colors = ['#ff5d73', '#ffd166', '#06d6a0', '#6ecbff', '#b694ff', '#4d3051', '#ff9f5f'];
 let players = [];
 let currentPlayer = 0;
 let gameFinished = false;
@@ -42,6 +45,50 @@ let gameFinished = false;
 const blockInstructions = {};
 let activeBlock = null;
 let lastActiveBlock = null;
+
+function setupPlayerSelect() {
+  if (!playerSelect || !playerSelectTrigger || !playerSelectMenu || !playerSelectLabel) return;
+
+  const options = [...playerSelectMenu.querySelectorAll('.player-option')];
+
+  const closeMenu = () => {
+    playerSelect.classList.remove('open');
+    playerSelectMenu.classList.add('hidden');
+    playerSelectTrigger.setAttribute('aria-expanded', 'false');
+  };
+
+  const selectValue = (value) => {
+    const activeOption = options.find((option) => option.dataset.value === String(value));
+    if (!activeOption) return;
+
+    options.forEach((option) => {
+      const isSelected = option === activeOption;
+      option.classList.toggle('selected', isSelected);
+      option.setAttribute('aria-selected', String(isSelected));
+    });
+
+    playerSelect.dataset.value = activeOption.dataset.value;
+    playerSelectLabel.textContent = activeOption.textContent;
+    closeMenu();
+  };
+
+  playerSelectTrigger.addEventListener('click', () => {
+    const isOpen = playerSelect.classList.toggle('open');
+    playerSelectMenu.classList.toggle('hidden', !isOpen);
+    playerSelectTrigger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  options.forEach((option) => {
+    option.addEventListener('click', () => selectValue(option.dataset.value));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!playerSelect.contains(event.target)) {
+      closeMenu();
+    }
+  });
+}
+
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -290,7 +337,7 @@ rollBtn.onclick = async () => {
 };
 
 startBtn.onclick = () => {
-  initPlayers(Number(playerCountSelect.value));
+  initPlayers(Number(playerSelect?.dataset.value || 2));
   startPopup.classList.add('hidden');
   rollBtn.disabled = false;
 };
@@ -302,3 +349,4 @@ window.addEventListener('resize', () => {
 });
 
 createBoard();
+setupPlayerSelect();

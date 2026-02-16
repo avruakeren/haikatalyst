@@ -17,12 +17,21 @@
     <div class="popup-card start-card">
       <p class="eyebrow">Game Setup</p>
       <h2>Siap Main?</h2>
-      <p class="subtext">Pilih jumlah pemain lalu mulai pertarungan strategi.</p>
-      <select id="playerCount">
-        <option value="2">2 Pemain</option>
-        <option value="3">3 Pemain</option>
-        <option value="4">4 Pemain</option>
-      </select>
+      <p class="subtext">Pilih jumlah pemain lalu mulai bermain.</p>
+      <div id="playerSelect" class="player-select" data-value="2">
+        <button id="playerSelectTrigger" class="player-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="playerSelectLabel">
+          <span id="playerSelectLabel">2 Pemain</span>
+          <span class="player-select-arrow" aria-hidden="true">▾</span>
+        </button>
+        <ul id="playerSelectMenu" class="player-select-menu hidden" role="listbox" aria-labelledby="playerSelectLabel">
+          <li><button type="button" class="player-option selected" data-value="2" role="option" aria-selected="true">2 Pemain</button></li>
+          <li><button type="button" class="player-option" data-value="3" role="option" aria-selected="false">3 Pemain</button></li>
+          <li><button type="button" class="player-option" data-value="4" role="option" aria-selected="false">4 Pemain</button></li>
+          <li><button type="button" class="player-option" data-value="5" role="option" aria-selected="false">5 Pemain</button></li>
+          <li><button type="button" class="player-option" data-value="6" role="option" aria-selected="false">6 Pemain</button></li>
+          <li><button type="button" class="player-option" data-value="7" role="option" aria-selected="false">7 Pemain</button></li>
+        </ul>
+      </div>
       <button id="startBtn" class="btn primary">Mulai Game</button>
     </div>
   </div>
@@ -35,7 +44,7 @@
           <h1>Board Arena</h1>
         </div>
         <div class="leader-wrap">
-          <span>Leader</span>
+          <span>Pemimpin permainan saat ini:</span>
           <strong id="leaderText">Pemain 1</strong>
         </div>
       </div>
@@ -69,7 +78,7 @@
       </div>
 
       <div class="glass stat-card">
-        <p class="stat-title">Battle Log</p>
+        <p class="stat-title">Log Permainan</p>
         <ul id="logList"></ul>
       </div>
     </aside>
@@ -77,10 +86,10 @@
 
   <div id="instructionPopup" class="overlay hidden">
     <div class="popup-card">
-      <h3>Instruksi Blok</h3>
+      <h3>Blok Instruksi</h3>
       <p class="subtext">Tambahkan efek ketika pemain mendarat di blok ini.</p>
-      <input id="instructionText" placeholder="Contoh: Mundur karena kena jebakan">
-      <input id="instructionMove" type="number" placeholder="Efek langkah (misal -3 / +4)">
+      <input id="instructionText" placeholder="Contoh: Berapakah jika 16 dijumlahkan 7?">
+      <input id="instructionMove" type="number" placeholder="Opsional: Tambahkan langkah (misal: 3 atau -2)">
       <div class="btn-row">
         <button id="saveInstruction" class="btn primary">Simpan</button>
         <button id="closeInstruction" class="btn secondary">Batal</button>
@@ -93,9 +102,8 @@
       <h3>Cara Bermain</h3>
       <ul class="tutorial-list">
         <li>Tekan Roll Dadu untuk bergerak sesuai angka.</li>
-        <li>Klik blok untuk menambahkan instruksi khusus.</li>
-        <li>Jika berhenti di blok berinstruksi, efeknya langsung dijalankan.</li>
-        <li>Gunakan Random Event untuk kejutan tambahan.</li>
+        <li>Klik blok untuk menambahkan instruksi khusus dan efek langkah.</li>
+        <li>Jika berhenti di blok berinstruksi, lakukan instruksinya!</li>
         <li>Pemain pertama yang mencapai blok 100 menang.</li>
       </ul>
       <button id="closeTutorial" class="btn primary">Tutup</button>

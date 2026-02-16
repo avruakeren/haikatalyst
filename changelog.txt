@@ -6,3 +6,18 @@
 16 Februari 2026:
 - nambahin efek glow setiap pion nginjek blok
 - buat animasi pion jalan ngesot alias udah gak teleport lagi
+- papan udah jadi zigzag kayak papan ular tangga
+- rombak ulang developer.html
+- dropdown pas pilih jumlah pemain gak basic lagi
+- rombak ulang halaman game
+- nambahin animasi geter kalo nginjek blok instruksi
+- nambahin animasi serpihan di pion
+- nambahin animasi nyala dikit di pion
+- nambahin animasi dadu alias udah gak angka lagi
+- nambahin log permainan
+- nambahin progres permainan
+- nambahin siapa yang memimpin permainan di pojok kanan papan gamenya (walaupun kayaknya gak penting sih)
+- nambahin hover di bloknya jadi ada efek border warna ungu
+- nambahin efek di blok kalo udah di atur sebagai blok instruksi
+- nambahin ucapan selamat untuk pemenang
+- buat websitenya responsif alias bisa dibuka di device manapuna tanpa kepotong-potong anjim sungguh update yang sangat canggih

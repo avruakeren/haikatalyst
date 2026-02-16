@@ -210,7 +210,7 @@ h1 { margin: 4px 0 0; font-size: 28px; }
   padding: 20px;
 }
 
-start-card {
+.start-card {
   background: linear-gradient(160deg, rgba(18, 28, 60, 0.98), rgba(12, 19, 45, 0.96));
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(130, 157, 255, 0.2);
 }
@@ -228,6 +228,71 @@ input, select {
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.player-select {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.player-select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  border: var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.player-select-trigger:hover,
+.player-select.open .player-select-trigger {
+  border-color: rgba(141, 123, 255, 0.85);
+  box-shadow: 0 0 0 2px rgba(141, 123, 255, 0.2);
+}
+
+.player-select-arrow {
+  color: var(--text-soft);
+  transition: transform .15s ease;
+}
+
+.player-select.open .player-select-arrow {
+  transform: rotate(180deg);
+}
+
+.player-select-menu {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 6px;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  border-radius: 12px;
+  border: var(--line);
+  background: rgba(13, 20, 44, 0.98);
+  backdrop-filter: blur(12px);
+  z-index: 15;
+}
+
+.player-option {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-main);
+  text-align: left;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.player-option:hover,
+.player-option.selected {
+  background: rgba(141, 123, 255, 0.25);
 }
 
 .btn-row { display: flex; gap: 8px; }
