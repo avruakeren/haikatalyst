@@ -22,3 +22,9 @@
 - nambahin ucapan selamat untuk pemenang
 - papan di sebelah board arena bakal ngikutin layar
 - buat websitenya responsif alias bisa dibuka di device manapuna tanpa kepotong-potong anjim sungguh update yang sangat canggih
+
+17 Februari 2026:
+- buat gamenya bakal fit di segala bentuk layar device
+
+18 Februari 2026:
+- buat mode game, ada mode polos dan mode yang bisa generate random blok mundur
