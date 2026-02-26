@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haikatalyst Board Game</title>
-  <link rel="stylesheet" href="game.css">
+  <link rel="stylesheet" href="game-kelas5-mat.css">
 </head>
 <body>
   <div class="ambient" aria-hidden="true">
@@ -32,7 +32,7 @@
           <li><button type="button" class="player-option" data-value="7" role="option" aria-selected="false">7 Pemain</button></li>
         </ul>
       </div>
-       <div class="mode-select" role="group" aria-label="Pilih mode board">
+      <div class="mode-select" role="group" aria-label="Pilih mode board">
         <p class="mode-label">Mode Board</p>
         <div class="mode-options">
           <button type="button" class="mode-option selected" data-mode="plain" aria-pressed="true">
@@ -45,7 +45,24 @@
           </button>
         </div>
       </div>
-      <button id="startBtn" class="btn primary">Mulai Game</button>
+      <div class="setup-actions">
+        <button id="openSetupGuide" class="btn secondary" type="button">Instruksi Bermain</button>
+        <button id="startBtn" class="btn primary" type="button">Mulai Game</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="setupGuidePopup" class="overlay hidden">
+    <div class="popup-card">
+      <h3>Instruksi Bermain</h3>
+      <ul class="tutorial-list">
+        <li>Pilih jumlah pemain dan mode board di halaman setup.</li>
+        <li>Tekan <strong>Mulai Game</strong>, lalu bergantian roll dadu.</li>
+        <li>Klik blok untuk menambahkan instruksi dan efek langkah.</li>
+        <li>Kalau mode Gangguan Acak aktif, hindari blok dengan ikon ⚠.</li>
+        <li>Pemain pertama yang mencapai blok 100 menjadi pemenang.</li>
+      </ul>
+      <button id="closeSetupGuide" class="btn primary" type="button">Tutup</button>
     </div>
   </div>
 
@@ -142,6 +159,6 @@
     </div>
   </div>
 
-  <script src="game.js"></script>
+  <script src="game-kelas5-mat.js"></script>
 </body>
 </html>

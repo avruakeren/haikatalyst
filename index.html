@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Haikatalyst: website yang isinya banya game</title>
 
-    <!-- FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
@@ -28,8 +27,8 @@
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 300px;
+            height: 300px;
             margin: 0 auto 18px;
             object-fit: contain;
         }
@@ -38,7 +37,6 @@
             font-size: 32px;
             margin-bottom: 36px;
             font-weight: 600;
-
         }
 
         .btn {
@@ -55,10 +53,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 12px 20px rgba(0,0,0,0.3);
-
-            transition:
-                transform 0.12s ease-out,
-                box-shadow 0.12s ease-out;
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
         }
 
         .btn.secondary {
@@ -75,7 +70,6 @@
             box-shadow: 0 10px 25px rgba(29, 32, 122, 0.5);
         }
 
-        /* POPUP */
         #overlay {
             display: none;
             position: fixed;
@@ -109,12 +103,11 @@
 <body>
 
     <div class="wrap">
-        <!-- LOGO -->
-        <img src="logo.png" alt="logo terkeren yang pernah ada" class="logo" style="width: 300px; height: 300px;">
+        <img src="logo.png" alt="logo terkeren yang pernah ada" class="logo">
 
         <h1>Haikatalyst Board Game</h1>
 
-        <button class="btn" onclick="location.href='game.html'">
+        <button class="btn" onclick="location.href='jenjang.html'">
             Play
         </button>
 
@@ -124,14 +117,13 @@
 
         <button class="btn secondary" onclick="location.href='developer.html'">
             Profil Pengembang
-        
+        </button>
+
         <button class="btn secondary" onclick="location.href='gamelain.html'">
             Game Lainnya
         </button>
-        
     </div>
 
-    <!-- POPUP -->
     <div id="overlay"></div>
     <div class="popup" id="popup">
         <p>
@@ -157,4 +149,3 @@
     </script>
 
 </body>
-</html>

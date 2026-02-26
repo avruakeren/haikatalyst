@@ -28,6 +28,9 @@ const popupOk = document.getElementById('popupOk');
 const openTutorial = document.getElementById('openTutorial');
 const tutorialPopup = document.getElementById('tutorialPopup');
 const closeTutorial = document.getElementById('closeTutorial');
+const openSetupGuide = document.getElementById('openSetupGuide');
+const setupGuidePopup = document.getElementById('setupGuidePopup');
+const closeSetupGuide = document.getElementById('closeSetupGuide');
 
 const randomBoostBtn = document.getElementById('randomBoost');
 const winPopup = document.getElementById('winPopup');
@@ -208,6 +211,19 @@ saveInstruction.onclick = () => {
 closeInstruction.onclick = () => instructionPopup.classList.add('hidden');
 openTutorial.onclick = () => tutorialPopup.classList.remove('hidden');
 closeTutorial.onclick = () => tutorialPopup.classList.add('hidden');
+
+if (openSetupGuide && setupGuidePopup) {
+  openSetupGuide.onclick = () => setupGuidePopup.classList.remove('hidden');
+}
+
+if (closeSetupGuide && setupGuidePopup) {
+  closeSetupGuide.onclick = () => setupGuidePopup.classList.add('hidden');
+  setupGuidePopup.addEventListener('click', (event) => {
+    if (event.target === setupGuidePopup) {
+      setupGuidePopup.classList.add('hidden');
+    }
+  });
+}
 
 function initPlayers(count) {
   players = [];
@@ -412,6 +428,7 @@ rollBtn.onclick = async () => {
 startBtn.onclick = () => {
   initPlayers(Number(playerSelect?.dataset.value || 2));
   startPopup.classList.add('hidden');
+  setupGuidePopup?.classList.add('hidden');
   rollBtn.disabled = false;
 };
 
