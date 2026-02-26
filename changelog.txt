@@ -28,3 +28,9 @@
 
 18 Februari 2026:
 - buat mode game, ada mode polos dan mode yang bisa generate random blok mundur
+
+26 Februari 2026:
+- setelah klik play dari landing page nantinya akan diarahin ke halaman pilih jenjang kelas yanga nantinya disitu akan pilih materi untuk kelas yang diinginkan
+- mindahin instruksi bermain di game kelas 5 matematika ke game setup pas awal main
+- nambahin game susun kata jadi kalimat untuk kelas 2 bahasa indonesia (yaudah seadanya dulu aja sih)
+- rombak landing page (harusnya bagus pake konsep ginian)

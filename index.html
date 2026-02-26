@@ -1,151 +1,294 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haikatalyst: website yang isinya banya game</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haikatalyst Board Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(140deg, #8392ff, #a86cf1);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(180deg, #c6c7f1, #9da2e1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgb(240, 245, 255);
-            text-align: center;
-        }
+    .bg-circle {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(8px);
+      pointer-events: none;
+      opacity: .45;
+      animation: float 8s ease-in-out infinite;
+    }
 
-        .wrap {
-            width: 100%;
-            max-width: 380px;
-            padding: 24px;
-        }
+    .bg-circle.a {
+      width: 260px;
+      height: 260px;
+      left: -60px;
+      bottom: 50px;
+      background: #ff4fc8;
+    }
 
-        .logo {
-            width: 300px;
-            height: 300px;
-            margin: 0 auto 18px;
-            object-fit: contain;
-        }
+    .bg-circle.b {
+      width: 330px;
+      height: 330px;
+      right: -80px;
+      top: -90px;
+      background: #7de4ff;
+      animation-delay: -2.8s;
+    }
 
-        h1 {
-            font-size: 32px;
-            margin-bottom: 36px;
-            font-weight: 600;
-        }
+    .layout {
+      width: min(1120px, 100%);
+      min-height: min(700px, 95vh);
+      border-radius: 26px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      background: linear-gradient(120deg, #6f2de4 0%, #7b46e7 55%, #f3f4ff 55%, #f3f4ff 100%);
+      box-shadow: 0 24px 42px rgba(28, 16, 88, .34);
+      position: relative;
+    }
 
-        .btn {
-            width: 100%;
-            padding: 18px;
-            margin: 14px 0;
-            font-size: 17px;
-            font-weight: 600;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.35);
-            background: rgba(255,255,255,0.9);
-            color: #1e3a8a;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
-            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
-        }
+    .left {
+      padding: 24px 34px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
 
-        .btn.secondary {
-            background: rgba(255,255,255,0.88);
-        }
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
 
-        .btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 6px 10px rgba(0,0,0,0.28);
-        }
+    .brand {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
 
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(29, 32, 122, 0.5);
-        }
+    .dev-btn {
+      border: 1px solid rgba(255,255,255,.4);
+      background: rgba(255,255,255,.14);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform .18s ease, background .18s ease;
+      white-space: nowrap;
+    }
 
-        #overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-        }
+    .dev-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.22);
+    }
 
-        .popup {
-            display: none;
-            position: fixed;
-            left: 50%;
-            bottom: 32px;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 380px;
-            background: rgba(255,255,255,0.92);
-            border-radius: 20px;
-            padding: 22px;
-            color: #1e3a8a;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
+    .headline {
+      margin: 8px 0 0;
+      font-size: clamp(40px, 6vw, 74px);
+      line-height: .95;
+      letter-spacing: -.03em;
+      font-weight: 900;
+    }
 
-        .popup p {
-            font-size: 14.5px;
-            line-height: 1.6;
-            margin-bottom: 18px;
-        }
-    </style>
+    .headline span { color: #d4cbff; }
+
+    .about {
+      margin: 4px 0 0;
+      max-width: 480px;
+      color: #efeaff;
+      line-height: 1.62;
+      font-weight: 500;
+      font-size: clamp(15px, 2vw, 19px);
+    }
+
+    .action-wrap {
+      margin-top: auto;
+      display: grid;
+      gap: 12px;
+      width: min(320px, 100%);
+    }
+
+    .play-btn {
+      border: 0;
+      background: #ffffff;
+      color: #1f1f3a;
+      border-radius: 999px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      box-shadow: 0 14px 24px rgba(21, 12, 68, .3);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .play-btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 30px rgba(21, 12, 68, .38);
+    }
+
+    .small-link {
+      color: #ece8ff;
+      text-decoration: none;
+      font-weight: 700;
+      width: fit-content;
+      border-bottom: 1px solid rgba(255,255,255,.4);
+    }
+
+    .right {
+      display: grid;
+      place-items: center;
+      position: relative;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .art {
+      width: min(500px, 95%);
+      height: min(560px, 92%);
+      border-radius: 26px;
+      background: linear-gradient(170deg, #ffffff 0%, #f2f4ff 100%);
+      box-shadow: inset 0 0 0 1px rgba(65, 74, 156, .14);
+      position: relative;
+      overflow: hidden;
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    .art::before {
+      content: '';
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -70px;
+      top: 40px;
+      border-radius: 50%;
+      background: #ff4fd6;
+    }
+
+    .art::after {
+      content: '';
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      left: 40px;
+      bottom: 60px;
+      border-radius: 26px;
+      background: linear-gradient(160deg, #5548f4, #ff4a4a);
+      opacity: .9;
+    }
+
+    .hero-image {
+      position: absolute;
+      width: min(620px, 125%);
+      right: -80px;
+      bottom: -60px;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 22px rgba(39, 28, 91, .3));
+      animation: float 8s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+        background: linear-gradient(165deg, #6f2de4 0%, #7b46e7 58%, #f3f4ff 58%, #f3f4ff 100%);
+      }
+
+      .right { min-height: 340px; }
+
+      .art {
+        width: min(420px, 92%);
+        height: 340px;
+      }
+
+      .hero-image {
+        width: min(470px, 120%);
+        right: -40px;
+        bottom: -70px;
+      }
+
+      .headline {
+        font-size: clamp(38px, 10vw, 56px);
+      }
+
+      .action-wrap {
+        margin-top: 8px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .top-row {
+        flex-wrap: wrap;
+      }
+
+      .dev-btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .right { min-height: 300px; }
+
+      .hero-image {
+        width: 115%;
+        right: -20px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <span class="bg-circle a" aria-hidden="true"></span>
+  <span class="bg-circle b" aria-hidden="true"></span>
 
-    <div class="wrap">
-        <img src="logo.png" alt="logo terkeren yang pernah ada" class="logo">
+  <main class="layout">
+    <section class="left">
+      <div class="top-row">
+        <p class="brand">Haikatalyst</p>
+        <a class="dev-btn" href="developer.html">Profil Pengembang</a>
+      </div>
 
-        <h1>Haikatalyst Board Game</h1>
+      <h1 class="headline">Education <span>Mini Games</span></h1>
+      <p class="about">
+        Haikatalyst adalah kumpulan mini game edukasi interaktif dari berbagai jenjang kelas.
+        Pemain bisa belajar sambil bermain, yang bisa diakses kapan saja dan di mana saja. 
+      </p>
 
-        <button class="btn" onclick="location.href='jenjang.html'">
-            Play
-        </button>
+      <div class="action-wrap">
+        <button class="play-btn" onclick="location.href='jenjang.html'">Play</button>
+      </div>
+    </section>
 
-        <button class="btn secondary" onclick="openPopup()">
-            Tentang Game
-        </button>
-
-        <button class="btn secondary" onclick="location.href='developer.html'">
-            Profil Pengembang
-        </button>
-
-        <button class="btn secondary" onclick="location.href='gamelain.html'">
-            Game Lainnya
-        </button>
-    </div>
-
-    <div id="overlay"></div>
-    <div class="popup" id="popup">
-        <p>
-            Haikatalyst Board Game merupakan permainan papan digital
-            yang dimana pemain bisa menambahkan instruksi di dalamnya sehingga permainan menjadi lebih interaktif dan menarik (harusnya).
-        </p>
-
-        <button class="btn" onclick="closePopup()">
-            Tutup
-        </button>
-    </div>
-
-    <script>
-        function openPopup() {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
-        }
-
-        function closePopup() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('popup').style.display = 'none';
-        }
-    </script>
-
+    <section class="right" aria-hidden="true">
+      <div class="art">
+        <img src="orang.png" alt="Ilustrasi karakter baru" class="hero-image">
+      </div>
+    </section>
+  </main>
 </body>
+</html>

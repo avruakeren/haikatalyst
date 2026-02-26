@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelas 2 - Bahasa Indonesia Menyusun Kalimat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="game-kelas2-bindo.css">
+</head>
+<body>
+  <main class="container">
+    <section class="card title">
+      <h1>Kelas 2 - Bahasa Indonesia</h1>
+      <p>Menyusun kalimat pola <strong>SPO</strong> dan <strong>SPOK</strong> dengan drag kata ke area jawaban.</p>
+    </section>
+
+    <section class="card stats">
+      <div class="stat"><small>Level</small><strong id="levelText">1 / 5</strong></div>
+      <div class="stat"><small>Skor</small><strong id="scoreText">0</strong></div>
+      <div class="stat"><small>Nyawa</small><strong id="livesText">3</strong></div>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <div>
+          <div id="patternTarget">Pola: SPO</div>
+          <p class="hint" id="hintText">Hint: susun sesuai pola kalimat.</p>
+        </div>
+        <a class="link" href="jenjang.html">← Kembali pilih kelas</a>
+      </div>
+
+      <div class="drop-zone empty" id="dropZone"></div>
+      <div class="word-bank" id="wordBank"></div>
+
+      <div class="actions">
+        <button class="btn primary" id="checkBtn" type="button">Cek Jawaban</button>
+        <button class="btn secondary" id="resetBtn" type="button">Ulang Susunan</button>
+        <button class="btn warn" id="skipBtn" type="button">Lewati Soal</button>
+      </div>
+
+      <div id="feedback"></div>
+    </section>
+  </main>
+
+  <div class="overlay hidden" id="finishPopup">
+    <div class="popup-card">
+      <h3>Semua Soal Selesai 🎉</h3>
+      <p id="finishMessage"></p>
+      <div class="popup-actions">
+        <button id="playAgainBtn" class="btn primary" type="button">Main Lagi</button>
+        <a href="jenjang.html" class="btn secondary link-btn">Pilih Kelas Lagi</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="game-kelas2-bindo.js"></script>
+</body>
+</html>
