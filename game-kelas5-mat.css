@@ -305,6 +305,65 @@ input, select {
   background: rgba(141, 123, 255, 0.19);
 }
 
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: var(--line);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.toggle-row span {
+  font-size: 13px;
+  font-weight: 700;
+  display: grid;
+  gap: 4px;
+}
+
+.toggle-row small {
+  color: var(--text-soft);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: 46px;
+  height: 26px;
+  margin: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 190, 230, 0.35);
+  background: rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.toggle-row input[type="checkbox"]::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform .2s ease;
+}
+
+.toggle-row input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+}
+
+.toggle-row input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+}
 
 .player-select-trigger {
   width: 100%;

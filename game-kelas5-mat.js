@@ -14,6 +14,7 @@ const playerSelectTrigger = document.getElementById('playerSelectTrigger');
 const playerSelectMenu = document.getElementById('playerSelectMenu');
 const playerSelectLabel = document.getElementById('playerSelectLabel');
 const modeOptions = [...document.querySelectorAll('.mode-option')];
+const autoQuestionToggle = document.getElementById('autoQuestionToggle');
 
 const instructionPopup = document.getElementById('instructionPopup');
 const instructionText = document.getElementById('instructionText');
@@ -51,6 +52,8 @@ let activeBlock = null;
 let lastActiveBlock = null;
 let gameMode = 'plain';
 let hazardBlocks = {};
+let autoGenerateQuestions = false;
+let autoQuestionBlocks = {};
 
 function setupPlayerSelect() {
   if (!playerSelect || !playerSelectTrigger || !playerSelectMenu || !playerSelectLabel) return;
@@ -95,6 +98,14 @@ function setupPlayerSelect() {
   });
 }
 
+function setupAutoQuestionToggle() {
+  if (!autoQuestionToggle) return;
+
+  autoGenerateQuestions = autoQuestionToggle.checked;
+  autoQuestionToggle.addEventListener('change', (event) => {
+    autoGenerateQuestions = event.target.checked;
+  });
+}
 
 function setupModeSelect() {
   if (!modeOptions.length) return;
@@ -113,6 +124,56 @@ function setupModeSelect() {
   });
 
   selectMode(gameMode);
+}
+
+function generateAutoQuestion() {
+  const templates = [
+    () => {
+      const a = Math.floor(Math.random() * 46) + 5;
+      const b = Math.floor(Math.random() * 35) + 5;
+      return `Hitung: ${a} + ${b} = ?`;
+    },
+    () => {
+      const a = Math.floor(Math.random() * 61) + 30;
+      const b = Math.floor(Math.random() * 26) + 4;
+      return `Hitung: ${a} - ${b} = ?`;
+    },
+    () => {
+      const a = Math.floor(Math.random() * 9) + 2;
+      const b = Math.floor(Math.random() * 9) + 2;
+      return `Berapakah hasil ${a} × ${b}?`;
+    },
+    () => {
+      const b = Math.floor(Math.random() * 9) + 2;
+      const answer = b * (Math.floor(Math.random() * 9) + 2);
+      return `Jika ${answer} ÷ ${b} = ...?`;
+    },
+    () => {
+      const base = Math.floor(Math.random() * 90) + 10;
+      const percent = [10, 20, 25, 50][Math.floor(Math.random() * 4)];
+      return `Berapa ${percent}% dari ${base}?`;
+    }
+  ];
+
+  return templates[Math.floor(Math.random() * templates.length)]();
+}
+
+function generateAutoQuestionBlocks() {
+  autoQuestionBlocks = {};
+  if (!autoGenerateQuestions) return;
+
+  const questionCount = 12;
+  const used = new Set([1, totalBlocks]);
+
+  Object.keys(hazardBlocks).forEach((position) => used.add(Number(position)));
+
+  while (Object.keys(autoQuestionBlocks).length < questionCount) {
+    const pos = Math.floor(Math.random() * 98) + 2;
+    if (used.has(pos)) continue;
+
+    used.add(pos);
+    autoQuestionBlocks[pos] = { text: generateAutoQuestion(), move: 0 };
+  }
 }
 
 function generateHazardBlocks() {
@@ -135,6 +196,12 @@ function generateHazardBlocks() {
 function paintSpecialBlocks() {
   Array.from(board.querySelectorAll('.block')).forEach((block) => {
     block.classList.remove('hazard-block');
+
+    if (block.dataset.autoQuestion === 'true') {
+      block.classList.remove('has-instruction');
+      delete block.dataset.autoQuestion;
+    }
+
     const oldTag = block.querySelector('.hazard-tag');
     if (oldTag) oldTag.remove();
   });
@@ -148,6 +215,14 @@ function paintSpecialBlocks() {
     tag.className = 'hazard-tag';
     tag.textContent = `⚠ ${move}`;
     block.appendChild(tag);
+  });
+
+  Object.keys(autoQuestionBlocks).forEach((position) => {
+    const block = document.getElementById(`block-${position}`);
+    if (!block) return;
+
+    block.classList.add('has-instruction');
+    block.dataset.autoQuestion = 'true';
   });
 }
 
@@ -185,7 +260,7 @@ function openInstructionEditor(num) {
   if (!players.length || gameFinished) return;
 
   activeBlock = num;
-  const data = blockInstructions[num];
+  const data = blockInstructions[num] || autoQuestionBlocks[num];
   instructionText.value = data ? data.text : '';
   instructionMove.value = data ? data.move : '';
   instructionPopup.classList.remove('hidden');
@@ -197,11 +272,19 @@ saveInstruction.onclick = () => {
 
   if (!text) {
     delete blockInstructions[activeBlock];
-    document.getElementById(`block-${activeBlock}`).classList.remove('has-instruction');
+    const activeEl = document.getElementById(`block-${activeBlock}`);
+    if (!autoQuestionBlocks[activeBlock]) {
+      activeEl.classList.remove('has-instruction');
+    }
     addLog(`Instruksi blok ${activeBlock} dihapus.`);
   } else {
     blockInstructions[activeBlock] = { text, move };
-    document.getElementById(`block-${activeBlock}`).classList.add('has-instruction');
+    delete autoQuestionBlocks[activeBlock];
+
+    const activeEl = document.getElementById(`block-${activeBlock}`);
+    activeEl.classList.add('has-instruction');
+    delete activeEl.dataset.autoQuestion;
+
     addLog(`Blok ${activeBlock} di-set: "${text}" (${move >= 0 ? '+' : ''}${move})`);
   }
 
@@ -243,14 +326,20 @@ function initPlayers(count) {
   }
 
   generateHazardBlocks();
+  generateAutoQuestionBlocks();
   paintSpecialBlocks();
 
   updateLeader();
   updateProgress();
   updateTurnInfo();
   addLog(`Game dimulai dengan ${count} pemain (${gameMode === 'hazard' ? 'Mode Gangguan Acak' : 'Mode Polos'}).`);
+  addLog(`Auto generate soal: ${autoGenerateQuestions ? 'Aktif' : 'Nonaktif'}.`);
   if (gameMode === 'hazard') {
     addLog('Blok berbahaya ditandai ikon ⚠ di papan.');
+  }
+
+  if (autoGenerateQuestions) {
+    addLog(`${Object.keys(autoQuestionBlocks).length} blok soal otomatis ditandai seperti blok instruksi.`);
   }
 }
 
@@ -375,7 +464,7 @@ function handleBlock(player) {
 
   if (checkWinner()) return;
 
- const hazardMove = hazardBlocks[player.position];
+  const hazardMove = hazardBlocks[player.position];
   if (hazardMove) {
     player.el.classList.add('shake');
     setTimeout(() => player.el.classList.remove('shake'), 320);
@@ -384,7 +473,7 @@ function handleBlock(player) {
     return;
   }
 
-  const data = blockInstructions[player.position];
+  const data = blockInstructions[player.position] || autoQuestionBlocks[player.position];
   if (data) {
     player.el.classList.add('shake');
     setTimeout(() => player.el.classList.remove('shake'), 320);
@@ -441,3 +530,4 @@ window.addEventListener('resize', () => {
 createBoard();
 setupPlayerSelect();
 setupModeSelect();
+setupAutoQuestionToggle();

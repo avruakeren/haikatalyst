@@ -34,3 +34,6 @@
 - mindahin instruksi bermain di game kelas 5 matematika ke game setup pas awal main
 - nambahin game susun kata jadi kalimat untuk kelas 2 bahasa indonesia (yaudah seadanya dulu aja sih)
 - rombak landing page (harusnya bagus pake konsep ginian)
+
+4 Maret 2026:
+- nambahin toggle auto generate soal pas sebelum main
