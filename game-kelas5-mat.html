@@ -45,6 +45,19 @@
           </button>
         </div>
       </div>
+      <div class="mode-select" role="group" aria-label="Pilih panjang permainan">
+        <p class="mode-label">Mode Permainan</p>
+        <div class="mode-options">
+          <button type="button" class="length-option selected" data-length="100" aria-pressed="true">
+            Normal Mode
+            <small>Target 100 blok</small>
+          </button>
+          <button type="button" class="length-option" data-length="50" aria-pressed="false">
+            Mode Cepat
+            <small>Target 50 blok</small>
+          </button>
+        </div>
+      </div>
        <label class="toggle-row" for="autoQuestionToggle">
         <span>
           Auto Generate Soal
@@ -71,7 +84,7 @@
         <li>Tekan <strong>Mulai Game</strong>, lalu bergantian roll dadu.</li>
         <li>Klik blok untuk menambahkan instruksi dan efek langkah.</li>
         <li>Kalau mode Gangguan Acak aktif, hindari blok dengan ikon ⚠.</li>
-        <li>Pemain pertama yang mencapai blok 100 menjadi pemenang.</li>
+        <li>Pemain pertama yang mencapai blok terakhir sesuai mode menjadi pemenang.</li>
         <li>Selamat bermain dan semoga menyenangkan!</li>
         <br>Catatan:</br>Instruksi di atas juga bisa disampaikan secara lisan oleh guru kepada siswa sebelum bermain.</li>
       </ol>
@@ -148,7 +161,7 @@
         <li>Tekan Roll Dadu untuk bergerak sesuai angka.</li>
         <li>Klik blok untuk menambahkan instruksi khusus dan efek langkah.</li>
         <li>Jika berhenti di blok berinstruksi, lakukan instruksinya!</li>
-        <li>Pemain pertama yang mencapai blok 100 menang.</li>
+        <li>Pemain pertama yang mencapai blok terakhir sesuai mode menang.</li>
       </ul>
       <button id="closeTutorial" class="btn primary">Tutup</button>
     </div>

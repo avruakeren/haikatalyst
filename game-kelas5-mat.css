@@ -277,7 +277,8 @@ input, select {
   gap: 8px;
 }
 
-.mode-option {
+.mode-option,
+.length-option {
   background: rgba(255, 255, 255, 0.06);
   border: var(--line);
   border-radius: 10px;
@@ -289,18 +290,21 @@ input, select {
   transition: border-color .16s ease, background .16s ease, transform .16s ease;
 }
 
-.mode-option small {
+.mode-option small,
+.length-option small {
   display: block;
   margin-top: 3px;
   color: var(--text-soft);
   font-weight: 500;
 }
 
-.mode-option:hover {
+.mode-option:hover,
+.length-option:hover {
   transform: translateY(-1px);
 }
 
-.mode-option.selected {
+.mode-option.selected,
+.length-option.selected {
   border-color: rgba(141, 123, 255, 0.9);
   background: rgba(141, 123, 255, 0.19);
 }

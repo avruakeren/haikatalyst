@@ -14,6 +14,7 @@ const playerSelectTrigger = document.getElementById('playerSelectTrigger');
 const playerSelectMenu = document.getElementById('playerSelectMenu');
 const playerSelectLabel = document.getElementById('playerSelectLabel');
 const modeOptions = [...document.querySelectorAll('.mode-option')];
+const lengthOptions = [...document.querySelectorAll('.length-option')];
 const autoQuestionToggle = document.getElementById('autoQuestionToggle');
 
 const instructionPopup = document.getElementById('instructionPopup');
@@ -41,7 +42,7 @@ const restartBtn = document.getElementById('restartBtn');
 let pendingPlayer = null;
 let pendingMove = 0;
 
-const totalBlocks = 100;
+let totalBlocks = 100;
 const colors = ['#ff5d73', '#ffd166', '#06d6a0', '#6ecbff', '#b694ff', '#4d3051', '#ff9f5f'];
 let players = [];
 let currentPlayer = 0;
@@ -51,6 +52,7 @@ const blockInstructions = {};
 let activeBlock = null;
 let lastActiveBlock = null;
 let gameMode = 'plain';
+let gameLengthMode = '100';
 let hazardBlocks = {};
 let autoGenerateQuestions = false;
 let autoQuestionBlocks = {};
@@ -126,6 +128,27 @@ function setupModeSelect() {
   selectMode(gameMode);
 }
 
+function setupLengthSelect() {
+  if (!lengthOptions.length) return;
+
+  const selectLength = (lengthMode) => {
+    gameLengthMode = lengthMode;
+    totalBlocks = Number(lengthMode);
+
+    lengthOptions.forEach((option) => {
+      const isSelected = option.dataset.length === lengthMode;
+      option.classList.toggle('selected', isSelected);
+      option.setAttribute('aria-pressed', String(isSelected));
+    });
+  };
+
+  lengthOptions.forEach((option) => {
+    option.addEventListener('click', () => selectLength(option.dataset.length));
+  });
+
+  selectLength(gameLengthMode);
+}
+
 function generateAutoQuestion() {
   const templates = [
     () => {
@@ -162,13 +185,13 @@ function generateAutoQuestionBlocks() {
   autoQuestionBlocks = {};
   if (!autoGenerateQuestions) return;
 
-  const questionCount = 12;
+  const questionCount = Math.max(6, Math.floor(totalBlocks * 0.12));
   const used = new Set([1, totalBlocks]);
 
   Object.keys(hazardBlocks).forEach((position) => used.add(Number(position)));
 
   while (Object.keys(autoQuestionBlocks).length < questionCount) {
-    const pos = Math.floor(Math.random() * 98) + 2;
+    const pos = Math.floor(Math.random() * (totalBlocks - 2)) + 2;
     if (used.has(pos)) continue;
 
     used.add(pos);
@@ -180,11 +203,12 @@ function generateHazardBlocks() {
   hazardBlocks = {};
   if (gameMode !== 'hazard') return;
 
-  const hazardCount = 12;
+  const hazardCount = Math.max(6, Math.floor(totalBlocks * 0.12));
   const used = new Set();
 
   while (Object.keys(hazardBlocks).length < hazardCount) {
-    const pos = Math.floor(Math.random() * 88) + 10;
+    const minBlock = Math.max(5, Math.floor(totalBlocks * 0.1));
+    const pos = Math.floor(Math.random() * (totalBlocks - minBlock)) + minBlock;
     if (used.has(pos)) continue;
 
     used.add(pos);
@@ -239,9 +263,11 @@ function addLog(message) {
 
 function createBoard() {
   board.innerHTML = '';
-  for (let row = 0; row < 10; row++) {
+  const rows = Math.ceil(totalBlocks / 10);
+  for (let row = 0; row < rows; row++) {
     const from = row * 10 + 1;
-    const sequence = Array.from({ length: 10 }, (_, idx) => from + idx);
+    const rowLength = Math.min(10, totalBlocks - row * 10);
+    const sequence = Array.from({ length: rowLength }, (_, idx) => from + idx);
     const visualRow = row % 2 === 0 ? sequence : sequence.reverse();
 
     visualRow.forEach((num) => {
@@ -511,10 +537,12 @@ rollBtn.onclick = async () => {
   const player = players[currentPlayer];
   const roll = await animateDiceRoll();
   addLog(`${player.label} roll ${roll}.`);
+  await wait(450);
   await movePlayer(player, roll);
 };
 
 startBtn.onclick = () => {
+  createBoard();
   initPlayers(Number(playerSelect?.dataset.value || 2));
   startPopup.classList.add('hidden');
   setupGuidePopup?.classList.add('hidden');
@@ -530,4 +558,5 @@ window.addEventListener('resize', () => {
 createBoard();
 setupPlayerSelect();
 setupModeSelect();
+setupLengthSelect();
 setupAutoQuestionToggle();
