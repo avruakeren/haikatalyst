@@ -37,3 +37,13 @@
 
 4 Maret 2026:
 - nambahin toggle auto generate soal pas sebelum main
+
+1 April 2026:
+-	di setup sebelum bermain game-kelas5-mat tambahin lagi dua mode, yaitu normal mode alias 100 blok, dan mode cepat yaitu 50 blok
+-	delay pemain maju, jadi dadu dulu yang berhenti kemudian disusul oleh pion
+-	i wish i could ask her for help
+
+3 April 2026:
+- penambahan variasi soal (tebak angka, susun nilai tempat, timbangan bilangan, sama kembalian)
+- it's been a month since i was blocked, and two months since she started ignoring me
+- perbaikan soal biar sesuai dengan kelasnya
