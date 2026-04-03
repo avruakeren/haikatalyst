@@ -30,10 +30,10 @@
 - buat mode game, ada mode polos dan mode yang bisa generate random blok mundur
 
 26 Februari 2026:
-- setelah klik play dari landing page nantinya akan diarahin ke halaman pilih jenjang kelas yanga nantinya disitu akan pilih materi untuk kelas yang diinginkan
+- setelah klik play dari landing page nantinya akan diarahin ke halaman pilih jenjang kelas yang nantinya disitu akan pilih materi untuk kelas yang diinginkan
 - mindahin instruksi bermain di game kelas 5 matematika ke game setup pas awal main
 - nambahin game susun kata jadi kalimat untuk kelas 2 bahasa indonesia (yaudah seadanya dulu aja sih)
-- rombak landing page (harusnya bagus pake konsep ginian)
+- rombak landing page (harusnya oke sih pake konsep ginian)
 
 4 Maret 2026:
 - nambahin toggle auto generate soal pas sebelum main
@@ -46,4 +46,4 @@
 3 April 2026:
 - penambahan variasi soal (tebak angka, susun nilai tempat, timbangan bilangan, sama kembalian)
 - it's been a month since i was blocked, and two months since she started ignoring me
-- perbaikan soal biar sesuai dengan kelasnya
+- perbaikan soal biar gak susah susah amat pas dikerjain, atau sesuai dengan jenjang kelasnya lah
