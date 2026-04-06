@@ -404,7 +404,7 @@ function generateAutoQuestion() {
       const digit = Math.floor(n / nilai[idx]) % 10;
       const jawaban = labels[idx];
       const pool = shuffle([...labels]);
-      return { tipe:'pilihan', emoji:'🏠', judul:'Nilai Tempat',
+      return { tipe:'pilihan', emoji:'', judul:'Nilai Tempat',
         soal:`Angka ${digit} pada bilangan ${fmt(n)}\nmenempati nilai tempat...`,
         pilihan: pool.slice(0,4), jawaban };
     }
@@ -436,17 +436,17 @@ function generateAutoQuestion() {
     const jawaban = fmt(n);
     const distractor = buatPilihan(n, 1000).filter(v => v !== n).slice(0,3).map(fmt);
     const pilihan = shuffle([jawaban, ...distractor]);
-    return { tipe:'tebak', emoji:'🎰', judul:'Tebak Angka',
+    return { tipe:'tebak', emoji:'', judul:'Tebak Angka',
       soal:'Siapakah aku? Baca petunjuknya satu per satu!',
       clues, pilihan, jawaban };
   }
 
   // ── TIPE 3: SUSUN NILAI TEMPAT ────────────────────────
+  // Soal: teks bilangan dalam kata → susun digit ke kolom nilai tempat
   if (tipe === 'nilaitempat') {
     const n = rnd(10000, 999999);
     const strukturLabels = ['Ratusan\nRibu','Puluhan\nRibu','Ribuan','Ratusan','Puluhan','Satuan'];
     const strukturNilai  = [100000, 10000, 1000, 100, 10, 1];
-    // Ambil hanya kolom yang relevan (digit non-leading-zero)
     const cols = [];
     let mulai = false;
     for (let i = 0; i < 6; i++) {
@@ -455,10 +455,9 @@ function generateAutoQuestion() {
       mulai = true;
       cols.push({ label: strukturLabels[i], nilai: strukturNilai[i], digit: d });
     }
-    // Digit-digit untuk chip (diacak)
     const chips = shuffle(cols.map(c => c.digit));
-    return { tipe:'nilaitempat', emoji:'🧩', judul:'Susun Nilai Tempat',
-      soal:`Letakkan angka yang benar di setiap kolom nilai tempat\nbilangan: ${fmt(n)}`,
+    return { tipe:'nilaitempat', emoji:'', judul:'Susun Nilai Tempat',
+      soal:`Susun digit dari bilangan berikut ke kolom yang tepat:\n"${angkaDalamKata(n)}"`,
       n, cols, chips };
   }
 
@@ -478,64 +477,57 @@ function generateAutoQuestion() {
           pilihan: shuffle([hasil-b, ...buatPilihan(hasil-b,100).filter(v=>v!==hasil-b).slice(0,3)]) };
       },
       () => {
-        const a = rnd(10, 99); const b = rnd(2, 9);
+        const a = rnd(2, 9); const b = rnd(2, 9);
         const hasil = a * b;
         return { kiriLabel: `${a} × ${b}`, kiriNilai: hasil,
-          pilihan: shuffle([hasil, ...buatPilihan(hasil, Math.max(10,a)).filter(v=>v!==hasil).slice(0,3)]) };
+          pilihan: shuffle([hasil, ...buatPilihan(hasil, a).filter(v=>v!==hasil).slice(0,3)]) };
       },
     ];
     const op = ops[rnd(0, ops.length - 1)]();
-    return { tipe:'timbangan', emoji:'⚖️', judul:'Timbangan Bilangan',
+    return { tipe:'timbangan', emoji:'', judul:'Timbangan Bilangan',
       soal:`Pilih angka yang membuat timbangan seimbang!`,
       kiriLabel: op.kiriLabel, kiriNilai: op.kiriNilai,
       pilihan: op.pilihan.map(v => ({ val: v, label: fmt(v) })),
       jawaban: fmt(op.kiriNilai) };
   }
   // ── TIPE 5: SOAL UANG / KEMBALIAN ─────────────────────
+  // Harga selalu kelipatan 5.000 agar kembalian bersih dari pecahan standar
   {
-    const PECAHAN = [100000, 50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100];
+    const PECAHAN = [50000, 20000, 10000, 5000, 2000, 1000, 500];
     const FMT_RP = n => `Rp${fmt(n)}`;
 
-    // Generate harga yang wajar
-    const hargaRaw = rnd(1, 19) * 5000 + rnd(0, 4) * 1000;
-    const harga = Math.max(1000, hargaRaw);
-
-    // Bayar dengan pecahan yang lebih besar
-    const pecahanBayar = PECAHAN.filter(p => p > harga);
-    const bayar = pecahanBayar.length ? pecahanBayar[rnd(0, Math.min(2, pecahanBayar.length-1))] : harga * 2;
-    const kembalian = bayar - harga;
-
-    // Pecahan yang tersedia untuk kembalian (tidak lebih dari kembalian)
-    const tersedia = PECAHAN.filter(p => p <= kembalian);
-    // Pastikan solusi bisa dirakit
-    let sisa = kembalian;
-    const jawabanPecahan = [];
-    for (const p of tersedia) {
-      while (sisa >= p && jawabanPecahan.length < 6) {
-        jawabanPecahan.push(p);
-        sisa -= p;
+    // Kembalian dipilih dulu dari kombinasi 2-4 pecahan, lalu harga dihitung
+    // Ini memastikan kembalian SELALU bisa dirakit dari chip yang disediakan
+    function buatKembalian() {
+      const pilPecahan = shuffle([...PECAHAN]);
+      const dipilih = [];
+      let total = 0;
+      // Ambil 2-3 pecahan acak sebagai jawaban kembalian
+      const jumlah = rnd(2, 3);
+      for (const p of pilPecahan) {
+        if (dipilih.length >= jumlah) break;
+        dipilih.push(p);
+        total += p;
       }
-      if (sisa === 0) break;
+      return { kembalian: total, jawabanPecahan: dipilih };
     }
 
-    // Kalau tidak bisa dirakit persis, fallback ke pilihan ganda biasa
-    if (sisa !== 0 || jawabanPecahan.length === 0) {
-      const a = rnd(5000, 50000); const b = rnd(1000, a-1);
-      const km = a - b;
-      return { tipe:'pilihan', emoji:'💰', judul:'Soal Uang',
-        soal:`🛍️ Harga barang ${FMT_RP(b)}.\nDibayar ${FMT_RP(a)}.\nBerapa kembaliannya?`,
-        pilihan: buatPilihan(km, 1000).map(fmt), jawaban: fmt(km) };
-    }
+    const { kembalian, jawabanPecahan } = buatKembalian();
 
-    // Chip pecahan yang ditampilkan (jawaban + distraktor)
-    const chipsSet = new Set(jawabanPecahan);
-    const extra = shuffle(PECAHAN.filter(p => p <= kembalian && !chipsSet.has(p)));
-    extra.slice(0, 3).forEach(p => chipsSet.add(p));
-    const chipsArr = shuffle([...chipsSet]);
+    // Bayar dengan salah satu pecahan besar (50rb atau 100rb)
+    const pilihanBayar = [50000, 100000].filter(p => p > kembalian);
+    const bayar = pilihanBayar[rnd(0, pilihanBayar.length - 1)] || 100000;
+    const harga = bayar - kembalian;
+
+    // Chip: jawaban + beberapa distraktor (pecahan yang TIDAK termasuk jawaban)
+    const chipSet = new Set(jawabanPecahan);
+    const extra = shuffle(PECAHAN.filter(p => !chipSet.has(p)));
+    extra.slice(0, rnd(2, 3)).forEach(p => chipSet.add(p));
+    const chips = shuffle([...chipSet]);
 
     return { tipe:'uang', emoji:'💰', judul:'Kembalian Uang',
       soal:`🛒 Harga: ${FMT_RP(harga)}\n💵 Dibayar: ${FMT_RP(bayar)}\n\nPilih uang kembalian yang tepat!`,
-      kembalian, jawabanPecahan, chips: chipsArr };
+      kembalian, jawabanPecahan, chips };
   }
 }
 
@@ -741,10 +733,12 @@ function renderNilaiTempat(box, quiz, player, playerColor, overlay) {
       target.filledWith = digit;
       target.digitEl.textContent = digit;
       target.slot.classList.add('filled');
+      target.slot.dataset.chipRef = digit;
       chip.classList.add('placed');
 
       // Kalau semua slot terisi, cek jawaban
       if (slotEls.every(s => s.filled)) {
+        undoBtn.disabled = true;
         let benar = true;
         slotEls.forEach(s => {
           const ok = parseInt(s.filledWith) === s.col.digit;
@@ -753,15 +747,34 @@ function renderNilaiTempat(box, quiz, player, playerColor, overlay) {
           if (!ok) benar = false;
         });
         chipsEl.querySelectorAll('.qnt-chip').forEach(c => c.disabled = true);
-        quiz.jawaban = benar ? 'BENAR' : 'SALAH'; // dummy
         selesaiQuiz(benar, { ...quiz, jawaban: quiz.cols.map(c=>c.digit).join('') }, player, playerColor, overlay);
       }
     };
     chipsEl.appendChild(chip);
   });
 
+  // Tombol undo
+  const undoBtn = document.createElement('button');
+  undoBtn.textContent = '↩ Undo';
+  undoBtn.style.cssText = `margin-top:10px;padding:7px 14px;border-radius:10px;border:none;
+    background:#222240;color:#aaa;font-size:12px;cursor:pointer;font-family:inherit;`;
+  undoBtn.onclick = () => {
+    // Cari slot terisi terakhir
+    const last = [...slotEls].reverse().find(s => s.filled);
+    if (!last) return;
+    // Kembalikan chip yang sesuai
+    const chipToReturn = [...chipsEl.querySelectorAll('.qnt-chip')]
+      .find(c => c.classList.contains('placed') && String(c.dataset.digit) === String(last.filledWith));
+    last.filled = false;
+    last.filledWith = null;
+    last.digitEl.textContent = '_';
+    last.slot.classList.remove('filled', 'correct', 'wrong');
+    if (chipToReturn) chipToReturn.classList.remove('placed');
+  };
+
   wrap.appendChild(slotsEl);
   wrap.appendChild(chipsEl);
+  wrap.appendChild(undoBtn);
   box.appendChild(wrap);
 }
 
@@ -853,6 +866,19 @@ function renderUang(box, quiz, player, playerColor, overlay) {
       : totalDipilih > quiz.kembalian ? '#e74c3c' : playerColor;
   };
 
+  // Tombol reset
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = '↩ Reset';
+  resetBtn.style.cssText = `margin-top:8px;padding:7px 14px;border-radius:10px;border:none;
+    background:#222240;color:#aaa;font-size:12px;cursor:pointer;font-family:inherit;`;
+  resetBtn.onclick = () => {
+    if (finished) return;
+    totalDipilih = 0;
+    selected = [];
+    updateProgress();
+    chipsEl.querySelectorAll('.quang-chip').forEach(c => c.classList.remove('selected'));
+  };
+
   quiz.chips.forEach(pecahan => {
     const chip = document.createElement('button');
     chip.className = 'quang-chip';
@@ -860,21 +886,28 @@ function renderUang(box, quiz, player, playerColor, overlay) {
     chip.textContent = `Rp${fmt(pecahan)}`;
     chip.onclick = () => {
       if (finished) return;
+      // Toggle: klik lagi untuk batalkan
+      if (chip.classList.contains('selected')) {
+        chip.classList.remove('selected');
+        totalDipilih -= pecahan;
+        selected.splice(selected.lastIndexOf(pecahan), 1);
+        updateProgress();
+        return;
+      }
       totalDipilih += pecahan;
       selected.push(pecahan);
       chip.classList.add('selected');
-      chip.disabled = true;
       updateProgress();
 
       if (totalDipilih === quiz.kembalian) {
         finished = true;
         chipsEl.querySelectorAll('.quang-chip').forEach(c => c.disabled = true);
-        quiz.jawaban = 'TEPAT';
+        resetBtn.disabled = true;
         selesaiQuiz(true, { ...quiz, jawaban:'kembalian tepat' }, player, playerColor, overlay);
       } else if (totalDipilih > quiz.kembalian) {
         finished = true;
         chipsEl.querySelectorAll('.quang-chip').forEach(c => c.disabled = true);
-        quiz.jawaban = `Rp${fmt(quiz.kembalian)}`;
+        resetBtn.disabled = true;
         selesaiQuiz(false, { ...quiz, jawaban:`Rp${fmt(quiz.kembalian)}` }, player, playerColor, overlay);
       }
     };
@@ -884,8 +917,10 @@ function renderUang(box, quiz, player, playerColor, overlay) {
   wrap.appendChild(progressEl);
   wrap.appendChild(hintEl);
   wrap.appendChild(chipsEl);
+  wrap.appendChild(resetBtn);
   box.appendChild(wrap);
 }
+
 function generateAutoQuestionBlocks() {
   autoQuestionBlocks = {};
   if (!autoGenerateQuestions) return;
