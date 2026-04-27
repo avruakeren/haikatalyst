@@ -70,7 +70,7 @@ body {
   font-size: clamp(38px, 5vw, 68px);
   font-weight: 800;
   line-height: 1;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
 .hero-box p {

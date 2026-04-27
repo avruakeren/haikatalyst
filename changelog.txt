@@ -53,3 +53,4 @@
 - benerin game kembalian yang uangnya malah masih kurang padahal udah dipencet semua wkwk
 - benerin game timbangan yang soalnya nabrak popup msg
 - benerin game nilai tempat. sekarang mengkonversi tulisan angkanya ke nilai digit
+- ganti instruksi bermain

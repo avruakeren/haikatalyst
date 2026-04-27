@@ -1062,8 +1062,46 @@ closeInstruction.onclick = () => instructionPopup.classList.add('hidden');
 openTutorial.onclick = () => tutorialPopup.classList.remove('hidden');
 closeTutorial.onclick = () => tutorialPopup.classList.add('hidden');
 
+let currentGuideStep = 0;
+const guideSteps = document.querySelectorAll('.guide-step');
+const setupGuideList = document.getElementById('setupGuideList');
+const prevSetupGuide = document.getElementById('prevSetupGuide');
+const nextSetupGuide = document.getElementById('nextSetupGuide');
+
+function updateSetupGuide() {
+  guideSteps.forEach((step, index) => {
+    if (index === currentGuideStep) step.classList.remove('hidden');
+    else step.classList.add('hidden');
+  });
+  if (setupGuideList) setupGuideList.start = currentGuideStep + 1;
+  
+  if (prevSetupGuide) prevSetupGuide.style.display = currentGuideStep === 0 ? 'none' : 'block';
+  if (currentGuideStep === guideSteps.length - 1) {
+    if (nextSetupGuide) nextSetupGuide.style.display = 'none';
+    if (closeSetupGuide) closeSetupGuide.style.display = 'block';
+  } else {
+    if (nextSetupGuide) nextSetupGuide.style.display = 'block';
+    if (closeSetupGuide) closeSetupGuide.style.display = 'none';
+  }
+}
+
+if (prevSetupGuide) {
+  prevSetupGuide.onclick = () => {
+    if (currentGuideStep > 0) { currentGuideStep--; updateSetupGuide(); }
+  };
+}
+if (nextSetupGuide) {
+  nextSetupGuide.onclick = () => {
+    if (currentGuideStep < guideSteps.length - 1) { currentGuideStep++; updateSetupGuide(); }
+  };
+}
+
 if (openSetupGuide && setupGuidePopup) {
-  openSetupGuide.onclick = () => setupGuidePopup.classList.remove('hidden');
+  openSetupGuide.onclick = () => {
+    currentGuideStep = 0;
+    updateSetupGuide();
+    setupGuidePopup.classList.remove('hidden');
+  };
 }
 
 if (closeSetupGuide && setupGuidePopup) {

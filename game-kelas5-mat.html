@@ -75,27 +75,31 @@
   <div id="setupGuidePopup" class="overlay hidden">
     <div class="popup-card">
       <h3>Instruksi Bermain</h3>
-      <ol class="tutorial-list">
-        <li>Guru membagi siswa menjadi beberapa kelompok terlebih dahulu</li>
-        <li>Setiap kelompok mengirim satu perwakilan untuk bermain</li>
-        <li>Pilih jumlah pemain sesuai jumlah perwakilan kelompok, lalu pilih mode permainan</li>
-        <li>Aktifkan <strong>Auto Generate Soal</strong> agar blok soal muncul otomatis di papan</li>
-        <li>Tekan Mulai Game, lalu pemain bergantian melempar dadu</li>
-        <li>Jika mendarat di blok soal, akan muncul tantangan:
+      <ol class="tutorial-list" id="setupGuideList" start="1">
+        <li class="guide-step">Guru membagi siswa menjadi beberapa kelompok terlebih dahulu</li>
+        <li class="guide-step hidden">Setiap kelompok mengirim satu perwakilan untuk bermain</li>
+        <li class="guide-step hidden">Pilih jumlah pemain sesuai jumlah perwakilan kelompok, lalu pilih mode permainan</li>
+        <li class="guide-step hidden">Aktifkan <strong>Auto Generate Soal</strong> agar blok soal muncul otomatis di papan</li>
+        <li class="guide-step hidden">Tekan Mulai Game, lalu pemain bergantian melempar dadu</li>
+        <li class="guide-step hidden">Jika mendarat di blok soal, akan muncul tantangan:
 <br><strong>Pilihan ganda:</strong> pilih jawaban yang benar dari 4 pilihan.
 <br><strong>Tebak Angka:</strong> baca petunjuk satu per satu, lalu tebak bilangan yang dimaksud.
 <br><strong>Susun Nilai Tempat:</strong> dengar nama bilangan, susun digitnya ke kolom yang tepat.
 <br><strong>Timbangan Bilangan:</strong> pilih angka yang membuat timbangan seimbang.
 <br><strong>Kembalian Uang:</strong> pilih pecahan uang yang pas untuk kembalian.</li>
-        <li>Jika jawaban benar, maka pemain akan maju secara otomatis 2 langkah. Namun, jika jawaban salah, pemain akan mundur 1 langkah.</li>
-        <li>Jika mode Gangguan Acak aktif, hindari blok berwarna merah bertanda ⚠, jika menginjak blok tersebut maka pemain akan mundur!</li>
-        <li>Guru juga dapat menambahkan blok instruksi khusus untuk memberikan petunjuk tambahan, dengan mengklik blok manapun</li>
-        <li>Pemain pertama yang mencapai blok terakhir sesuai mode menjadi pemenang.</li>
-        <li>Selamat bermain dan semoga menyenangkan!</li>
-        <br>Catatan:</br>Instruksi di atas juga bisa disampaikan secara lisan oleh guru kepada siswa sebelum bermain.</li>
+        <li class="guide-step hidden">Jika jawaban benar, maka pemain akan maju secara otomatis 2 langkah. Namun, jika jawaban salah, pemain akan mundur 1 langkah.</li>
+        <li class="guide-step hidden">Jika mode Gangguan Acak aktif, hindari blok berwarna merah bertanda ⚠, jika menginjak blok tersebut maka pemain akan mundur!</li>
+        <li class="guide-step hidden">Guru juga dapat menambahkan blok instruksi khusus untuk memberikan petunjuk tambahan, dengan mengklik blok manapun</li>
+        <li class="guide-step hidden">Pemain pertama yang mencapai blok terakhir sesuai mode menjadi pemenang.</li>
+        <li class="guide-step hidden">Selamat bermain dan semoga menyenangkan!
+        <br><br>Catatan: Instruksi di atas juga bisa disampaikan secara lisan oleh guru kepada siswa sebelum bermain.</li>
       </ol>
       <br>
-      <button id="closeSetupGuide" class="btn primary" type="button">Tutup</button>
+      <div class="btn-row" id="setupGuideControls">
+        <button id="prevSetupGuide" class="btn secondary" style="display:none;" type="button">Sebelumnya</button>
+        <button id="nextSetupGuide" class="btn primary" type="button">Selanjutnya</button>
+        <button id="closeSetupGuide" class="btn primary" style="display:none;" type="button">Tutup</button>
+      </div>
     </div>
   </div>
 
@@ -168,6 +172,7 @@
         <li>Klik blok untuk menambahkan instruksi khusus dan efek langkah.</li>
         <li>Jika berhenti di blok berinstruksi, lakukan instruksinya!</li>
         <li>Pemain pertama yang mencapai blok terakhir sesuai mode menang.</li>
+        <br>
       </ul>
       <button id="closeTutorial" class="btn primary">Tutup</button>
     </div>
