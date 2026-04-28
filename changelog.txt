@@ -54,3 +54,11 @@
 - benerin game timbangan yang soalnya nabrak popup msg
 - benerin game nilai tempat. sekarang mengkonversi tulisan angkanya ke nilai digit
 - ganti instruksi bermain
+
+28 April 2026:
+- ganti warna yang ada di gameboard, dari yang gelap jadi agak terang
+- instruksi permainan pake slideshow
+
+29 April 2026:
+- nambahin sistem timer di gamenya
+- 

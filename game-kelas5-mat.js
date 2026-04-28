@@ -56,6 +56,7 @@ let gameLengthMode = '100';
 let hazardBlocks = {};
 let autoGenerateQuestions = false;
 let autoQuestionBlocks = {};
+let questionFrequency = 0.12;
 
 function setupPlayerSelect() {
   if (!playerSelect || !playerSelectTrigger || !playerSelectMenu || !playerSelectLabel) return;
@@ -103,10 +104,22 @@ function setupPlayerSelect() {
 function setupAutoQuestionToggle() {
   if (!autoQuestionToggle) return;
 
+  const freqContainer = document.getElementById('freqContainer');
+  const questionFreq = document.getElementById('questionFreq');
+
   autoGenerateQuestions = autoQuestionToggle.checked;
+  if (freqContainer) freqContainer.style.display = autoGenerateQuestions ? 'block' : 'none';
+
   autoQuestionToggle.addEventListener('change', (event) => {
     autoGenerateQuestions = event.target.checked;
+    if (freqContainer) freqContainer.style.display = autoGenerateQuestions ? 'block' : 'none';
   });
+
+  if (questionFreq) {
+    questionFreq.addEventListener('change', (e) => {
+      questionFrequency = parseFloat(e.target.value);
+    });
+  }
 }
 
 function setupModeSelect() {
@@ -186,150 +199,163 @@ function angkaDalamKata(n) {
     @keyframes popIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
     @keyframes bounceIn { 0%{transform:scale(0.3);opacity:0} 60%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
     .qoverlay {
-      position:fixed;inset:0;background:rgba(0,0,0,0.72);
+      position:fixed;inset:0;background:rgba(30,27,75,0.45);
+      backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
       display:flex;align-items:center;justify-content:center;
-      z-index:9999;font-family:inherit;padding:12px;box-sizing:border-box;
+      z-index:9999;font-family:'Comic Neue','Segoe UI',sans-serif;padding:12px;box-sizing:border-box;
     }
     .qbox {
-      background:#16162a;border-radius:22px;padding:22px 20px 18px;
-      max-width:460px;width:100%;box-shadow:0 16px 60px rgba(0,0,0,0.7);
+      background:#fff;border-radius:28px;padding:24px 22px 20px;
+      max-width:480px;width:100%;
+      box-shadow:0 24px 60px rgba(30,27,75,0.18);
+      border:2px solid rgba(99,102,241,0.18);
+      border-top:5px solid var(--pc);
       animation:quizPop 0.28s cubic-bezier(.34,1.3,.64,1);
       max-height:92vh;overflow-y:auto;
     }
     .qheader {
       display:flex;align-items:center;gap:10px;margin-bottom:14px;
-      padding-bottom:12px;border-bottom:1px solid #252540;
+      padding-bottom:12px;border-bottom:2px solid rgba(99,102,241,0.1);
     }
-    .qemoji{font-size:30px;line-height:1;flex-shrink:0;}
-    .qtipe{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;}
-    .qrule{font-size:11px;color:#555;margin-top:3px;}
-    .qsoal{font-size:15px;font-weight:700;color:#eee;line-height:1.6;margin-bottom:16px;white-space:pre-line;}
+    .qemoji{font-size:28px;line-height:1;flex-shrink:0;}
+    .qtipe{font-family:'Baloo 2',sans-serif;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--pc);}
+    .qrule{font-size:11px;color:#6B7280;margin-top:3px;}
+    .qtimer{font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:800;color:#fff;background:var(--pc);padding:6px 11px;border-radius:10px;text-align:center;min-width:50px;transition:all 0.3s;box-shadow:0 3px 10px rgba(0,0,0,0.15);}
+    .qtimer.danger{background:#EF4444!important;animation:shakeEl 0.5s ease infinite;}
+    .qsoal{font-size:15px;font-weight:700;color:#1E1B4B;line-height:1.65;margin-bottom:16px;white-space:pre-line;}
     /* PILIHAN GANDA */
     .qchoice{
       display:block;width:100%;text-align:left;
-      padding:11px 15px;margin:5px 0;border-radius:13px;
-      border:2px solid #252540;background:#1e1e38;color:#ccc;
-      font-size:14px;cursor:pointer;transition:all 0.15s;font-family:inherit;
+      padding:11px 15px;margin:6px 0;border-radius:14px;
+      border:2px solid rgba(99,102,241,0.18);background:#F5F7FF;color:#1E1B4B;
+      font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;
+      cursor:pointer;transition:all 0.15s;
     }
-    .qchoice:hover:not(:disabled){background:#28284a;border-color:var(--pc);}
-    .qchoice.benar{background:#0d2e1e;border-color:#27ae60;color:#2ecc71!important;}
-    .qchoice.salah{background:#2e0d0d;border-color:#c0392b;color:#e74c3c!important;}
+    .qchoice:hover:not(:disabled){background:#EEF2FF;border-color:var(--pc);transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.15);}
+    .qchoice.benar{background:#D1FAE5;border-color:#10B981;color:#065F46!important;font-weight:800;}
+    .qchoice.salah{background:#FEE2E2;border-color:#EF4444;color:#991B1B!important;}
     .qchoice:disabled{cursor:default;}
     /* TEBAK ANGKA */
     .qclue{
-      background:#1c1c34;border-radius:12px;padding:10px 13px;
-      margin:7px 0;font-size:14px;color:#ccc;border-left:3px solid var(--pc);
+      background:#EEF2FF;border-radius:12px;padding:10px 14px;
+      margin:7px 0;font-size:14px;color:#374151;border-left:4px solid var(--pc);
       animation:popIn 0.2s ease;
     }
     .qclue-badge{
-      display:inline-block;background:var(--pc);color:#000;
-      border-radius:5px;font-size:10px;font-weight:800;
-      padding:1px 6px;margin-right:6px;
+      display:inline-block;background:var(--pc);color:#fff;
+      border-radius:6px;font-family:'Baloo 2',sans-serif;font-size:10px;font-weight:800;
+      padding:2px 7px;margin-right:7px;
     }
     .qmore-btn{
-      margin-top:10px;padding:9px 16px;border-radius:11px;
-      border:none;background:#222240;color:#aaa;font-size:13px;
-      cursor:pointer;transition:all 0.15s;font-family:inherit;display:inline-flex;align-items:center;gap:6px;
+      margin-top:10px;padding:9px 16px;border-radius:12px;
+      border:2px solid rgba(99,102,241,0.2);background:#F5F7FF;color:#4F46E5;
+      font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;
+      cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;
     }
-    .qmore-btn:hover{background:#303058;color:#fff;}
+    .qmore-btn:hover{background:#EEF2FF;border-color:#4F46E5;transform:translateY(-1px);}
     /* SUSUN NILAI TEMPAT */
     .qnt-wrap{margin:10px 0;}
     .qnt-slots{
       display:flex;gap:6px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;
     }
     .qnt-slot{
-      min-width:44px;height:50px;border-radius:10px;border:2px dashed #2e2e50;
+      min-width:46px;height:54px;border-radius:12px;border:2px dashed rgba(99,102,241,0.3);
       display:flex;flex-direction:column;align-items:center;justify-content:center;
-      background:#111128;transition:all 0.15s;
+      background:#F5F7FF;transition:all 0.15s;
     }
-    .qnt-slot-digit{font-size:20px;font-weight:800;color:#555;}
-    .qnt-slot-label{font-size:8px;color:#444;text-transform:uppercase;margin-top:2px;}
+    .qnt-slot-digit{font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;color:#C4B5FD;}
+    .qnt-slot-label{font-size:8px;color:#9CA3AF;text-transform:uppercase;margin-top:2px;text-align:center;white-space:pre;}
     .qnt-slot.filled .qnt-slot-digit{color:var(--pc);}
-    .qnt-slot.filled{border-color:var(--pc);background:#1a1a30;}
-    .qnt-slot.correct{border-color:#27ae60;background:#0d2e1e;}
-    .qnt-slot.correct .qnt-slot-digit{color:#2ecc71;}
-    .qnt-slot.wrong{border-color:#c0392b;background:#2e0d0d;}
-    .qnt-slot.wrong .qnt-slot-digit{color:#e74c3c;}
+    .qnt-slot.filled{border-color:var(--pc);border-style:solid;background:#EEF2FF;}
+    .qnt-slot.correct{border-color:#10B981;border-style:solid;background:#D1FAE5;}
+    .qnt-slot.correct .qnt-slot-digit{color:#065F46;}
+    .qnt-slot.wrong{border-color:#EF4444;border-style:solid;background:#FEE2E2;}
+    .qnt-slot.wrong .qnt-slot-digit{color:#991B1B;}
     .qnt-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
     .qnt-chip{
-      padding:10px 16px;border-radius:11px;border:2px solid #2e2e50;
-      background:#1e1e38;color:#ddd;font-size:16px;font-weight:800;
-      cursor:pointer;transition:all 0.15s;font-family:inherit;
+      padding:10px 18px;border-radius:12px;border:2px solid rgba(99,102,241,0.2);
+      background:#F5F7FF;color:#1E1B4B;
+      font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:800;
+      cursor:pointer;transition:all 0.15s;
     }
-    .qnt-chip:hover:not(.placed){background:#28284a;border-color:var(--pc);transform:translateY(-2px);}
-    .qnt-chip.placed{opacity:0.3;pointer-events:none;}
+    .qnt-chip:hover:not(.placed){background:#EEF2FF;border-color:var(--pc);transform:translateY(-3px);box-shadow:0 4px 14px rgba(99,102,241,0.2);}
+    .qnt-chip.placed{opacity:0.28;pointer-events:none;}
     /* TIMBANGAN */
     .qtimb-wrap{display:flex;flex-direction:column;align-items:center;margin:8px 0 16px;}
     .qtimb-visual{position:relative;width:240px;height:110px;margin-bottom:8px;}
     .qtimb-pivot{
       position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-      width:10px;height:70px;background:#777;border-radius:5px;
+      width:10px;height:70px;background:#A5B4FC;border-radius:5px;
     }
     .qtimb-arm{
       position:absolute;left:10px;right:10px;top:8px;height:6px;
-      background:#999;border-radius:3px;transform-origin:center;
+      background:#818CF8;border-radius:3px;transform-origin:center;
       transition:transform 0.6s cubic-bezier(.34,1.3,.64,1);
     }
     .qtimb-panL,.qtimb-panR{
       position:absolute;top:-4px;width:60px;height:8px;
-      background:#bbb;border-radius:4px;
+      background:#C7D2FE;border-radius:4px;
     }
     .qtimb-panL{left:-4px;}
     .qtimb-panR{right:-4px;}
     .qtimb-valL,.qtimb-valR{
-      position:absolute;top:14px;font-size:13px;font-weight:800;color:#eee;
+      position:absolute;top:14px;font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:800;color:#1E1B4B;
       width:60px;text-align:center;line-height:1.3;
     }
     .qtimb-valL{left:-4px;}
     .qtimb-valR{right:-4px;}
     .qtimb-choices{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
     .qtimb-btn{
-      padding:10px 15px;border-radius:12px;border:2px solid #2e2e50;
-      background:#1e1e38;color:#ddd;font-size:14px;font-weight:700;
-      cursor:pointer;transition:all 0.15s;font-family:inherit;
+      padding:10px 16px;border-radius:12px;border:2px solid rgba(99,102,241,0.2);
+      background:#F5F7FF;color:#1E1B4B;
+      font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;
+      cursor:pointer;transition:all 0.15s;
     }
-    .qtimb-btn:hover:not(:disabled){background:#28284a;border-color:var(--pc);transform:translateY(-2px);}
-    .qtimb-btn.benar{background:#0d2e1e;border-color:#27ae60;color:#2ecc71;}
-    .qtimb-btn.salah{background:#2e0d0d;border-color:#c0392b;color:#e74c3c;}
+    .qtimb-btn:hover:not(:disabled){background:#EEF2FF;border-color:var(--pc);transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,0.2);}
+    .qtimb-btn.benar{background:#D1FAE5;border-color:#10B981;color:#065F46;}
+    .qtimb-btn.salah{background:#FEE2E2;border-color:#EF4444;color:#991B1B;}
     .qtimb-btn:disabled{cursor:default;}
     /* UANG */
     .quang-scene{margin:8px 0;}
     .quang-info{
-      background:#1c1c34;border-radius:12px;padding:12px;margin-bottom:12px;
+      background:#EEF2FF;border-radius:14px;padding:12px 14px;margin-bottom:12px;
       display:flex;justify-content:space-between;align-items:center;
+      border:2px solid rgba(99,102,241,0.15);
     }
-    .quang-label{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:1px;}
-    .quang-amount{font-size:20px;font-weight:800;color:#fff;}
-    .quang-kembalian{font-size:24px;font-weight:900;color:var(--pc);}
+    .quang-label{font-size:11px;color:#6B7280;text-transform:uppercase;letter-spacing:1px;font-weight:700;}
+    .quang-amount{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:800;color:#1E1B4B;}
+    .quang-kembalian{font-family:'Baloo 2',sans-serif;font-size:24px;font-weight:900;color:var(--pc);}
     .quang-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:12px;}
     .quang-chip{
-      padding:9px 14px;border-radius:11px;border:2px solid #2e2e50;
-      background:#1e1e38;color:#eee;font-size:13px;font-weight:700;
-      cursor:pointer;transition:all 0.2s;font-family:inherit;user-select:none;
+      padding:9px 14px;border-radius:12px;border:2px solid rgba(99,102,241,0.18);
+      background:#F5F7FF;color:#1E1B4B;
+      font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;
+      cursor:pointer;transition:all 0.2s;user-select:none;
     }
-    .quang-chip:hover:not(:disabled){background:#28284a;border-color:var(--pc);transform:translateY(-2px);}
-    .quang-chip:disabled{opacity:0.35;cursor:default;}
-    .quang-chip.selected{background:#1a2e3a;border-color:var(--pc);color:var(--pc);}
+    .quang-chip:hover:not(:disabled){background:#EEF2FF;border-color:var(--pc);transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,0.2);}
+    .quang-chip:disabled{opacity:0.3;cursor:default;}
+    .quang-chip.selected{background:#E0E7FF;border-color:var(--pc);color:var(--pc);}
     .quang-progress{
-      text-align:center;font-size:28px;font-weight:900;color:var(--pc);
+      text-align:center;font-family:'Baloo 2',sans-serif;font-size:28px;font-weight:900;color:var(--pc);
       margin:8px 0 2px;letter-spacing:1px;
     }
-    .quang-hint{text-align:center;font-size:12px;color:#555;}
+    .quang-hint{text-align:center;font-size:12px;color:#6B7280;font-weight:600;}
     /* FEEDBACK */
     .qfeedback{
-      margin-top:14px;padding:13px 16px;border-radius:14px;
-      font-weight:700;font-size:15px;text-align:center;
+      margin-top:14px;padding:14px 16px;border-radius:16px;
+      font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;text-align:center;
     }
-    .qfeedback.benar{background:#0d2e1e;color:#2ecc71;animation:bounceIn 0.4s ease;}
-    .qfeedback.salah{background:#2e0d0d;color:#e74c3c;animation:shakeEl 0.3s ease;}
+    .qfeedback.benar{background:#D1FAE5;color:#065F46;border:2px solid #10B981;animation:bounceIn 0.4s ease;}
+    .qfeedback.salah{background:#FEE2E2;color:#991B1B;border:2px solid #EF4444;animation:shakeEl 0.3s ease;}
     /* SUBMIT */
     .qsubmit{
       width:100%;margin-top:12px;padding:13px;border-radius:14px;
-      border:none;font-size:15px;font-weight:800;cursor:pointer;
-      background:var(--pc);color:#000;transition:opacity 0.15s;font-family:inherit;
+      border:none;font-family:'Baloo 2',sans-serif;font-size:15px;font-weight:800;cursor:pointer;
+      background:var(--pc);color:#fff;transition:all 0.15s;
+      box-shadow:0 4px 14px rgba(0,0,0,0.15);
     }
-    .qsubmit:disabled{opacity:0.3;cursor:default;}
-    .qsubmit:not(:disabled):hover{opacity:0.85;}
+    .qsubmit:disabled{opacity:0.3;cursor:default;box-shadow:none;}
+    .qsubmit:not(:disabled):hover{opacity:0.88;transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.2);}
   `;
   document.head.appendChild(s);
 })();
@@ -458,7 +484,7 @@ function generateAutoQuestion() {
     const chips = shuffle(cols.map(c => c.digit));
     return { tipe:'nilaitempat', emoji:'', judul:'Susun Nilai Tempat',
       soal:`Susun digit dari bilangan berikut ke kolom yang tepat:\n"${angkaDalamKata(n)}"`,
-      n, cols, chips };
+      n, cols, chips, jawaban: cols.map(c => c.digit).join('') };
   }
 
   // ── TIPE 4: TIMBANGAN BILANGAN ────────────────────────
@@ -527,7 +553,7 @@ function generateAutoQuestion() {
 
     return { tipe:'uang', emoji:'💰', judul:'Kembalian Uang',
       soal:`🛒 Harga: ${FMT_RP(harga)}\n💵 Dibayar: ${FMT_RP(bayar)}\n\nPilih uang kembalian yang tepat!`,
-      kembalian, jawabanPecahan, chips };
+      kembalian, jawabanPecahan, chips, jawaban: FMT_RP(kembalian) };
   }
 }
 
@@ -552,10 +578,28 @@ function showQuizPopup(quiz, player) {
   header.className = 'qheader';
   header.innerHTML = `
     <span class="qemoji">${quiz.emoji}</span>
-    <div>
-      <div class="qtipe" style="color:${playerColor}">${quiz.judul} — ${player.label}</div>
+    <div style="flex:1;">
+      <div class="qtipe">${quiz.judul} — ${player.label}</div>
       <div class="qrule">✅ Benar → maju +2 &nbsp;|&nbsp; ❌ Salah → mundur -1</div>
-    </div>`;
+    </div>
+    <div class="qtimer">60s</div>`;
+
+  const timerEl = header.querySelector('.qtimer');
+  let timeLeft = 60;
+  const timerInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = `${timeLeft}s`;
+    if (timeLeft <= 10) {
+      timerEl.classList.add('danger');
+    }
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      const buttons = box.querySelectorAll('button');
+      buttons.forEach(b => b.disabled = true);
+      selesaiQuiz(false, { ...quiz, jawaban: quiz.jawaban || 'Waktu Habis' }, player, playerColor, overlay, true);
+    }
+  }, 1000);
+  overlay.timerInterval = timerInterval;
 
   const soalEl = document.createElement('div');
   soalEl.className = 'qsoal';
@@ -581,16 +625,23 @@ function showQuizPopup(quiz, player) {
   document.body.appendChild(overlay);
 }
 
-function selesaiQuiz(benar, quiz, player, playerColor, overlay) {
+function selesaiQuiz(benar, quiz, player, playerColor, overlay, isTimeOut = false) {
+  if (overlay.timerInterval) clearInterval(overlay.timerInterval);
+
   const move = benar ? 2 : -1;
   const fb = document.createElement('div');
   fb.className = `qfeedback ${benar ? 'benar' : 'salah'}`;
-  fb.textContent = benar
-    ? `🎉 Benar! ${player.label} maju +2 langkah!`
-    : `😅 Salah! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`;
+  
+  if (isTimeOut) {
+    fb.textContent = `⏰ Waktu Habis! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`;
+  } else {
+    fb.textContent = benar
+      ? `🎉 Benar! ${player.label} maju +2 langkah!`
+      : `😅 Salah! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`;
+  }
   overlay.querySelector('.qbox').appendChild(fb);
 
-  addLog(`${player.label} ${benar ? 'BENAR ✅' : 'SALAH ❌'} (${quiz.judul}) → ${move>=0?'+':''}${move} langkah.`);
+  addLog(`${player.label} ${isTimeOut ? 'WAKTU HABIS ⏰' : (benar ? 'BENAR ✅' : 'SALAH ❌')} (${quiz.judul}) → ${move>=0?'+':''}${move} langkah.`);
 
   setTimeout(() => {
     overlay.remove();
@@ -925,7 +976,7 @@ function generateAutoQuestionBlocks() {
   autoQuestionBlocks = {};
   if (!autoGenerateQuestions) return;
 
-  const questionCount = Math.max(6, Math.floor(totalBlocks * 0.12));
+  const questionCount = Math.max(6, Math.floor(totalBlocks * questionFrequency));
   const used = new Set([1, totalBlocks]);
 
   Object.keys(hazardBlocks).forEach((position) => used.add(Number(position)));
@@ -1349,3 +1400,28 @@ setupPlayerSelect();
 setupModeSelect();
 setupLengthSelect();
 setupAutoQuestionToggle();
+
+// ── THEME TOGGLE ──────────────────────────────────────────
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeToggleSetupBtn = document.getElementById('themeToggleSetupBtn');
+
+function toggleTheme() {
+  const isLight = document.body.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.body.removeAttribute('data-theme');
+    if (themeToggleBtn) themeToggleBtn.textContent = 'Tema: Dark';
+    if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema: Dark';
+  } else {
+    document.body.setAttribute('data-theme', 'light');
+    if (themeToggleBtn) themeToggleBtn.textContent = 'Tema: Light';
+    if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema: Light';
+  }
+}
+
+if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+if (themeToggleSetupBtn) themeToggleSetupBtn.addEventListener('click', toggleTheme);
+
+// Pastikan defaultnya dark mode saat diload
+document.body.removeAttribute('data-theme');
+if (themeToggleBtn) themeToggleBtn.textContent = 'Tema: Dark';
+if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema: Dark';

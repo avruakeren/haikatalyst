@@ -1,65 +1,152 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haikatalyst Board Game</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(140deg, #8392ff, #a86cf1);
+      /* Solo Leveling Abyssal Background */
+      background: linear-gradient(-45deg, #020205, #08081a, #040924, #010108);
+      background-size: 400% 400%;
+      animation: epicGradient 20s ease infinite;
       color: #ffffff;
       display: grid;
       place-items: center;
       padding: 20px;
       overflow-x: hidden;
+      perspective: 1000px;
     }
 
-    .bg-circle {
+    /* Background Animations */
+    @keyframes epicGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* System Grid Overlay */
+    .grid-overlay {
       position: fixed;
-      border-radius: 50%;
-      filter: blur(8px);
+      bottom: -20%;
+      left: -50%;
+      width: 200%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.15) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 0;
       pointer-events: none;
-      opacity: .45;
-      animation: float 8s ease-in-out infinite;
+      transform: perspective(600px) rotateX(75deg);
+      animation: moveGrid 8s linear infinite;
+      mask-image: linear-gradient(transparent, black 70%);
+      -webkit-mask-image: linear-gradient(transparent, black 70%);
     }
 
-    .bg-circle.a {
-      width: 260px;
-      height: 260px;
-      left: -60px;
-      bottom: 50px;
-      background: #ff4fc8;
+    @keyframes moveGrid {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 0 50px;
+      }
     }
 
-    .bg-circle.b {
-      width: 330px;
-      height: 330px;
-      right: -80px;
-      top: -90px;
-      background: #7de4ff;
-      animation-delay: -2.8s;
+    /* Magical System Energy Particles */
+    .epic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
     }
 
+    .epic-particle {
+      position: absolute;
+      bottom: -20px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #fff, 0 0 20px #3b82f6, 0 0 35px #6366f1;
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      80% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* The System Window */
     .layout {
       width: min(1120px, 100%);
       min-height: min(700px, 95vh);
-      border-radius: 26px;
-      overflow: hidden;
+      border-radius: 40px 12px 40px 12px;
+      overflow: visible;
+      /* ALLOWS HERO TO BREAK OUT OF FRAME */
       display: grid;
       grid-template-columns: 1.05fr .95fr;
-      background: linear-gradient(120deg, #6f2de4 0%, #7b46e7 55%, #f3f4ff 55%, #f3f4ff 100%);
-      box-shadow: 0 24px 42px rgba(28, 16, 88, .34);
+      /* Dark System Glassmorphism */
+      background: rgba(10, 12, 25, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 0 80px rgba(59, 130, 246, 0.15);
       position: relative;
+      z-index: 10;
+      animation: popIn 1.2s cubic-bezier(0.2, 1.2, 0.5, 1);
+    }
+
+    /* Inner System Frame Border */
+    .layout::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border: 1px dashed rgba(59, 130, 246, 0.2);
+      border-radius: 30px 8px 30px 8px;
+      pointer-events: none;
+      z-index: 1;
     }
 
     .left {
-      padding: 24px 34px 28px;
+      padding: 44px 54px 48px;
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -72,49 +159,73 @@
       justify-content: space-between;
       align-items: center;
       gap: 16px;
+      animation: fadeDown 1s ease backwards 0.3s;
     }
 
     .brand {
       margin: 0;
-      font-size: 28px;
+      font-family: 'Baloo 2', cursive;
+      font-size: 34px;
       font-weight: 900;
-      letter-spacing: -.04em;
+      letter-spacing: .02em;
+      color: #93c5fd;
+      text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+      text-transform: uppercase;
     }
 
     .dev-btn {
-      border: 1px solid rgba(255,255,255,.4);
-      background: rgba(255,255,255,.14);
-      color: #fff;
-      border-radius: 999px;
-      padding: 10px 16px;
+      border: 1px dashed rgba(59, 130, 246, 0.6);
+      background: rgba(15, 23, 42, 0.6);
+      color: #93c5fd;
+      font-family: 'Baloo 2', cursive;
+      border-radius: 12px 4px 12px 4px;
+      padding: 10px 20px;
+      font-size: 16px;
       text-decoration: none;
-      font-weight: 700;
-      transition: transform .18s ease, background .18s ease;
+      font-weight: 800;
+      letter-spacing: .05em;
+      transition: all .3s ease;
       white-space: nowrap;
+      backdrop-filter: blur(5px);
+      text-transform: uppercase;
     }
 
     .dev-btn:hover {
       transform: translateY(-2px);
-      background: rgba(255,255,255,.22);
+      background: rgba(30, 58, 138, 0.6);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      color: #ffffff;
+      border-color: #60a5fa;
     }
 
     .headline {
-      margin: 8px 0 0;
-      font-size: clamp(40px, 6vw, 74px);
+      margin: 24px 0 0;
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(40px, 6.5vw, 84px);
       line-height: .95;
-      letter-spacing: -.03em;
+      letter-spacing: -.02em;
       font-weight: 900;
+      animation: fadeUp 1s ease backwards 0.5s;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      text-transform: uppercase;
     }
 
-    .headline span { color: #d4cbff; }
+    .headline span {
+      background: linear-gradient(135deg, #3b82f6, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));
+    }
 
     .about {
-      margin: 4px 0 0;
+      margin: 10px 0 0;
       max-width: 480px;
-      color: #efeaff;
+      color: #bfdbfe;
       line-height: 1.62;
       font-weight: 500;
-      font-size: clamp(15px, 2vw, 19px);
+      font-size: clamp(16px, 2vw, 20px);
+      animation: fadeUp 1s ease backwards 0.6s;
     }
 
     .action-wrap {
@@ -122,124 +233,217 @@
       display: grid;
       gap: 12px;
       width: min(320px, 100%);
+      animation: fadeUp 1s ease backwards 0.7s;
     }
 
     .play-btn {
-      border: 0;
-      background: #ffffff;
-      color: #1f1f3a;
-      border-radius: 999px;
-      padding: 18px;
-      font-size: 18px;
+      border: 1px solid rgba(59, 130, 246, 0.8);
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      border-radius: 24px 8px 24px 8px;
+      padding: 22px;
+      font-family: 'Baloo 2', cursive;
+      font-size: 24px;
       font-weight: 900;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: .03em;
-      box-shadow: 0 14px 24px rgba(21, 12, 68, .3);
-      transition: transform .2s ease, box-shadow .2s ease;
+      letter-spacing: .1em;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.2);
+      transition: all .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .play-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.4), transparent);
+      transition: left 0.6s ease;
     }
 
     .play-btn:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 20px 30px rgba(21, 12, 68, .38);
+      transform: translateY(-6px) scale(1.04);
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(15, 23, 42, 0.9));
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.6);
+      border-color: #93c5fd;
+      color: #ffffff;
     }
 
-    .small-link {
-      color: #ece8ff;
-      text-decoration: none;
-      font-weight: 700;
-      width: fit-content;
-      border-bottom: 1px solid rgba(255,255,255,.4);
+    .play-btn:hover::after {
+      left: 100%;
     }
 
     .right {
-      display: grid;
-      place-items: center;
+      display: block;
       position: relative;
-      padding: 20px;
-      overflow: hidden;
+      padding: 0;
+      overflow: visible;
+      animation: popInRight 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) backwards 0.6s;
     }
 
     .art {
-      width: min(500px, 95%);
-      height: min(560px, 92%);
-      border-radius: 26px;
-      background: linear-gradient(170deg, #ffffff 0%, #f2f4ff 100%);
-      box-shadow: inset 0 0 0 1px rgba(65, 74, 156, .14);
-      position: relative;
-      overflow: hidden;
-      animation: pulse 5s ease-in-out infinite;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: visible;
     }
 
+    /* Solo Leveling Magical Auras (Deep Cyan / Indigo) */
     .art::before {
       content: '';
       position: absolute;
-      width: 240px;
-      height: 240px;
-      right: -70px;
-      top: 40px;
+      width: 400px;
+      height: 400px;
+      right: -50px;
+      top: 10%;
       border-radius: 50%;
-      background: #ff4fd6;
+      background: #0ea5e9;
+      animation: rotateBlob 15s linear infinite;
+      filter: blur(60px);
+      opacity: 0.35;
+      z-index: 0;
     }
 
     .art::after {
       content: '';
       position: absolute;
-      width: 170px;
-      height: 170px;
-      left: 40px;
-      bottom: 60px;
-      border-radius: 26px;
-      background: linear-gradient(160deg, #5548f4, #ff4a4a);
-      opacity: .9;
+      width: 350px;
+      height: 350px;
+      left: 0%;
+      bottom: -20px;
+      border-radius: 50%;
+      background: linear-gradient(160deg, #4f46e5, #3b82f6);
+      opacity: 0.4;
+      animation: rotateBlob 20s linear infinite reverse;
+      filter: blur(60px);
+      z-index: 0;
     }
 
     .hero-image {
       position: absolute;
-      width: min(620px, 125%);
+      width: min(720px, 155%);
       right: -80px;
       bottom: -60px;
       object-fit: contain;
-      filter: drop-shadow(0 16px 22px rgba(39, 28, 91, .3));
-      animation: float 8s ease-in-out infinite;
-      z-index: 2;
+      filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.8));
+      animation: floatHero 6s ease-in-out infinite;
+      z-index: 10;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+    .right:hover .hero-image {
+      transform: scale(1.05) translateY(-15px);
+      filter: drop-shadow(0 40px 50px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-18px); }
+    /* Keyframes */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes popInRight {
+      from {
+        opacity: 0;
+        transform: translateX(60px) scale(0.85);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes rotateBlob {
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(1.15);
+      }
+
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    @keyframes floatHero {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-22px);
+      }
     }
 
     @media (max-width: 980px) {
       .layout {
         grid-template-columns: 1fr;
-        background: linear-gradient(165deg, #6f2de4 0%, #7b46e7 58%, #f3f4ff 58%, #f3f4ff 100%);
+        background: rgba(10, 12, 25, 0.75);
       }
 
-      .right { min-height: 340px; }
+      .left {
+        padding: 30px;
+      }
 
-      .art {
-        width: min(420px, 92%);
-        height: 340px;
+      .right {
+        min-height: 400px;
       }
 
       .hero-image {
-        width: min(470px, 120%);
-        right: -40px;
-        bottom: -70px;
+        width: min(550px, 130%);
+        right: -30px;
+        bottom: -50px;
       }
 
       .headline {
-        font-size: clamp(38px, 10vw, 56px);
+        font-size: clamp(42px, 10vw, 60px);
       }
 
       .action-wrap {
-        margin-top: 8px;
+        margin-top: 12px;
       }
     }
 
@@ -253,18 +457,25 @@
         text-align: center;
       }
 
-      .right { min-height: 300px; }
+      .right {
+        min-height: 350px;
+      }
 
       .hero-image {
-        width: 115%;
+        width: 130%;
         right: -20px;
+        bottom: -40px;
       }
     }
   </style>
 </head>
+
 <body>
-  <span class="bg-circle a" aria-hidden="true"></span>
-  <span class="bg-circle b" aria-hidden="true"></span>
+  <!-- Epic Background Grid -->
+  <div class="grid-overlay"></div>
+
+  <!-- Epic Particles Container -->
+  <div id="epic-bg" class="epic-bg"></div>
 
   <main class="layout">
     <section class="left">
@@ -273,14 +484,14 @@
         <a class="dev-btn" href="developer.html">Profil Pengembang</a>
       </div>
 
-      <h1 class="headline">Education <span>Mini Games</span></h1>
+      <h1 class="headline">Education<br><span>Mini Games</span></h1>
       <p class="about">
         Haikatalyst adalah kumpulan mini game edukasi interaktif dari berbagai jenjang kelas.
-        Pemain bisa belajar sambil bermain, yang bisa diakses kapan saja dan di mana saja. 
+        Pemain bisa belajar sambil bermain, yang bisa diakses kapan saja dan di mana saja.
       </p>
 
       <div class="action-wrap">
-        <button class="play-btn" onclick="location.href='jenjang.html'">Play</button>
+        <button class="play-btn" onclick="location.href='jenjang.html'">PLAY</button>
       </div>
     </section>
 
@@ -290,5 +501,27 @@
       </div>
     </section>
   </main>
+
+  <script>
+    // Epic Particles Generator (System Energy Aura)
+    document.addEventListener('DOMContentLoaded', () => {
+      const bg = document.getElementById('epic-bg');
+      const particleCount = window.innerWidth < 768 ? 20 : 45;
+
+      for (let i = 0; i < particleCount; i++) {
+        let p = document.createElement('div');
+        p.className = 'epic-particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (Math.random() * 8 + 4) + 's';
+        p.style.animationDelay = (Math.random() * 5) + 's';
+        p.style.opacity = Math.random() * 0.7 + 0.3;
+        let size = Math.random() * 5 + 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        bg.appendChild(p);
+      }
+    });
+  </script>
 </body>
+
 </html>

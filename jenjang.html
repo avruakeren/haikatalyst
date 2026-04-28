@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pilih Jenjang Kelas - Haikatalyst</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Nunito:wght@500;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="jenjang.css">
 </head>
+
 <body>
-  <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+  <!-- Epic Background Elements -->
+  <div class="grid-overlay"></div>
+  <div id="epic-bg" class="epic-bg"></div>
 
   <main class="page">
     <section class="hero-box reveal">
@@ -27,31 +32,31 @@
           <span class="class-number">1</span>
         </span>
       </button>
-      <button class="class-btn reveal" style="--delay: 80ms" data-grade="2">
+      <button class="class-btn reveal" style="--delay: 100ms" data-grade="2">
         <span class="class-btn-inner">
           <span class="class-label">KELAS</span>
           <span class="class-number">2</span>
         </span>
       </button>
-      <button class="class-btn reveal" style="--delay: 160ms" data-grade="3">
+      <button class="class-btn reveal" style="--delay: 200ms" data-grade="3">
         <span class="class-btn-inner">
           <span class="class-label">KELAS</span>
           <span class="class-number">3</span>
         </span>
       </button>
-      <button class="class-btn reveal" style="--delay: 240ms" data-grade="4">
+      <button class="class-btn reveal" style="--delay: 300ms" data-grade="4">
         <span class="class-btn-inner">
           <span class="class-label">KELAS</span>
           <span class="class-number">4</span>
         </span>
       </button>
-      <button class="class-btn reveal" style="--delay: 320ms" data-grade="5">
+      <button class="class-btn reveal" style="--delay: 400ms" data-grade="5">
         <span class="class-btn-inner">
           <span class="class-label">KELAS</span>
           <span class="class-number">5</span>
         </span>
       </button>
-      <button class="class-btn reveal" style="--delay: 400ms" data-grade="6">
+      <button class="class-btn reveal" style="--delay: 500ms" data-grade="6">
         <span class="class-btn-inner">
           <span class="class-label">KELAS</span>
           <span class="class-number">6</span>
@@ -59,9 +64,9 @@
       </button>
     </section>
 
-    <div class="footer-row reveal" style="--delay: 500ms">
-      <p class="hint"><!-- siapa tau mau dikasih komentar --></p>
-      <a class="back-link" href="index.html">← kembali</a>
+    <div class="footer-row reveal" style="--delay: 600ms">
+      <p class="hint"></p>
+      <a class="back-link" href="index.html">← Kembali ke Beranda</a>
     </div>
   </main>
 
@@ -74,12 +79,33 @@
       <div class="status" id="materialStatus"></div>
 
       <div class="modal-actions">
-        <button id="startMaterialBtn" type="button">Mulai</button>
+        <button id="startMaterialBtn" type="button">Mulai Main!</button>
         <button id="closeModalBtn" type="button">Tutup</button>
       </div>
     </div>
   </div>
 
   <script src="jenjang.js"></script>
+  <script>
+    // Epic Particles Generator
+    document.addEventListener('DOMContentLoaded', () => {
+      const bg = document.getElementById('epic-bg');
+      const particleCount = window.innerWidth < 768 ? 20 : 40;
+
+      for (let i = 0; i < particleCount; i++) {
+        let p = document.createElement('div');
+        p.className = 'epic-particle';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (Math.random() * 10 + 5) + 's';
+        p.style.animationDelay = (Math.random() * 5) + 's';
+        p.style.opacity = Math.random() * 0.7 + 0.3;
+        let size = Math.random() * 6 + 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        bg.appendChild(p);
+      }
+    });
+  </script>
 </body>
+
 </html>

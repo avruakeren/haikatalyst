@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haikatalyst Board Game</title>
+  <meta name="description" content="Haikatalyst Board Game — permainan matematika seru untuk kelas 5 SD!">
+  <title>Haikatalyst — Board Game Matematika Kelas 5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Comic+Neue:wght@300;400;700&display=swap">
   <link rel="stylesheet" href="game-kelas5-mat.css">
 </head>
 <body>
@@ -15,57 +19,106 @@
 
   <div id="startPopup" class="overlay">
     <div class="popup-card start-card">
-      <p class="eyebrow">Game Setup</p>
-      <h2>Pilih Jumlah Pemain</h2>
-      <p class="subtext">Pilih jumlah pemain lalu mulai bermain.</p>
-      <div id="playerSelect" class="player-select" data-value="2">
-        <button id="playerSelectTrigger" class="player-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="playerSelectLabel">
-          <span id="playerSelectLabel">2 Pemain</span>
-          <span class="player-select-arrow" aria-hidden="true">▾</span>
-        </button>
-        <ul id="playerSelectMenu" class="player-select-menu hidden" role="listbox" aria-labelledby="playerSelectLabel">
-          <li><button type="button" class="player-option selected" data-value="2" role="option" aria-selected="true">2 Pemain</button></li>
-          <li><button type="button" class="player-option" data-value="3" role="option" aria-selected="false">3 Pemain</button></li>
-          <li><button type="button" class="player-option" data-value="4" role="option" aria-selected="false">4 Pemain</button></li>
-          <li><button type="button" class="player-option" data-value="5" role="option" aria-selected="false">5 Pemain</button></li>
-          <li><button type="button" class="player-option" data-value="6" role="option" aria-selected="false">6 Pemain</button></li>
-          <li><button type="button" class="player-option" data-value="7" role="option" aria-selected="false">7 Pemain</button></li>
-        </ul>
-      </div>
-      <div class="mode-select" role="group" aria-label="Pilih mode board">
-        <p class="mode-label">Mode Board</p>
-        <div class="mode-options">
-          <button type="button" class="mode-option selected" data-mode="plain" aria-pressed="true">
-            Polos
-            <small>Semua blok normal</small>
-          </button>
-          <button type="button" class="mode-option" data-mode="hazard" aria-pressed="false">
-            Gangguan Acak
-            <small>Ada blok berbahaya yang membuat mundur</small>
-          </button>
+
+      <!-- ── Header ── -->
+      <div class="start-header">
+        <div>
+          <p class="eyebrow">Haikatalyst</p>
+          <h2>Board Game Matematika</h2>
+          <p class="subtext">Pilih pengaturan permainan lalu tekan Mulai Game!</p>
         </div>
+        <div class="start-badge">🎲</div>
       </div>
-      <div class="mode-select" role="group" aria-label="Pilih panjang permainan">
-        <p class="mode-label">Mode Permainan</p>
-        <div class="mode-options">
-          <button type="button" class="length-option selected" data-length="100" aria-pressed="true">
-            Normal Mode
-            <small>Target 100 blok</small>
-          </button>
-          <button type="button" class="length-option" data-length="50" aria-pressed="false">
-            Mode Cepat
-            <small>Target 50 blok</small>
-          </button>
+
+      <!-- ── 2-col settings grid ── -->
+      <div class="setup-grid">
+
+        <!-- LEFT: player + toggle -->
+        <div class="setup-col setup-col-left">
+          <div class="setup-section-card">
+            <p class="section-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Jumlah Pemain
+            </p>
+            <div id="playerSelect" class="player-select" data-value="2">
+              <button id="playerSelectTrigger" class="player-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="playerSelectLabel">
+                <span id="playerSelectLabel">2 Pemain</span>
+                <span class="player-select-arrow" aria-hidden="true">▾</span>
+              </button>
+              <ul id="playerSelectMenu" class="player-select-menu hidden" role="listbox" aria-labelledby="playerSelectLabel">
+                <li><button type="button" class="player-option selected" data-value="2" role="option" aria-selected="true">2 Pemain</button></li>
+                <li><button type="button" class="player-option" data-value="3" role="option" aria-selected="false">3 Pemain</button></li>
+                <li><button type="button" class="player-option" data-value="4" role="option" aria-selected="false">4 Pemain</button></li>
+                <li><button type="button" class="player-option" data-value="5" role="option" aria-selected="false">5 Pemain</button></li>
+                <li><button type="button" class="player-option" data-value="6" role="option" aria-selected="false">6 Pemain</button></li>
+                <li><button type="button" class="player-option" data-value="7" role="option" aria-selected="false">7 Pemain</button></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="setup-section-card toggle-section">
+            <label class="toggle-row" for="autoQuestionToggle">
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                Auto Generate Soal
+                <small>Soal muncul otomatis saat pemain berhenti di blok biasa.</small>
+              </span>
+              <input id="autoQuestionToggle" type="checkbox" role="switch" aria-label="Auto Generate Soal">
+            </label>
+            <div id="freqContainer" style="display: none; padding: 0 14px 14px;">
+               <label for="questionFreq" style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Frekuensi Soal</label>
+               <select id="questionFreq" style="margin-top: 6px; margin-bottom: 0;">
+                 <option value="0.05">Jarang</option>
+                 <option value="0.12" selected>Normal</option>
+                 <option value="0.25">Sering</option>
+                 <option value="0.5">Ekstrem</option>
+               </select>
+            </div>
+          </div>
         </div>
-      </div>
-       <label class="toggle-row" for="autoQuestionToggle">
-        <span>
-          Auto Generate Soal
-          <small>Soal matematika dibuat otomatis saat pemain berhenti di blok biasa.</small>
-        </span>
-        <input id="autoQuestionToggle" type="checkbox" role="switch" aria-label="Auto Generate Soal">
-      </label>
+
+        <!-- RIGHT: mode cards -->
+        <div class="setup-col setup-col-right">
+          <div class="setup-section-card" role="group" aria-label="Pilih mode board">
+            <p class="section-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              Mode Board
+            </p>
+            <div class="mode-options mode-cards">
+              <button type="button" class="mode-option selected" data-mode="plain" aria-pressed="true">
+                <span class="mode-icon">🎯</span>
+                <span class="mode-text">Polos<small>Semua blok normal</small></span>
+              </button>
+              <button type="button" class="mode-option" data-mode="hazard" aria-pressed="false">
+                <span class="mode-icon">⚡</span>
+                <span class="mode-text">Gangguan Acak<small>Ada blok berbahaya</small></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="setup-section-card" role="group" aria-label="Pilih panjang permainan">
+            <p class="section-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Mode Permainan
+            </p>
+            <div class="mode-options mode-cards">
+              <button type="button" class="length-option selected" data-length="100" aria-pressed="true">
+                <span class="mode-icon">🏆</span>
+                <span class="mode-text">Normal<small>Target 100 blok</small></span>
+              </button>
+              <button type="button" class="length-option" data-length="50" aria-pressed="false">
+                <span class="mode-icon">🚀</span>
+                <span class="mode-text">Mode Cepat<small>Target 50 blok</small></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /setup-grid -->
+
+      <!-- ── Actions ── -->
       <div class="setup-actions">
+        <button id="themeToggleSetupBtn" class="btn secondary" type="button">Tema: Dark</button>
         <button id="openSetupGuide" class="btn secondary" type="button">Instruksi Bermain</button>
         <button id="startBtn" class="btn primary" type="button">Mulai Game</button>
       </div>
@@ -141,6 +194,7 @@
         <p class="stat-title">Aksi</p>
         <div class="action-grid">
           <button id="openTutorial" class="btn secondary">Cara Bermain</button>
+          <button id="themeToggleBtn" class="btn secondary">Ubah Tema</button>
         </div>
       </div>
 
