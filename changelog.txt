@@ -61,4 +61,12 @@
 
 29 April 2026:
 - nambahin sistem timer di gamenya
-- 
+- rombak ulang tampilan gamenya
+- nambahin dark mode dan light mode
+- nambahin frekuensi soal yang mau keluar
+- popup instruksi diperbesar
+
+4 Mei 2026:
+- nambahin fitur blok instruksi yang bisa custom soal apa aja yang kita mau
+- unblocked by her :)
+- fix frekuensi soal, dari dropdown jadi button

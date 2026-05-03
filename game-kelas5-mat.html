@@ -66,13 +66,13 @@
               <input id="autoQuestionToggle" type="checkbox" role="switch" aria-label="Auto Generate Soal">
             </label>
             <div id="freqContainer" style="display: none; padding: 0 14px 14px;">
-               <label for="questionFreq" style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Frekuensi Soal</label>
-               <select id="questionFreq" style="margin-top: 6px; margin-bottom: 0;">
-                 <option value="0.05">Jarang</option>
-                 <option value="0.12" selected>Normal</option>
-                 <option value="0.25">Sering</option>
-                 <option value="0.5">Ekstrem</option>
-               </select>
+               <label id="freqLabel" style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 2px;">Frekuensi Soal</label>
+               <div class="freq-bar" id="freqSelectBar">
+                 <button type="button" class="freq-btn" data-value="0.05">Jarang</button>
+                 <button type="button" class="freq-btn selected" data-value="0.12">Normal</button>
+                 <button type="button" class="freq-btn" data-value="0.25">Sering</button>
+                 <button type="button" class="freq-btn" data-value="0.5">Ekstrem</button>
+               </div>
             </div>
           </div>
         </div>
@@ -209,8 +209,25 @@
     <div class="popup-card">
       <h3>Blok Instruksi</h3>
       <p class="subtext">Tambahkan efek ketika pemain mendarat di blok ini.</p>
-      <input id="instructionText" placeholder="Contoh: Berapakah jika 16 dijumlahkan 7?">
+      
+      <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Tipe Konten</label>
+      <div class="freq-bar" id="instructionTypeBar" style="margin-bottom: 16px; flex-wrap: wrap; height: auto; gap: 4px; padding: 4px;">
+        <button type="button" class="freq-btn selected" data-type="text" style="flex: 1 1 auto; min-width: 60px;">Teks</button>
+        <button type="button" class="freq-btn" data-type="pilihan" style="flex: 1 1 auto; min-width: 60px;">Pilihan</button>
+        <button type="button" class="freq-btn" data-type="tebak" style="flex: 1 1 auto; min-width: 60px;">Tebak</button>
+        <button type="button" class="freq-btn" data-type="nilaitempat" style="flex: 1 1 auto; min-width: 60px;">Susun</button>
+        <button type="button" class="freq-btn" data-type="timbangan" style="flex: 1 1 auto; min-width: 60px;">Timbangan</button>
+        <button type="button" class="freq-btn" data-type="uang" style="flex: 1 1 auto; min-width: 60px;">Uang</button>
+      </div>
+
+      <div id="instructionTextInputGroup">
+        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Pesan Instruksi</label>
+        <input id="instructionText" placeholder="Contoh: Berapakah jika 16 dijumlahkan 7?">
+      </div>
+
+      <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-top: 12px; margin-bottom: 6px;">Efek Langkah (Hanya untuk Teks)</label>
       <input id="instructionMove" type="number" placeholder="Opsional: Tambahkan langkah (misal: 3 atau -2)">
+      
       <div class="btn-row">
         <button id="saveInstruction" class="btn primary">Simpan</button>
         <button id="closeInstruction" class="btn secondary">Batal</button>

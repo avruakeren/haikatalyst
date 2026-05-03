@@ -105,7 +105,7 @@ function setupAutoQuestionToggle() {
   if (!autoQuestionToggle) return;
 
   const freqContainer = document.getElementById('freqContainer');
-  const questionFreq = document.getElementById('questionFreq');
+  const freqSelectBar = document.getElementById('freqSelectBar');
 
   autoGenerateQuestions = autoQuestionToggle.checked;
   if (freqContainer) freqContainer.style.display = autoGenerateQuestions ? 'block' : 'none';
@@ -115,9 +115,17 @@ function setupAutoQuestionToggle() {
     if (freqContainer) freqContainer.style.display = autoGenerateQuestions ? 'block' : 'none';
   });
 
-  if (questionFreq) {
-    questionFreq.addEventListener('change', (e) => {
-      questionFrequency = parseFloat(e.target.value);
+  if (freqSelectBar) {
+    const freqBtns = [...freqSelectBar.querySelectorAll('.freq-btn')];
+    freqBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // Update selection state
+        freqBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        
+        // Update frequency value
+        questionFrequency = parseFloat(btn.dataset.value);
+      });
     });
   }
 }
@@ -362,7 +370,7 @@ function angkaDalamKata(n) {
 
 // ── GENERATOR SOAL ──────────────────────────────────────────
 
-function generateAutoQuestion() {
+function generateAutoQuestion(forcedType) {
   const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
   const fmt = n => n.toLocaleString('id-ID');
   const shuffle = a => { for (let i = a.length-1; i>0; i--) { const j=rnd(0,i); [a[i],a[j]]=[a[j],a[i]]; } return a; };
@@ -381,7 +389,7 @@ function generateAutoQuestion() {
   }
 
   const TIPE_LIST = ['pilihan', 'tebak', 'nilaitempat', 'timbangan', 'uang'];
-  const tipe = TIPE_LIST[rnd(0, TIPE_LIST.length - 1)];
+  const tipe = forcedType || TIPE_LIST[rnd(0, TIPE_LIST.length - 1)];
 
   // ── TIPE 1: PILIHAN GANDA ──────────────────────────────
   if (tipe === 'pilihan') {
@@ -1074,21 +1082,60 @@ function createBoard() {
   }
 }
 
+const instructionTypeBar = document.getElementById('instructionTypeBar');
+const instructionTextInputGroup = document.getElementById('instructionTextInputGroup');
+let selectedInstructionType = 'text';
+
+if (instructionTypeBar) {
+  const typeBtns = [...instructionTypeBar.querySelectorAll('.freq-btn')];
+  typeBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      typeBtns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedInstructionType = btn.dataset.type;
+      
+      if (instructionTextInputGroup) {
+        instructionTextInputGroup.style.display = selectedInstructionType === 'text' ? 'block' : 'none';
+      }
+    });
+  });
+}
+
 function openInstructionEditor(num) {
   if (!players.length || gameFinished) return;
 
   activeBlock = num;
   const data = blockInstructions[num] || autoQuestionBlocks[num];
-  instructionText.value = data ? data.text : '';
-  instructionMove.value = data ? data.move : '';
+  
+  // Load existing data or defaults
+  instructionText.value = data ? (data.text || '') : '';
+  instructionMove.value = data ? (data.move || '') : '';
+  selectedInstructionType = data ? (data.type || 'text') : 'text';
+
+  // Update UI for type selector
+  if (instructionTypeBar) {
+    const typeBtns = [...instructionTypeBar.querySelectorAll('.freq-btn')];
+    typeBtns.forEach(btn => {
+      const isSelected = btn.dataset.type === selectedInstructionType;
+      btn.classList.toggle('selected', isSelected);
+    });
+  }
+  
+  if (instructionTextInputGroup) {
+    instructionTextInputGroup.style.display = selectedInstructionType === 'text' ? 'block' : 'none';
+  }
+
   instructionPopup.classList.remove('hidden');
 }
 
 saveInstruction.onclick = () => {
   const text = instructionText.value.trim();
   const move = Number(instructionMove.value || 0);
+  const type = selectedInstructionType;
 
-  if (!text) {
+  // Hapus jika tidak ada teks (untuk tipe teks) atau jika tipe berubah?
+  // Sebenarnya jika user pilih tipe soal, mereka tidak perlu input teks.
+  if (type === 'text' && !text && !move) {
     delete blockInstructions[activeBlock];
     const activeEl = document.getElementById(`block-${activeBlock}`);
     if (!autoQuestionBlocks[activeBlock]) {
@@ -1096,14 +1143,18 @@ saveInstruction.onclick = () => {
     }
     addLog(`Instruksi blok ${activeBlock} dihapus.`);
   } else {
-    blockInstructions[activeBlock] = { text, move };
+    blockInstructions[activeBlock] = { text, move, type };
     delete autoQuestionBlocks[activeBlock];
 
     const activeEl = document.getElementById(`block-${activeBlock}`);
     activeEl.classList.add('has-instruction');
     delete activeEl.dataset.autoQuestion;
 
-    addLog(`Blok ${activeBlock} di-set: "${text}" (${move >= 0 ? '+' : ''}${move})`);
+    if (type === 'text') {
+      addLog(`Blok ${activeBlock} di-set: "${text}" (${move >= 0 ? '+' : ''}${move})`);
+    } else {
+      addLog(`Blok ${activeBlock} di-set: Soal ${type.toUpperCase()}`);
+    }
   }
 
   instructionPopup.classList.add('hidden');
@@ -1329,7 +1380,7 @@ function handleBlock(player) {
     return;
   }
 
-  // Cek dulu autoQuestionBlocks (quiz pilihan ganda)
+  // Cek dulu autoQuestionBlocks (quiz pilihan ganda dari auto-generate)
   const autoData = autoQuestionBlocks[player.position];
   if (autoData && autoData.quiz) {
     player.el.classList.add('shake');
@@ -1339,13 +1390,22 @@ function handleBlock(player) {
     return;
   }
 
-  // Blok instruksi manual (teks biasa)
+  // Blok instruksi manual atau custom quiz
   const data = blockInstructions[player.position];
   if (data) {
     player.el.classList.add('shake');
     setTimeout(() => player.el.classList.remove('shake'), 320);
-    addLog(`${player.label} mendarat di blok ${player.position}: ${data.text}`);
-    showCustomPopup(`${data.text} (Efek langkah: ${data.move >= 0 ? '+' : ''}${data.move})`, player, data.move);
+
+    const type = data.type || 'text';
+    if (type === 'text') {
+      addLog(`${player.label} mendarat di blok ${player.position}: ${data.text}`);
+      showCustomPopup(`${data.text} (Efek langkah: ${data.move >= 0 ? '+' : ''}${data.move})`, player, data.move);
+    } else {
+      // Generate quiz sesuai tipe yang dipilih
+      const customQuiz = generateAutoQuestion(type);
+      addLog(`${player.label} mendapat tantangan ${type.toUpperCase()} di blok ${player.position}!`);
+      showQuizPopup(customQuiz, player);
+    }
   } else {
     addLog(`${player.label} berhenti di blok ${player.position}.`);
     nextTurn();
