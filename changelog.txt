@@ -70,3 +70,6 @@
 - nambahin fitur blok instruksi yang bisa custom soal apa aja yang kita mau
 - unblocked by her :)
 - fix frekuensi soal, dari dropdown jadi button
+
+12 Mei 2026:
+- 
