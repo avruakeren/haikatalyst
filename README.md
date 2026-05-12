@@ -46,9 +46,5 @@ Proyek ini mengusung tema **"Solo Leveling Abyssal System"**. Penggunaan partike
 - **Dosen Pembimbing 2**: Firdaus, M.Pd.
 
 ---
-
-## 📜 Log Perubahan (Changelog)
-Detail perkembangan proyek ini dapat dilihat pada file [changelog.txt](./changelog.txt).
-
----
-*© 2026 Haikatalyst - Dibuat dengan ❤️ untuk kemajuan pendidikan Indonesia.*
+- [Lihat Catatan Perubahan (Changelog)](./changelog.txt)
+- *© 2026 Haikatalyst - Media Pembelajaran Interaktif PGSD UNTIRTA*
