@@ -7,10 +7,10 @@
 
 ---
 
-## 🎭 Konsep & Estetika
+## 🎭 Concept & Aesthetics
 Proyek ini mengusung tema **"Solo Leveling Abyssal System"**. Penggunaan partikel energi, grid sistem yang dinamis, dan efek *glassmorphism* memberikan kesan premium dan modern, bertujuan untuk meningkatkan keterlibatan (engagement) siswa generasi Z dan Alpha yang terbiasa dengan visual game modern.
 
-## 🌟 Fitur Unggulan
+## 🌟 Key Features
 - **🕹️ Dynamic Board Game**: Papan permainan yang adaptif dengan animasi pion yang halus dan sistem dadu acak.
 - **🧠 Intelligent Question System**: Fitur *Auto-Generate Soal* yang memudahkan guru dalam menyiapkan materi secara cepat.
 - **⚡ Multiple Game Modes**: 
@@ -21,7 +21,7 @@ Proyek ini mengusung tema **"Solo Leveling Abyssal System"**. Penggunaan partike
 - **🌓 Dual Theme Support**: Dilengkapi dengan *Dark Mode* dan *Light Mode* untuk kenyamanan visual di berbagai kondisi pencahayaan.
 - **📱 Ultra Responsive Design**: Dapat diakses dengan lancar melalui berbagai perangkat (Desktop, Tablet, maupun Smartphone).
 
-## 🛠️ Teknologi yang Digunakan
+## 🛠️ Technology Stack
 - **Struktur**: HTML5 (Semantic Elements)
 - **Gaya**: Vanilla CSS3 (Custom Properties, Flexbox, Grid, Keyframe Animations)
 - **Logika**: JavaScript (ES6+, DOM Manipulation, Game Logic)
