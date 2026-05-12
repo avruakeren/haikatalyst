@@ -1,7 +1,7 @@
 # 🌌 Haikatalyst: Media Pembelajaran Berbasis Permainan Papan Interaktif
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live_Preview-blueviolet?style=for-the-badge&logo=github)](https://avruakeren.github.io/haikatalyst/)
-[![Academic Project](https://img.shields.io/badge/Status-Skripsi-success?style=for-the-badge)](https://developer.html)
+[![Academic Project](https://img.shields.io/badge/Status-Skripsi-success?style=for-the-badge)](https://avruakeren.github.io/haikatalyst/developer.html)
 
 **Haikatalyst** adalah media pembelajaran inovatif yang dirancang untuk mentransformasi cara siswa Sekolah Dasar memahami materi pelajaran. Menggabungkan konsep permainan papan (board game) klasik dengan estetika antarmuka "System" modern, proyek ini bertujuan menciptakan pengalaman belajar yang imersif, interaktif, dan menyenangkan.
 
