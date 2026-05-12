@@ -333,13 +333,13 @@ body {
 }
 
 #startMaterialBtn { 
-  background: linear-gradient(135deg, #a86cf1, #ff4fc8); 
+  background: linear-gradient(135deg, #8327f3, #7d7e9d); 
   color: #fff; 
-  box-shadow: 0 10px 20px rgba(255, 79, 200, 0.3);
+  box-shadow: 0 10px 20px rgba(161, 79, 255, 0.3);
 }
 #startMaterialBtn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 25px rgba(255, 79, 200, 0.5);
+  box-shadow: 0 15px 25px rgba(161, 79, 255, 0.5);
 }
 
 #closeModalBtn { 
