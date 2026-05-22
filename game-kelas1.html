@@ -4,34 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelas 1 - Bahasa Indonesia - Menyusun Kalimat</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/game-kelas1.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/game-kelas1.css">
+  <link rel="stylesheet" href="css/pixel-art-icons.css">
+  <script src="js/pixel-art-icons.js"></script>
 </head>
 <body>
-  <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
-
-  <main class="page">
-    <section class="hero-box reveal">
+  <div class="container">
+    <!-- Header Card -->
+    <header class="card title">
       <h1>Menyusun Kalimat</h1>
-      <p>
-        Susunlah kalimat yang benar dari kata-kata yang tersedia!
-        Klik tombol "Acak Kata" untuk mengacak posisi kata, lalu klik kata untuk menyusunnya.
-      </p>
-    </section>
+      <p>Susunlah kata-kata acak di bawah ini menjadi kalimat Bahasa Indonesia yang baik dan benar!</p>
+    </header>
 
-    <section class="game-area" aria-label="Area permainan menyusun kalimat">
-      <div id="wordPool" class="word-pool" aria-live="polite">
-        <!-- Kata-kata akan muncul di sini -->
+    <!-- Stats Bar -->
+    <section class="stats" aria-label="Statistik Permainan">
+      <div class="stat">
+        <small>Soal Ke</small>
+        <strong>🎯 <span id="levelText">1</span>/5</strong>
       </div>
-      <button id="shuffleBtn" class="btn secondary" type="button">Acak Kata</button>
-      <button id="submitBtn" class="btn primary" type="button">Kirim Jawaban</button>
+      <div class="stat">
+        <small>Skor Pemain</small>
+        <strong>💰 <span id="scoreText">0</span></strong>
+      </div>
+      <div class="stat">
+        <small>Sisa Nyawa</small>
+        <strong>⚡ <span id="livesText">3</span></strong>
+      </div>
     </section>
 
-    <div class="footer-row reveal" style="--delay: 500ms">
-      <p class="hint">Tip: klik kata-kata untuk menyusunnya menjadi kalimat yang benar.</p>
-      <a class="back-link" href="jenjang.html">← kembali</a>
-    </div>
-  </main>
+    <!-- Game Work Area -->
+    <main class="card game-card">
+      <div id="sentenceTarget">Kalimat 1</div>
+      <p id="hintText" class="hint">Hint: Aktivitas yang dilakukan di rumah atau sekolah.</p>
+      
+      <!-- Drop Zone Area -->
+      <div id="dropZone" class="drop-zone empty"></div>
+      
+      <!-- Word Pool (Bank) Area -->
+      <div id="wordBank" class="word-bank"></div>
+      
+      <!-- Feedback Message -->
+      <div id="feedback"></div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button id="checkBtn" class="btn primary" type="button">Kirim Jawaban</button>
+        <button id="resetBtn" class="btn secondary" type="button">Ulang Susunan</button>
+        <button id="skipBtn" class="btn warn" type="button">Lewati Soal</button>
+      </div>
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="row">
+      <p class="hint">Tip: Tarik atau klik kata-kata untuk menyusunnya menjadi kalimat yang benar.</p>
+      <a class="link" href="jenjang.html">← Kembali ke Pilihan Kelas</a>
+    </footer>
+  </div>
 
   <script src="js/game-kelas1.js"></script>
+</body>
+</html>

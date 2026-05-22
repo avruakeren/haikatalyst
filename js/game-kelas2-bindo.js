@@ -66,6 +66,15 @@ function createChip(text, index) {
     draggedId = null;
   });
 
+  chip.addEventListener('click', () => {
+    if (chip.parentNode === wordBank) {
+      dropZone.appendChild(chip);
+    } else {
+      wordBank.appendChild(chip);
+    }
+    refreshDropZoneState();
+  });
+
   return chip;
 }
 
@@ -80,8 +89,11 @@ function updateStats() {
 }
 
 function showFinishPopup() {
-  finishMessage.textContent = `Kerja bagus! Kamu menyelesaikan ${questions.length} soal dengan skor akhir ${score}.`;
+  finishMessage.textContent = `Kerja bagus! Kamu menyelesaikan ${questions.length} soal dengan skor akhir ${score}. 🏆`;
   finishPopup.classList.remove('hidden');
+  if (typeof window.triggerPixelConfetti === 'function') {
+    window.triggerPixelConfetti();
+  }
 }
 
 function renderQuestion() {
@@ -145,10 +157,13 @@ checkBtn.addEventListener('click', () => {
 
   if (userSentence === expected) {
     score += 20;
-    feedback.textContent = 'Benar! Lanjut ke level berikutnya.';
+    feedback.textContent = 'Benar! Lanjut ke level berikutnya. 🎉';
     feedback.className = 'success';
+    if (typeof window.triggerPixelConfetti === 'function') {
+      window.triggerPixelConfetti();
+    }
     level += 1;
-    setTimeout(renderQuestion, 700);
+    setTimeout(renderQuestion, 1600);
   } else {
     lives -= 1;
     feedback.textContent = 'Belum tepat, coba lagi ya.';

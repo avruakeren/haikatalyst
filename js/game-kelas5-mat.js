@@ -85,13 +85,14 @@ function setupPlayerSelect() {
   };
 
   playerSelectTrigger.addEventListener('click', () => {
+    if (window.SFX) window.SFX.toggle();
     const isOpen = playerSelect.classList.toggle('open');
     playerSelectMenu.classList.toggle('hidden', !isOpen);
     playerSelectTrigger.setAttribute('aria-expanded', String(isOpen));
   });
 
   options.forEach((option) => {
-    option.addEventListener('click', () => selectValue(option.dataset.value));
+    option.addEventListener('click', () => { if (window.SFX) window.SFX.soft(); selectValue(option.dataset.value); });
   });
 
   document.addEventListener('click', (event) => {
@@ -119,6 +120,7 @@ function setupAutoQuestionToggle() {
     const freqBtns = [...freqSelectBar.querySelectorAll('.freq-btn')];
     freqBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
+        if (window.SFX) window.SFX.click();
         // Update selection state
         freqBtns.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
@@ -143,7 +145,7 @@ function setupModeSelect() {
   };
 
   modeOptions.forEach((option) => {
-    option.addEventListener('click', () => selectMode(option.dataset.mode));
+    option.addEventListener('click', () => { if (window.SFX) window.SFX.toggle(); selectMode(option.dataset.mode); });
   });
 
   selectMode(gameMode);
@@ -164,7 +166,7 @@ function setupLengthSelect() {
   };
 
   lengthOptions.forEach((option) => {
-    option.addEventListener('click', () => selectLength(option.dataset.length));
+    option.addEventListener('click', () => { if (window.SFX) window.SFX.toggle(); selectLength(option.dataset.length); });
   });
 
   selectLength(gameLengthMode);
@@ -674,6 +676,7 @@ function renderPilihanGanda(box, quiz, player, playerColor, overlay) {
     btn.style.setProperty('--pc', playerColor);
     btn.textContent = `${letters[i]}. ${p}`;
     btn.onclick = () => {
+      if (window.SFX) window.SFX.click();
       if (answered) return;
       answered = true;
       wrap.querySelectorAll('.qchoice').forEach(b => b.disabled = true);
@@ -714,7 +717,10 @@ function renderTebakAngka(box, quiz, player, playerColor, overlay) {
   moreBtn.className = 'qmore-btn';
   moreBtn.style.setProperty('--pc', playerColor);
   moreBtn.textContent = '💡 Petunjuk 1';
-  moreBtn.onclick = showNextClue;
+  moreBtn.onclick = () => {
+    if (window.SFX) window.SFX.soft();
+    showNextClue();
+  };
 
   box.appendChild(clueWrap);
   box.appendChild(moreBtn);
@@ -729,6 +735,7 @@ function renderTebakAngka(box, quiz, player, playerColor, overlay) {
     btn.style.setProperty('--pc', playerColor);
     btn.textContent = `${letters[i]}. ${p}`;
     btn.onclick = () => {
+      if (window.SFX) window.SFX.click();
       if (answered) return;
       answered = true;
       moreBtn.disabled = true;
@@ -784,6 +791,7 @@ function renderNilaiTempat(box, quiz, player, playerColor, overlay) {
     chip.dataset.digit = digit;
 
     chip.onclick = () => {
+      if (window.SFX) window.SFX.click();
       if (chip.classList.contains('placed')) return;
       // Cari slot kosong pertama
       const target = slotEls.find(s => !s.filled);
@@ -873,6 +881,7 @@ function renderTimbangan(box, quiz, player, playerColor, overlay) {
     btn.style.setProperty('--pc', playerColor);
     btn.textContent = p.label;
     btn.onclick = () => {
+      if (window.SFX) window.SFX.click();
       if (answered) return;
       answered = true;
       choicesEl.querySelectorAll('.qtimb-btn').forEach(b => b.disabled = true);
@@ -931,6 +940,7 @@ function renderUang(box, quiz, player, playerColor, overlay) {
   resetBtn.style.cssText = `margin-top:8px;padding:7px 14px;border-radius:10px;border:none;
     background:#222240;color:#aaa;font-size:12px;cursor:pointer;font-family:inherit;`;
   resetBtn.onclick = () => {
+    if (window.SFX) window.SFX.click();
     if (finished) return;
     totalDipilih = 0;
     selected = [];
@@ -944,6 +954,7 @@ function renderUang(box, quiz, player, playerColor, overlay) {
     chip.style.setProperty('--pc', playerColor);
     chip.textContent = `Rp${fmt(pecahan)}`;
     chip.onclick = () => {
+      if (window.SFX) window.SFX.click();
       if (finished) return;
       // Toggle: klik lagi untuk batalkan
       if (chip.classList.contains('selected')) {
@@ -1090,6 +1101,7 @@ if (instructionTypeBar) {
   const typeBtns = [...instructionTypeBar.querySelectorAll('.freq-btn')];
   typeBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
+      if (window.SFX) window.SFX.click();
       typeBtns.forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       selectedInstructionType = btn.dataset.type;
@@ -1128,7 +1140,7 @@ function openInstructionEditor(num) {
   instructionPopup.classList.remove('hidden');
 }
 
-saveInstruction.onclick = () => {
+saveInstruction.onclick = () => { if (window.SFX) window.SFX.soft();
   const text = instructionText.value.trim();
   const move = Number(instructionMove.value || 0);
   const type = selectedInstructionType;
@@ -1160,9 +1172,9 @@ saveInstruction.onclick = () => {
   instructionPopup.classList.add('hidden');
 };
 
-closeInstruction.onclick = () => instructionPopup.classList.add('hidden');
-openTutorial.onclick = () => tutorialPopup.classList.remove('hidden');
-closeTutorial.onclick = () => tutorialPopup.classList.add('hidden');
+closeInstruction.onclick = () => { if (window.SFX) window.SFX.soft(); instructionPopup.classList.add('hidden'); };
+openTutorial.onclick = () => { if (window.SFX) window.SFX.info(); tutorialPopup.classList.remove('hidden'); };
+closeTutorial.onclick = () => { if (window.SFX) window.SFX.soft(); tutorialPopup.classList.add('hidden'); };
 
 let currentGuideStep = 0;
 const guideSteps = document.querySelectorAll('.guide-step');
@@ -1189,17 +1201,20 @@ function updateSetupGuide() {
 
 if (prevSetupGuide) {
   prevSetupGuide.onclick = () => {
+    if (window.SFX) window.SFX.click();
     if (currentGuideStep > 0) { currentGuideStep--; updateSetupGuide(); }
   };
 }
 if (nextSetupGuide) {
   nextSetupGuide.onclick = () => {
+    if (window.SFX) window.SFX.click();
     if (currentGuideStep < guideSteps.length - 1) { currentGuideStep++; updateSetupGuide(); }
   };
 }
 
 if (openSetupGuide && setupGuidePopup) {
   openSetupGuide.onclick = () => {
+    if (window.SFX) window.SFX.info();
     currentGuideStep = 0;
     updateSetupGuide();
     setupGuidePopup.classList.remove('hidden');
@@ -1207,7 +1222,7 @@ if (openSetupGuide && setupGuidePopup) {
 }
 
 if (closeSetupGuide && setupGuidePopup) {
-  closeSetupGuide.onclick = () => setupGuidePopup.classList.add('hidden');
+  closeSetupGuide.onclick = () => { if (window.SFX) window.SFX.soft(); setupGuidePopup.classList.add('hidden'); };
   setupGuidePopup.addEventListener('click', (event) => {
     if (event.target === setupGuidePopup) {
       setupGuidePopup.classList.add('hidden');
@@ -1334,7 +1349,7 @@ function showCustomPopup(message, player, move) {
   customPopup.classList.remove('hidden');
 }
 
-popupOk.onclick = () => {
+popupOk.onclick = () => { if (window.SFX) window.SFX.soft();
   if (pendingPlayer) {
     pendingPlayer.position += pendingMove;
     pendingPlayer.position = Math.max(1, Math.min(totalBlocks, pendingPlayer.position));
@@ -1430,7 +1445,7 @@ function checkWinner() {
   return true;
 }
 
-rollBtn.onclick = async () => {
+rollBtn.onclick = async () => { if (window.SFX) window.SFX.roll();
   if (gameFinished) return;
 
   rollBtn.disabled = true;
@@ -1442,6 +1457,10 @@ rollBtn.onclick = async () => {
 };
 
 startBtn.onclick = () => {
+  if (window.SFX) {
+    window.SFX.start();
+    window.SFX.bgmStart();
+  }
   createBoard();
   initPlayers(Number(playerSelect?.dataset.value || 2));
   startPopup.classList.add('hidden');
@@ -1449,7 +1468,7 @@ startBtn.onclick = () => {
   rollBtn.disabled = false;
 };
 
-restartBtn.onclick = () => window.location.reload();
+restartBtn.onclick = () => { if (window.SFX) window.SFX.soft(); window.location.reload(); };
 
 window.addEventListener('resize', () => {
   players.forEach(updatePawn);
@@ -1478,8 +1497,20 @@ function toggleTheme() {
   }
 }
 
-if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-if (themeToggleSetupBtn) themeToggleSetupBtn.addEventListener('click', toggleTheme);
+if (themeToggleBtn) themeToggleBtn.addEventListener('click', () => { if (window.SFX) window.SFX.toggle(); toggleTheme(); });
+if (themeToggleSetupBtn) themeToggleSetupBtn.addEventListener('click', () => { if (window.SFX) window.SFX.toggle(); toggleTheme(); });
+
+// Global SFX hover logic
+document.addEventListener('mouseover', (e) => {
+  const btn = e.target.closest('button, .mode-option, .length-option, .player-option, .qchoice, .qnt-chip, .qtimb-btn, .quang-chip, .freq-btn');
+  if (btn && !btn.disabled && window.SFX) {
+    if (!btn._hovered) {
+      window.SFX.hover();
+      btn._hovered = true;
+      btn.addEventListener('mouseleave', () => btn._hovered = false, { once: true });
+    }
+  }
+});
 
 // Pastikan defaultnya dark mode saat diload
 document.body.removeAttribute('data-theme');

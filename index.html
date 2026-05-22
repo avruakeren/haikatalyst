@@ -481,7 +481,7 @@
     <section class="left">
       <div class="top-row">
         <p class="brand">Haikatalyst</p>
-        <a class="dev-btn" href="developer.html">Profil Pengembang</a>
+        <a class="dev-btn interact-btn" href="developer.html">Profil Pengembang</a>
       </div>
 
       <h1 class="headline">Education<br><span>Mini Games</span></h1>
@@ -491,7 +491,7 @@
       </p>
 
       <div class="action-wrap">
-        <button class="play-btn" onclick="location.href='jenjang.html'">PLAY</button>
+        <button class="play-btn interact-btn" data-href="jenjang.html">PLAY</button>
       </div>
     </section>
 
@@ -520,6 +520,43 @@
         p.style.height = size + 'px';
         bg.appendChild(p);
       }
+    });
+  </script>
+
+  <script src="js/sfx.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let audioStarted = false;
+
+      // Start BGM on any first interaction
+      const startAudio = () => {
+        if (!audioStarted && window.SFX) {
+          window.SFX.bgmStart();
+          audioStarted = true;
+          document.removeEventListener("pointerdown", startAudio);
+        }
+      };
+      document.addEventListener("pointerdown", startAudio);
+
+      // Add SFX logic to interact buttons
+      const interactBtns = document.querySelectorAll('.interact-btn');
+      
+      interactBtns.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          if (window.SFX) window.SFX.hover();
+        });
+
+        btn.addEventListener('click', (e) => {
+          if (window.SFX) window.SFX.click();
+
+          if (btn.hasAttribute('data-href')) {
+            e.preventDefault();
+            setTimeout(() => {
+              window.location.href = btn.getAttribute('data-href');
+            }, 300);
+          }
+        });
+      });
     });
   </script>
 </body>

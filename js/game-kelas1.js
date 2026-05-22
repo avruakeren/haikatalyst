@@ -65,6 +65,15 @@ const questions = [
         draggedId = null;
       });
 
+      chip.addEventListener('click', () => {
+        if (chip.parentNode === wordBank) {
+          dropZone.appendChild(chip);
+        } else {
+          wordBank.appendChild(chip);
+        }
+        refreshDropZoneState();
+      });
+
       return chip;
     }
 
@@ -79,8 +88,11 @@ const questions = [
         wordBank.innerHTML = '';
         dropZone.innerHTML = '';
         refreshDropZoneState();
-        feedback.textContent = `Game selesai! Skor akhir kamu: ${score}`;
+        feedback.textContent = `Game selesai! Skor akhir kamu: ${score} 🏆`;
         feedback.className = 'success';
+        if (typeof window.triggerPixelConfetti === 'function') {
+          window.triggerPixelConfetti();
+        }
         return;
       }
 
@@ -139,8 +151,11 @@ const questions = [
         score += 20;
         feedback.textContent = 'Benar! Keren 🎉 Lanjut ke soal berikutnya.';
         feedback.className = 'success';
+        if (typeof window.triggerPixelConfetti === 'function') {
+          window.triggerPixelConfetti();
+        }
         level += 1;
-        setTimeout(renderQuestion, 850);
+        setTimeout(renderQuestion, 1600);
       } else {
         lives -= 1;
         feedback.textContent = 'Belum tepat, coba lagi ya.';

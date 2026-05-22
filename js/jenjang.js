@@ -67,9 +67,17 @@ function addClickBounce(button) {
 }
 
 document.querySelectorAll('.class-btn').forEach((button) => {
+  button.addEventListener('mouseenter', () => {
+    const grade = Number(button.dataset.grade || 1);
+    const pitchMultiplier = 0.75 + (grade - 1) * 0.10; // ascending pitch from 0.75x to 1.25x
+    if (window.SFX) window.SFX.hover(pitchMultiplier);
+  });
+
   button.addEventListener('click', () => {
     addClickBounce(button);
-    openModal(button.dataset.grade);
+    const grade = Number(button.dataset.grade || 1);
+    if (window.SFX) window.SFX.click(grade); // Play grade-specific click scaling
+    openModal(grade);
   });
 });
 
@@ -78,30 +86,40 @@ startMaterialBtn.addEventListener('click', () => {
   const selectedMaterial = activeMaterials[selectedIndex];
 
   if (!selectedMaterial) {
+    if (window.SFX) window.SFX.warn();
     materialStatus.textContent = 'Materi belum dipilih.';
     return;
   }
 
   if (!selectedMaterial.available) {
+    if (window.SFX) window.SFX.warn();
     materialStatus.textContent = 'Materi ini masih coming soon. Pilih materi lain ya.';
     return;
   }
 
-  window.location.href = selectedMaterial.href;
+  if (window.SFX) window.SFX.start();
+  
+  // A tiny delay before transition lets the start chime be heard beautifully
+  setTimeout(() => {
+    window.location.href = selectedMaterial.href;
+  }, 200);
 });
 
 closeModalBtn.addEventListener('click', () => {
+  if (window.SFX) window.SFX.soft();
   materialOverlay.style.display = 'none';
 });
 
 materialOverlay.addEventListener('click', (event) => {
   if (event.target === materialOverlay) {
+    if (window.SFX) window.SFX.soft();
     materialOverlay.style.display = 'none';
   }
 });
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
+  if (event.key === 'Escape' && materialOverlay.style.display === 'flex') {
+    if (window.SFX) window.SFX.soft();
     materialOverlay.style.display = 'none';
   }
 });

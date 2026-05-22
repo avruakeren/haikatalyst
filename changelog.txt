@@ -72,4 +72,8 @@
 - fix frekuensi soal, dari dropdown jadi button
 
 12 Mei 2026:
+- ada update cuma lupa apaan yak
+
+23 Mei 2026:
+- nambahin sfx (finally)
 - 
