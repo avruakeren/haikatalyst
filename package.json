@@ -1,0 +1,8 @@
+{
+  "name": "haikatalyst",
+  "version": "1.0.0",
+  "description": "Media pembelajaran berbasis permainan papan interaktif untuk siswa SD",
+  "private": true,
+  "author": "Haikal Akbar Diennova",
+  "license": "MIT"
+}

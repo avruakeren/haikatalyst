@@ -1,0 +1,16 @@
+node_modules/
+.env
+.DS_Store
+Thumbs.db
+npm-debug.log*
+
+# Windows shell config
+desktop.ini
+
+# AI agent tooling (developer local)
+.agent/
+.agents/
+
+# Python cache
+__pycache__/
+*.pyc
