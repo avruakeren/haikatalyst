@@ -88,7 +88,7 @@ const questions = [
         wordBank.innerHTML = '';
         dropZone.innerHTML = '';
         refreshDropZoneState();
-        feedback.textContent = `Game selesai! Skor akhir kamu: ${score} 🏆`;
+        feedback.textContent = `Permainan selesai! Skor akhir kamu: ${score} 🏆`;
         feedback.className = 'success';
         if (typeof window.triggerPixelConfetti === 'function') {
           window.triggerPixelConfetti();
@@ -162,7 +162,7 @@ const questions = [
         feedback.className = 'error';
 
         if (lives <= 0) {
-          feedback.textContent = `Game over! Kalimat yang benar: "${expected}". Klik Ulang Susunan atau refresh untuk main lagi.`;
+          feedback.textContent = `Wah, kesempatan habis! Kalimat yang benar adalah: "${expected}". Klik Ulang Susunan atau refresh untuk main lagi.`;
           feedback.className = 'error';
           document.getElementById('checkBtn').disabled = true;
           document.getElementById('skipBtn').disabled = true;
@@ -185,13 +185,13 @@ const questions = [
       if (level >= questions.length) return;
       lives -= 1;
       level += 1;
-      feedback.textContent = 'Soal dilewati. Nyawa berkurang 1.';
+      feedback.textContent = 'Soal dilewati. Kesempatan berkurang 1.';
       feedback.className = 'error';
       livesText.textContent = String(lives);
       if (lives <= 0) {
         document.getElementById('checkBtn').disabled = true;
         document.getElementById('skipBtn').disabled = true;
-        feedback.textContent = 'Nyawa habis. Refresh halaman untuk mulai ulang.';
+        feedback.textContent = 'Kesempatan habis. Refresh halaman untuk mulai lagi, ya!';
         return;
       }
       setTimeout(renderQuestion, 600);

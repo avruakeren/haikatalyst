@@ -1,0 +1,8 @@
+
+> haikatalyst@1.0.0 dev
+> live-server --port=3000 --no-browser
+
+[32mServing "C:\Users\LEGION\Documents\dungeon\web" at http://127.0.0.1:3000[39m
+[36mChange detected[39m C:\Users\LEGION\Documents\dungeon\web\node_modules\bcryptjs\src\bcrypt\prng
+[36mChange detected[39m C:\Users\LEGION\Documents\dungeon\web\node_modules\bcryptjs\src\bcrypt\prng
+[36mChange detected[39m C:\Users\LEGION\Documents\dungeon\web\dev-output.txt

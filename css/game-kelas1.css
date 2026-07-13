@@ -2,7 +2,7 @@
 
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Nunito', sans-serif;
       min-height: 100vh;
       color: #1d2759;
       background: radial-gradient(circle at top left, #dce4ff 0%, rgba(220,228,255,0) 35%),
@@ -27,6 +27,7 @@
 
     .title h1 {
       margin: 0;
+      font-family: 'Baloo 2', cursive;
       font-size: clamp(24px, 4vw, 34px);
       color: #24358a;
     }
@@ -72,7 +73,7 @@
     }
 
     .drop-zone.empty::before {
-      content: 'Taruh kata ke sini sesuai urutan kalimat.';
+      content: 'Letakkan kata-kata di sini, yuk!';
       color: #7a86bd;
       font-size: 14px;
     }

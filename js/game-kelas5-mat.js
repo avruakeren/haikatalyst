@@ -207,7 +207,7 @@ function angkaDalamKata(n) {
     @keyframes quizPop { from{transform:scale(0.82) translateY(20px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
     @keyframes shakeEl { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-7px)} 75%{transform:translateX(7px)} }
     @keyframes popIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
-    @keyframes bounceIn { 0%{transform:scale(0.3);opacity:0} 60%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+    @keyframes feedbackPop { 0%{transform:scale(0.3);opacity:0} 60%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
     .qoverlay {
       position:fixed;inset:0;background:rgba(30,27,75,0.45);
       backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
@@ -220,7 +220,7 @@ function angkaDalamKata(n) {
       box-shadow:0 24px 60px rgba(30,27,75,0.18);
       border:2px solid rgba(99,102,241,0.18);
       border-top:5px solid var(--pc);
-      animation:quizPop 0.28s cubic-bezier(.34,1.3,.64,1);
+      animation:quizPop 0.28s cubic-bezier(0.16,1,0.3,1);
       max-height:92vh;overflow-y:auto;
     }
     .qheader {
@@ -274,7 +274,7 @@ function angkaDalamKata(n) {
       background:#F5F7FF;transition:all 0.15s;
     }
     .qnt-slot-digit{font-family:'Baloo 2',sans-serif;font-size:22px;font-weight:800;color:#C4B5FD;}
-    .qnt-slot-label{font-size:8px;color:#9CA3AF;text-transform:uppercase;margin-top:2px;text-align:center;white-space:pre;}
+    .qnt-slot-label{font-size:8px;color:#6B7280;text-transform:uppercase;margin-top:2px;text-align:center;white-space:pre;}
     .qnt-slot.filled .qnt-slot-digit{color:var(--pc);}
     .qnt-slot.filled{border-color:var(--pc);border-style:solid;background:#EEF2FF;}
     .qnt-slot.correct{border-color:#10B981;border-style:solid;background:#D1FAE5;}
@@ -300,7 +300,7 @@ function angkaDalamKata(n) {
     .qtimb-arm{
       position:absolute;left:10px;right:10px;top:8px;height:6px;
       background:#818CF8;border-radius:3px;transform-origin:center;
-      transition:transform 0.6s cubic-bezier(.34,1.3,.64,1);
+      transition:transform 0.6s ease-out;
     }
     .qtimb-panL,.qtimb-panR{
       position:absolute;top:-4px;width:60px;height:8px;
@@ -355,7 +355,7 @@ function angkaDalamKata(n) {
       margin-top:14px;padding:14px 16px;border-radius:16px;
       font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;text-align:center;
     }
-    .qfeedback.benar{background:#D1FAE5;color:#065F46;border:2px solid #10B981;animation:bounceIn 0.4s ease;}
+    .qfeedback.benar{background:#D1FAE5;color:#065F46;border:2px solid #10B981;animation:feedbackPop 0.4s cubic-bezier(0.16,1,0.3,1);}
     .qfeedback.salah{background:#FEE2E2;color:#991B1B;border:2px solid #EF4444;animation:shakeEl 0.3s ease;}
     /* SUBMIT */
     .qsubmit{
@@ -1230,6 +1230,26 @@ if (closeSetupGuide && setupGuidePopup) {
   });
 }
 
+const openCapaian = document.getElementById('openCapaian');
+const capaianPopup = document.getElementById('capaianPopup');
+const closeCapaian = document.getElementById('closeCapaian');
+
+if (openCapaian && capaianPopup) {
+  openCapaian.onclick = () => {
+    if (window.SFX) window.SFX.info();
+    capaianPopup.classList.remove('hidden');
+  };
+}
+
+if (closeCapaian && capaianPopup) {
+  closeCapaian.onclick = () => { if (window.SFX) window.SFX.soft(); capaianPopup.classList.add('hidden'); };
+  capaianPopup.addEventListener('click', (event) => {
+    if (event.target === capaianPopup) {
+      capaianPopup.classList.add('hidden');
+    }
+  });
+}
+
 function initPlayers(count) {
   players = [];
   currentPlayer = 0;
@@ -1373,9 +1393,9 @@ popupOk.onclick = () => { if (window.SFX) window.SFX.soft();
 
 function handleBlock(player) {
   const block = document.getElementById(`block-${player.position}`);
+  player.el.classList.add('pop');
 
-  player.el.classList.add('bounce');
-  setTimeout(() => player.el.classList.remove('bounce'), 350);
+  setTimeout(() => player.el.classList.remove('pop'), 350);
 
   if (lastActiveBlock) lastActiveBlock.classList.remove('active-block');
   block.classList.add('active-block');
@@ -1465,6 +1485,7 @@ startBtn.onclick = () => {
   initPlayers(Number(playerSelect?.dataset.value || 2));
   startPopup.classList.add('hidden');
   setupGuidePopup?.classList.add('hidden');
+  capaianPopup?.classList.add('hidden');
   rollBtn.disabled = false;
 };
 
@@ -1488,12 +1509,12 @@ function toggleTheme() {
   const isLight = document.body.getAttribute('data-theme') === 'light';
   if (isLight) {
     document.body.removeAttribute('data-theme');
-    if (themeToggleBtn) themeToggleBtn.textContent = 'Tema: Dark';
-    if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema: Dark';
+    if (themeToggleBtn) themeToggleBtn.textContent = 'Tema Gelap';
+    if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema Gelap';
   } else {
     document.body.setAttribute('data-theme', 'light');
-    if (themeToggleBtn) themeToggleBtn.textContent = 'Tema: Light';
-    if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema: Light';
+    if (themeToggleBtn) themeToggleBtn.textContent = 'Tema Terang';
+    if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema Terang';
   }
 }
 
@@ -1514,5 +1535,5 @@ document.addEventListener('mouseover', (e) => {
 
 // Pastikan defaultnya dark mode saat diload
 document.body.removeAttribute('data-theme');
-if (themeToggleBtn) themeToggleBtn.textContent = 'Tema: Dark';
-if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema: Dark';
+if (themeToggleBtn) themeToggleBtn.textContent = 'Tema Gelap';
+if (themeToggleSetupBtn) themeToggleSetupBtn.textContent = 'Tema Gelap';

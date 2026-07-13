@@ -173,7 +173,7 @@ checkBtn.addEventListener('click', () => {
     if (lives <= 0) {
       checkBtn.disabled = true;
       skipBtn.disabled = true;
-      finishMessage.textContent = `Nyawa habis. Skor akhir kamu ${score}. Coba ulang lagi ya!`;
+      finishMessage.textContent = `Kesempatan habis. Skor akhir kamu ${score}. Coba ulang lagi ya!`;
       finishPopup.classList.remove('hidden');
     }
   }
@@ -191,14 +191,14 @@ skipBtn.addEventListener('click', () => {
   if (level >= questions.length) return;
   lives -= 1;
   level += 1;
-  feedback.textContent = 'Soal dilewati. Nyawa berkurang 1.';
+  feedback.textContent = 'Soal dilewati. Kesempatan berkurang 1.';
   feedback.className = 'error';
   updateStats();
 
   if (lives <= 0) {
     checkBtn.disabled = true;
     skipBtn.disabled = true;
-    finishMessage.textContent = `Nyawa habis. Skor akhir kamu ${score}. Coba ulang lagi ya!`;
+    finishMessage.textContent = `Kesempatan habis. Skor akhir kamu ${score}. Coba ulang lagi ya!`;
     finishPopup.classList.remove('hidden');
     return;
   }

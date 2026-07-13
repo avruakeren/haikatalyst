@@ -26,7 +26,7 @@
   vertical-align: middle;
   position: relative;
   line-height: 1;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.2s ease-out;
 }
 
 .pixel-icon-wrapper:hover {
@@ -44,8 +44,8 @@
 
 /* --- ANIMATIONS RETRO --- */
 
-/* 1. Bounce (➕, ➖) */
-@keyframes pixelBounce {
+/* 1. Float (➕, ➖) */
+@keyframes pixelFloat {
   0%, 100% {
     transform: translateY(0);
   }
@@ -53,8 +53,8 @@
     transform: translateY(-4px);
   }
 }
-.pixel-anim-bounce {
-  animation: pixelBounce 1.6s ease-in-out infinite;
+.pixel-anim-float {
+  animation: pixelFloat 1.6s ease-in-out infinite;
 }
 
 /* 2. Step Spin / Retro Rotation (✖️, 🔁) */
@@ -66,12 +66,12 @@
 .pixel-anim-spin-step { animation: pixelSpin 4s steps(8) infinite; }
 .pixel-icon-wrapper:hover .pixel-anim-spin-hover { animation: pixelSpin 0.8s steps(4) infinite; }
 
-/* 3. Wobble / Floating Tilt (➗, 🚀) */
-@keyframes pixelWobble {
+/* 3. Tilt (➗, 🚀) */
+@keyframes pixelTilt {
   0%, 100% { transform: rotate(-5deg) translateY(0); }
   50% { transform: rotate(5deg) translateY(-2px); }
 }
-.pixel-anim-wobble { animation: pixelWobble 2s ease-in-out infinite; }
+.pixel-anim-tilt { animation: pixelTilt 2s ease-in-out infinite; }
 
 /* 4. Glow Pulse (⚡, 🎯) */
 @keyframes pixelGlow {
@@ -196,5 +196,5 @@
 
 /* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .pixel-bounce, .pixel-spin, .pixel-anim-bounce, .pixel-anim-spin-slow, .pixel-anim-spin-step, .pixel-anim-wobble, .pixel-anim-roll { animation: none; }
+  .pixel-bounce, .pixel-spin, .pixel-anim-float, .pixel-anim-spin-slow, .pixel-anim-spin-step, .pixel-anim-tilt, .pixel-anim-roll { animation: none; }
 }

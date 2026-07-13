@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Haikatalyst Board Game — permainan matematika seru untuk kelas 5 SD!">
-  <title>Haikatalyst — Board Game Matematika Kelas 5</title>
+  <title>Petualangan Matematika Kelas 5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Comic+Neue:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Comic+Neue:wght@300;400;700&family=Fredoka:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/game-kelas5-mat.css">
   <link rel="stylesheet" href="css/pixel-art-icons.css">
   <script src="js/pixel-art-icons.js"></script>
+  <script type="module" src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"></script>
 </head>
 <body>
   <div class="ambient" aria-hidden="true">
@@ -25,9 +26,9 @@
       <!-- ── Header ── -->
       <div class="start-header">
         <div>
-          <p class="eyebrow">Haikatalyst</p>
-          <h2>Board Game Matematika</h2>
-          <p class="subtext">Pilih pengaturan permainan lalu tekan Mulai Game!</p>
+          <p class="eyebrow">MathQuest</p>
+          <h2>Permainan Papan Matematika</h2>
+          <p class="subtext">Sebelum main, yuk atur dulu peraturan mainnya!</p>
         </div>
         <div class="start-badge">🎲</div>
       </div>
@@ -62,18 +63,18 @@
             <label class="toggle-row" for="autoQuestionToggle">
               <span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                Auto Generate Soal
-                <small>Soal muncul otomatis saat pemain berhenti di blok biasa.</small>
+                Soal Otomatis
+                <small>Aktifkan biar soal-soal muncul dengan sendirinya, seru!</small>
               </span>
               <input id="autoQuestionToggle" type="checkbox" role="switch" aria-label="Auto Generate Soal">
             </label>
             <div id="freqContainer" style="display: none; padding: 0 14px 14px;">
-               <label id="freqLabel" style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 2px;">Frekuensi Soal</label>
+               <label id="freqLabel" style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 2px;">Seberapa Sering Soal Muncul</label>
                <div class="freq-bar" id="freqSelectBar">
                  <button type="button" class="freq-btn" data-value="0.05">Jarang</button>
                  <button type="button" class="freq-btn selected" data-value="0.12">Normal</button>
                  <button type="button" class="freq-btn" data-value="0.25">Sering</button>
-                 <button type="button" class="freq-btn" data-value="0.5">Hard</button>
+                  <button type="button" class="freq-btn" data-value="0.5">Sulit</button>
                </div>
             </div>
           </div>
@@ -84,16 +85,16 @@
           <div class="setup-section-card" role="group" aria-label="Pilih mode board">
             <p class="section-label">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-              Mode Board
+              Mode Papan
             </p>
             <div class="mode-options mode-cards">
               <button type="button" class="mode-option selected" data-mode="plain" aria-pressed="true">
                 <span class="mode-icon">🎯</span>
-                <span class="mode-text">Polos<small>Semua blok normal</small></span>
+                <span class="mode-text">Polos<small>Permainan tanpa blok yang membuat pemain mundur</small></span>
               </button>
               <button type="button" class="mode-option" data-mode="hazard" aria-pressed="false">
                 <span class="mode-icon">⚡</span>
-                <span class="mode-text">Gangguan Acak<small>Ada blok berbahaya</small></span>
+                <span class="mode-text">Gangguan Acak<small>Ada blok berbahaya yang jika menginjak blok akan membuat pemain mundur beberapa blok!</small></span>
               </button>
             </div>
           </div>
@@ -120,16 +121,27 @@
 
       <!-- ── Actions ── -->
       <div class="setup-actions">
-        <button id="themeToggleSetupBtn" class="btn secondary" type="button">Tema: Dark</button>
-        <button id="openSetupGuide" class="btn secondary" type="button">Instruksi Bermain!</button>
-        <button id="startBtn" class="btn primary" type="button">Mulai Game</button>
+        <button id="themeToggleSetupBtn" class="btn secondary" type="button">Tema Gelap</button>
+        <button id="openSetupGuide" class="btn secondary" type="button">Cara Bermain</button>
+        <button id="openCapaian" class="btn secondary" type="button">Tujuan Belajar</button>
+        <button id="startBtn" class="btn primary start-btn" type="button">Mulai Main</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="capaianPopup" class="overlay hidden">
+    <div class="popup-card capaian-card">
+      <h3>Tujuan Belajar</h3>
+      <img src="assets/tujuanpembelajaran.png" alt="Tujuan Pembelajaran" class="capaian-img">
+      <div class="btn-row">
+        <button id="closeCapaian" class="btn primary">Tutup</button>
       </div>
     </div>
   </div>
 
   <div id="setupGuidePopup" class="overlay hidden">
     <div class="popup-card">
-      <h3>Instruksi Bermain</h3>
+      <h3>📖 Instruksi Bermain</h3>
       <ol class="tutorial-list" id="setupGuideList" start="1">
         <li class="guide-step">Guru membagi siswa menjadi beberapa kelompok terlebih dahulu.</li>
         <li class="guide-step hidden">Setiap kelompok mengirim satu perwakilan untuk bermain.</li>
@@ -162,8 +174,8 @@
     <section class="board-panel">
       <div class="panel-header">
         <div>
-          <p class="eyebrow">Haikatalyst</p>
-          <h1>Board Arena</h1>
+          <p class="eyebrow">MathQuest</p>
+          <h1>Arena Permainan</h1>
         </div>
         <div class="leader-wrap">
           <span>Pemimpin permainan saat ini:</span>
@@ -174,11 +186,12 @@
       <div id="board"></div>
 
       <div class="progress-wrap">
-        <span>Progress permainan</span>
+        <span>Perkembangan Permainan</span>
         <div class="progress-track">
           <div id="progressFill"></div>
         </div>
       </div>
+      <div class="bottom-decoration" aria-hidden="true"></div>
     </section>
 
     <aside id="control" class="control-panel">
@@ -187,32 +200,34 @@
         <div id="info">Tekan Mulai</div>
         <div class="dice-wrap">
           <div id="dice">🎲</div>
-          <span id="lastRoll">Belum roll</span>
+          <span id="lastRoll">Belum lempar</span>
         </div>
-        <button id="rollBtn" class="btn primary" disabled>Roll Dadu</button>
+        <button id="rollBtn" class="btn primary" disabled>Lempar Dadu</button>
       </div>
 
       <div class="glass stat-card">
         <p class="stat-title">Aksi</p>
         <div class="action-grid">
           <button id="openTutorial" class="btn secondary">Cara Bermain</button>
-          <button id="themeToggleBtn" class="btn secondary">Ubah Tema</button>
+          <button id="themeToggleBtn" class="btn secondary">Ganti Tema</button>
         </div>
       </div>
 
       <div class="glass stat-card">
-        <p class="stat-title">Log Permainan</p>
+        <p class="stat-title">Catatan Permainan</p>
         <ul id="logList"></ul>
       </div>
+
+      <spline-viewer class="spline-inline" url="https://prod.spline.design/XH8q1UYJsXlh7N3L/scene.splinecode"></spline-viewer>
     </aside>
   </main>
 
   <div id="instructionPopup" class="overlay hidden">
     <div class="popup-card">
       <h3>Blok Instruksi</h3>
-      <p class="subtext">Tambahkan efek ketika pemain mendarat di blok ini.</p>
+      <p class="subtext">Atur efek saat pemain mendarat di blok ini.</p>
       
-      <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Tipe Konten</label>
+      <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Jenis Soal</label>
       <div class="freq-bar" id="instructionTypeBar" style="margin-bottom: 16px; flex-wrap: wrap; height: auto; gap: 4px; padding: 4px;">
         <button type="button" class="freq-btn selected" data-type="text" style="flex: 1 1 auto; min-width: 60px;">Teks</button>
         <button type="button" class="freq-btn" data-type="pilihan" style="flex: 1 1 auto; min-width: 60px;">Pilihan</button>
@@ -223,11 +238,11 @@
       </div>
 
       <div id="instructionTextInputGroup">
-        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Pesan Instruksi</label>
+        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 6px;">Isi Instruksi</label>
         <input id="instructionText" placeholder="Contoh: Berapakah jika 16 dijumlahkan 7?">
       </div>
 
-      <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-top: 12px; margin-bottom: 6px;">Efek Langkah (Hanya untuk Teks)</label>
+      <label style="display: block; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-top: 12px; margin-bottom: 6px;">Efek Langkah</label>
       <input id="instructionMove" type="number" placeholder="Opsional: Tambahkan langkah (misal: 3 atau -2)">
       
       <div class="btn-row">
@@ -262,7 +277,7 @@
   <div id="winPopup" class="overlay hidden">
     <div class="popup-card win-card">
       <h3 id="winText">Pemenang</h3>
-      <p>Game selesai! Mau main lagi?</p>
+      <p>Permainan selesai! Mau main lagi?</p>
       <div class="btn-row">
         <button id="restartBtn" class="btn primary">Main Lagi</button>
         <a href="index.html" class="btn secondary link-btn">Ke Beranda</a>

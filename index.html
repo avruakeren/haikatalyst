@@ -4,531 +4,356 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haikatalyst Board Game</title>
+  <title>Haikatalyst — Education Mini Games</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      /* Solo Leveling Abyssal Background */
-      background: linear-gradient(-45deg, #020205, #08081a, #040924, #010108);
-      background-size: 400% 400%;
-      animation: epicGradient 20s ease infinite;
-      color: #ffffff;
-      display: grid;
-      place-items: center;
-      padding: 20px;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      flex-direction: column;
       overflow-x: hidden;
-      perspective: 1000px;
+      background: #D2D2E6;
     }
 
-    /* Background Animations */
-    @keyframes epicGradient {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    /* System Grid Overlay */
-    .grid-overlay {
+    /* ==============================
+       MINIMAL BACKDROP (matches robot #D2D2E6)
+       ============================== */
+    .bg-gradient {
       position: fixed;
-      bottom: -20%;
-      left: -50%;
-      width: 200%;
-      height: 100%;
-      background-image:
-        linear-gradient(rgba(59, 130, 246, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59, 130, 246, 0.15) 1px, transparent 1px);
-      background-size: 50px 50px;
+      inset: 0;
       z-index: 0;
       pointer-events: none;
-      transform: perspective(600px) rotateX(75deg);
-      animation: moveGrid 8s linear infinite;
-      mask-image: linear-gradient(transparent, black 70%);
-      -webkit-mask-image: linear-gradient(transparent, black 70%);
+      background: #D2D2E6;
     }
 
-    @keyframes moveGrid {
-      0% {
-        background-position: 0 0;
-      }
-
-      100% {
-        background-position: 0 50px;
-      }
-    }
-
-    /* Magical System Energy Particles */
-    .epic-bg {
+    /* ==============================
+       ABOUT LINK (standalone)
+       ============================== */
+    .about-link {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
+      top: 20px;
+      right: clamp(20px, 4vw, 40px);
+      z-index: 100;
+      font-size: 15px;
+      font-weight: 700;
+      color: oklch(0.40 0.02 260);
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
     }
 
-    .epic-particle {
-      position: absolute;
-      bottom: -20px;
-      background: #fff;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #fff, 0 0 20px #3b82f6, 0 0 35px #6366f1;
-      animation: rise linear infinite;
+    .about-link:hover {
+      background: oklch(0.000 0.000 0 / 0.06);
     }
 
-    @keyframes rise {
-      0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 1;
-      }
-
-      80% {
-        opacity: 0.8;
-      }
-
-      100% {
-        transform: translateY(-110vh) scale(1.5);
-        opacity: 0;
-      }
-    }
-
-    /* The System Window */
-    .layout {
-      width: min(1120px, 100%);
-      min-height: min(700px, 95vh);
-      border-radius: 40px 12px 40px 12px;
-      overflow: visible;
-      /* ALLOWS HERO TO BREAK OUT OF FRAME */
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      /* Dark System Glassmorphism */
-      background: rgba(10, 12, 25, 0.65);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 0 80px rgba(59, 130, 246, 0.15);
+    /* ==============================
+       HERO
+       ============================== */
+    .hero {
       position: relative;
       z-index: 10;
-      animation: popIn 1.2s cubic-bezier(0.2, 1.2, 0.5, 1);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
     }
 
-    /* Inner System Frame Border */
-    .layout::before {
-      content: '';
+    .hero-header {
+      text-align: center;
+      max-width: 720px;
+      margin-bottom: clamp(32px, 6vh, 64px);
+      animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-headline {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(40px, 6vw, 76px);
+      line-height: 1.05;
+      font-weight: 900;
+      color: oklch(0.18 0.02 260);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(24px, 4vw, 64px);
+      width: 100%;
+      margin: auto 0;
+    }
+
+    .hero-robot-col {
+      flex: 1.4;
+      display: flex;
+      justify-content: center;
+      animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .robot-card {
+      position: relative;
+      width: 100%;
+      max-width: 680px;
+      aspect-ratio: 1 / 1;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .robot-card spline-viewer {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Menutupi badge "Built with Spline" dengan warna background */
+    .spline-cover {
       position: absolute;
-      inset: 12px;
-      border: 1px dashed rgba(59, 130, 246, 0.2);
-      border-radius: 30px 8px 30px 8px;
+      right: 0;
+      bottom: 0;
+      width: 200px;
+      height: 56px;
+      background: #D2D2E6;
       pointer-events: none;
+      z-index: 5;
+    }
+
+    spline-viewer::part(logo) {
+      display: none !important;
+    }
+
+    .hero-play-col {
+      flex: 0.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+    }
+
+    .play-desc {
+      max-width: 340px;
+      text-align: justify;
+      text-wrap: pretty;
+      color: oklch(0.40 0.02 260);
+      line-height: 1.6;
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 700;
+    }
+
+    .cta-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      background: linear-gradient(135deg, oklch(0.80 0.11 240), oklch(0.62 0.15 245));
+      color: oklch(1.000 0.000 0);
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(18px, 2vw, 22px);
+      font-weight: 900;
+      padding: 16px 48px;
+      border-radius: 16px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: transform 0.2s;
+      box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.35);
+      animation: ctaGlow 2.6s ease-in-out infinite;
+    }
+
+    .cta-btn .cta-label {
+      position: relative;
       z-index: 1;
     }
 
-    .left {
-      padding: 44px 54px 48px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      animation: fadeDown 1s ease backwards 0.3s;
-    }
-
-    .brand {
-      margin: 0;
-      font-family: 'Baloo 2', cursive;
-      font-size: 34px;
-      font-weight: 900;
-      letter-spacing: .02em;
-      color: #93c5fd;
-      text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
-      text-transform: uppercase;
-    }
-
-    .dev-btn {
-      border: 1px dashed rgba(59, 130, 246, 0.6);
-      background: rgba(15, 23, 42, 0.6);
-      color: #93c5fd;
-      font-family: 'Baloo 2', cursive;
-      border-radius: 12px 4px 12px 4px;
-      padding: 10px 20px;
-      font-size: 16px;
-      text-decoration: none;
-      font-weight: 800;
-      letter-spacing: .05em;
-      transition: all .3s ease;
-      white-space: nowrap;
-      backdrop-filter: blur(5px);
-      text-transform: uppercase;
-    }
-
-    .dev-btn:hover {
-      transform: translateY(-2px);
-      background: rgba(30, 58, 138, 0.6);
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-      color: #ffffff;
-      border-color: #60a5fa;
-    }
-
-    .headline {
-      margin: 24px 0 0;
-      font-family: 'Baloo 2', cursive;
-      font-size: clamp(40px, 6.5vw, 84px);
-      line-height: .95;
-      letter-spacing: -.02em;
-      font-weight: 900;
-      animation: fadeUp 1s ease backwards 0.5s;
-      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      text-transform: uppercase;
-    }
-
-    .headline span {
-      background: linear-gradient(135deg, #3b82f6, #818cf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;
-      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));
-    }
-
-    .about {
-      margin: 10px 0 0;
-      max-width: 480px;
-      color: #bfdbfe;
-      line-height: 1.62;
-      font-weight: 500;
-      font-size: clamp(16px, 2vw, 20px);
-      animation: fadeUp 1s ease backwards 0.6s;
-    }
-
-    .action-wrap {
-      margin-top: auto;
-      display: grid;
-      gap: 12px;
-      width: min(320px, 100%);
-      animation: fadeUp 1s ease backwards 0.7s;
-    }
-
-    .play-btn {
-      border: 1px solid rgba(59, 130, 246, 0.8);
-      background: rgba(15, 23, 42, 0.8);
-      color: #fff;
-      border-radius: 24px 8px 24px 8px;
-      padding: 22px;
-      font-family: 'Baloo 2', cursive;
-      font-size: 24px;
-      font-weight: 900;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.2);
-      transition: all .4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position: relative;
-      overflow: hidden;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .play-btn::after {
+    .cta-btn::after {
       content: '';
       position: absolute;
       top: 0;
-      left: -100%;
-      width: 100%;
+      left: -60%;
+      width: 50%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.4), transparent);
-      transition: left 0.6s ease;
+      background: linear-gradient(120deg, transparent, oklch(1.000 0.000 0 / 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: ctaShine 3.2s ease-in-out infinite;
+      pointer-events: none;
     }
 
-    .play-btn:hover {
-      transform: translateY(-6px) scale(1.04);
-      background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(15, 23, 42, 0.9));
-      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.6);
-      border-color: #93c5fd;
-      color: #ffffff;
+    @keyframes ctaGlow {
+      0%, 100% { box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.30); }
+      50% { box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 14px 40px oklch(0.62 0.15 245 / 0.60); }
     }
 
-    .play-btn:hover::after {
-      left: 100%;
+    @keyframes ctaShine {
+      0% { left: -60%; }
+      55%, 100% { left: 130%; }
     }
 
-    .right {
-      display: block;
-      position: relative;
-      padding: 0;
-      overflow: visible;
-      animation: popInRight 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) backwards 0.6s;
+    .cta-btn:hover {
+      transform: translateY(-4px) scale(1.03);
     }
 
-    .art {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: visible;
-    }
-
-    /* Solo Leveling Magical Auras (Deep Cyan / Indigo) */
-    .art::before {
-      content: '';
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      right: -50px;
-      top: 10%;
-      border-radius: 50%;
-      background: #0ea5e9;
-      animation: rotateBlob 15s linear infinite;
-      filter: blur(60px);
-      opacity: 0.35;
-      z-index: 0;
-    }
-
-    .art::after {
-      content: '';
-      position: absolute;
-      width: 350px;
-      height: 350px;
-      left: 0%;
-      bottom: -20px;
-      border-radius: 50%;
-      background: linear-gradient(160deg, #4f46e5, #3b82f6);
-      opacity: 0.4;
-      animation: rotateBlob 20s linear infinite reverse;
-      filter: blur(60px);
-      z-index: 0;
-    }
-
-    .hero-image {
-      position: absolute;
-      width: min(720px, 155%);
-      right: -80px;
-      bottom: -60px;
-      object-fit: contain;
-      filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.8));
-      animation: floatHero 6s ease-in-out infinite;
-      z-index: 10;
-      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .right:hover .hero-image {
-      transform: scale(1.05) translateY(-15px);
-      filter: drop-shadow(0 40px 50px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
-    }
-
-    /* Keyframes */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .cta-btn:active {
+      transform: translateY(3px) scale(0.98);
+      transition-duration: 0.05s;
     }
 
     @keyframes popIn {
-      from {
-        opacity: 0;
-        transform: scale(0.85);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: translateY(24px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @keyframes popInRight {
-      from {
-        opacity: 0;
-        transform: translateX(60px) scale(0.85);
+    /* ==============================
+       RESPONSIVE
+       ============================== */
+    @media (max-width: 860px) {
+      .hero {
+        padding-top: 100px;
       }
 
-      to {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-      }
-    }
-
-    @keyframes rotateBlob {
-      0% {
-        transform: rotate(0deg) scale(1);
+      .hero-content {
+        flex-direction: column;
+        gap: 32px;
       }
 
-      50% {
-        transform: rotate(180deg) scale(1.15);
-      }
-
-      100% {
-        transform: rotate(360deg) scale(1);
-      }
-    }
-
-    @keyframes floatHero {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-22px);
-      }
-    }
-
-    @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-        background: rgba(10, 12, 25, 0.75);
-      }
-
-      .left {
-        padding: 30px;
-      }
-
-      .right {
-        min-height: 400px;
-      }
-
-      .hero-image {
-        width: min(550px, 130%);
-        right: -30px;
-        bottom: -50px;
-      }
-
-      .headline {
-        font-size: clamp(42px, 10vw, 60px);
-      }
-
-      .action-wrap {
-        margin-top: 12px;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .top-row {
-        flex-wrap: wrap;
-      }
-
-      .dev-btn {
+      .hero-robot-col,
+      .hero-play-col {
+        flex: none;
         width: 100%;
-        text-align: center;
       }
 
-      .right {
-        min-height: 350px;
+      .robot-card {
+        max-width: 360px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 90px 20px 40px;
       }
 
-      .hero-image {
-        width: 130%;
-        right: -20px;
-        bottom: -40px;
+      .cta-btn {
+        width: 100%;
+        padding: 14px 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bg-gradient {
+        animation: none;
+      }
+
+      .hero-header,
+      .hero-robot-col,
+      .hero-play-col {
+        animation: none;
+        opacity: 1;
+      }
+
+      .cta-btn {
+        transition: none;
+        animation: none;
+      }
+
+      .cta-btn::after {
+        animation: none;
+      }
+
+      .cta-btn:hover {
+        transform: none;
       }
     }
   </style>
+  <script type="module" src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"></script>
 </head>
 
 <body>
-  <!-- Epic Background Grid -->
-  <div class="grid-overlay"></div>
+  <!-- Minimal backdrop -->
+  <div class="bg-gradient" aria-hidden="true"></div>
 
-  <!-- Epic Particles Container -->
-  <div id="epic-bg" class="epic-bg"></div>
+  <!-- About link -->
+  <a class="about-link interact-btn" href="developer.html">Tentang Pembuat</a>
 
-  <main class="layout">
-    <section class="left">
-      <div class="top-row">
-        <p class="brand">Haikatalyst</p>
-        <a class="dev-btn interact-btn" href="developer.html">Profil Pengembang</a>
+  <!-- Hero -->
+  <main class="hero">
+    <header class="hero-header">
+      <h1 class="hero-headline">Haikatalyst</h1>
+    </header>
+
+    <div class="hero-content">
+      <div class="hero-robot-col">
+        <div class="robot-card">
+          <spline-viewer url="https://prod.spline.design/DMpY0Y0s7JftE1LU/scene.splinecode"></spline-viewer>
+          <div class="spline-cover" aria-hidden="true"></div>
+        </div>
       </div>
 
-      <h1 class="headline">Education<br><span>Mini Games</span></h1>
-      <p class="about">
-        Haikatalyst adalah kumpulan mini game edukasi interaktif dari berbagai jenjang kelas di Sekolah Dasar.
-        Pemain bisa belajar sambil bermain, yang bisa diakses kapan saja dan di mana saja.
-      </p>
-
-      <div class="action-wrap">
-        <button class="play-btn interact-btn" data-href="jenjang.html">PLAY</button>
+      <div class="hero-play-col">
+        <p class="play-desc">
+          Yuk, hidupkan suasana belajar dengan cara yang lebih seru! Jelajahi ratusan mini game interaktif yang mengubah setiap materi menjadi pengalaman belajar yang menyenangkan, lebih interaktif, dan lebih mudah dipahami.
+        </p>
+        <button class="cta-btn interact-btn" data-href="jenjang.html">
+          <span class="cta-label">AYO MAIN</span>
+        </button>
       </div>
-    </section>
-
-    <section class="right" aria-hidden="true">
-      <div class="art">
-        <img src="assets/orang.png" alt="Ilustrasi karakter baru" class="hero-image">
-      </div>
-    </section>
+    </div>
   </main>
 
   <script>
-    // Epic Particles Generator (System Energy Aura)
     document.addEventListener('DOMContentLoaded', () => {
-      const bg = document.getElementById('epic-bg');
-      const particleCount = window.innerWidth < 768 ? 20 : 45;
+      const btn = document.querySelector('.cta-btn');
+      const aboutLink = document.querySelector('.about-link');
 
-      for (let i = 0; i < particleCount; i++) {
-        let p = document.createElement('div');
-        p.className = 'epic-particle';
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.animationDuration = (Math.random() * 8 + 4) + 's';
-        p.style.animationDelay = (Math.random() * 5) + 's';
-        p.style.opacity = Math.random() * 0.7 + 0.3;
-        let size = Math.random() * 5 + 2;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        bg.appendChild(p);
+      const handleAboutClick = (e) => {
+        const href = e.currentTarget.getAttribute('href');
+        if (window.SFX) window.SFX.click();
+        e.preventDefault();
+        setTimeout(() => { window.location.href = href; }, 300);
+      };
+
+      const handleCtaClick = (e) => {
+        const href = e.currentTarget.getAttribute('data-href');
+        if (window.SFX) window.SFX.click();
+        setTimeout(() => { window.location.href = href; }, 300);
+      };
+
+      if (btn) {
+        btn.addEventListener('click', handleCtaClick);
+        btn.addEventListener('mouseenter', () => { if (window.SFX) window.SFX.hover(); });
+      }
+
+      if (aboutLink) {
+        aboutLink.addEventListener('click', handleAboutClick);
+        aboutLink.addEventListener('mouseenter', () => { if (window.SFX) window.SFX.hover(); });
       }
     });
   </script>
-
   <script src="js/sfx.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       let audioStarted = false;
-
-      // Start BGM on any first interaction
       const startAudio = () => {
         if (!audioStarted && window.SFX) {
           window.SFX.bgmStart();
@@ -537,26 +362,6 @@
         }
       };
       document.addEventListener("pointerdown", startAudio);
-
-      // Add SFX logic to interact buttons
-      const interactBtns = document.querySelectorAll('.interact-btn');
-      
-      interactBtns.forEach(btn => {
-        btn.addEventListener('mouseenter', () => {
-          if (window.SFX) window.SFX.hover();
-        });
-
-        btn.addEventListener('click', (e) => {
-          if (window.SFX) window.SFX.click();
-
-          if (btn.hasAttribute('data-href')) {
-            e.preventDefault();
-            setTimeout(() => {
-              window.location.href = btn.getAttribute('data-href');
-            }, 300);
-          }
-        });
-      });
     });
   </script>
 </body>

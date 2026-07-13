@@ -87,13 +87,13 @@ startMaterialBtn.addEventListener('click', () => {
 
   if (!selectedMaterial) {
     if (window.SFX) window.SFX.warn();
-    materialStatus.textContent = 'Materi belum dipilih.';
+    materialStatus.textContent = 'Kamu belum pilih materi, nih.';
     return;
   }
 
   if (!selectedMaterial.available) {
     if (window.SFX) window.SFX.warn();
-    materialStatus.textContent = 'Materi ini masih coming soon. Pilih materi lain ya.';
+    materialStatus.textContent = 'Materi ini masih dibuat. Pilih materi lainnya dulu, ya!';
     return;
   }
 

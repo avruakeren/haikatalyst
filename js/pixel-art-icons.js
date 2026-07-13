@@ -6,7 +6,7 @@
   const pixelIcons = {
     // ➕ PLUS (Addition)
     '➕': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-bounce pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-float pixel-outline-retro">
         <!-- Inner Sky-Blue Plus -->
         <path d="M6 3h4v10H6z" fill="var(--pixel-blue)" />
         <path d="M3 6h10v4H3z" fill="var(--pixel-blue)" />
@@ -20,7 +20,7 @@
 
     // ➖ MINUS (Subtraction)
     '➖': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-bounce pixel-outline-retro" style="animation-delay: 0.3s">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-float pixel-outline-retro" style="animation-delay: 0.3s">
         <!-- Inner Orange Bar -->
         <path d="M3 6h10v4H3z" fill="var(--pixel-orange)" />
         <!-- Highlight -->
@@ -42,7 +42,7 @@
 
     // ➗ DIVIDE (Division)
     '➗': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-wobble pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-tilt pixel-outline-retro">
         <!-- Inner Red Division -->
         <rect x="7" y="3" width="2" height="2" fill="var(--pixel-red)" />
         <rect x="3" y="7" width="10" height="2" fill="var(--pixel-red)" />
@@ -69,7 +69,7 @@
       <div class="pixel-coin-particle pixel-coin-p1"></div>
       <div class="pixel-coin-particle pixel-coin-p2"></div>
       <div class="pixel-coin-particle pixel-coin-p3"></div>
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-bounce pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-float pixel-outline-retro">
         <!-- Treasure Chest Base -->
         <path d="M2 7h12v7H2z" fill="#78350f" />
         <path d="M2 3h12v4H2z" fill="#b45309" />
@@ -103,7 +103,7 @@
     // 🏆 TROPHY (Normal length mode / Winner)
     '🏆': `
       <div class="pixel-glare-overlay"><div class="pixel-glare-effect"></div></div>
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-wobble pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-tilt pixel-outline-retro">
         <!-- Gold Trophy Cup -->
         <path d="M3 2h10v6H9v3h3v2H4v-2h3V8H3V2zm0 2H1v2h2V4zm10 0h2v2h-2V4z" fill="var(--pixel-gold)" />
         <!-- Pedestal / Base -->
@@ -115,7 +115,7 @@
 
     // 🚀 ROCKET (Mode Cepat)
     '🚀': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-wobble pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-tilt pixel-outline-retro">
         <!-- Thruster Fire -->
         <path class="pixel-thruster" d="M7 13h2v3H7z" fill="var(--pixel-orange)" />
         <path class="pixel-thruster" d="M8 14h1v1H8z" fill="var(--pixel-gold)" style="animation-delay: 0.1s" />
@@ -153,7 +153,7 @@
 
     // 🎉 CONFETTI / SUCCESS PARTY POPPER
     '🎉': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-bounce pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-float pixel-outline-retro">
         <!-- Retro Party Popper Cone -->
         <path d="M1 15l4-4 2 2-2 2-4-2z" fill="var(--pixel-orange)" />
         <!-- Inner Cone Shade -->
@@ -167,7 +167,7 @@
 
     // ⏰ TIMEOUT / CLOCK
     '⏰': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-wobble pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-tilt pixel-outline-retro">
         <!-- Red Clock Bell Tops -->
         <rect x="2" y="1" width="3" height="2" fill="var(--pixel-red)" />
         <rect x="11" y="1" width="3" height="2" fill="var(--pixel-red)" />
@@ -182,7 +182,7 @@
 
     // ✅ CHECK (Success)
     '✅': `
-      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-bounce pixel-outline-retro">
+      <svg viewBox="0 0 16 16" class="pixel-icon-svg pixel-anim-float pixel-outline-retro">
         <!-- Pixel Checkmark -->
         <path d="M13 3l1 1-7 9-4-4 1-2 3 3 6-7z" fill="var(--pixel-green)" />
         <path d="M13 3l1 1-7 9-1-1 6-7-1-1-5 6-2-2-1 1 3 3 7-9z" fill="var(--pixel-green-light)" />

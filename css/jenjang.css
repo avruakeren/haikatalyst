@@ -108,7 +108,7 @@ body {
   font-weight: 600;
   font-size: clamp(16px, 2vw, 20px);
   line-height: 1.6;
-  color: #e2d9ff;
+  color: #e4e8ff;
 }
 
 .card-strip {
@@ -127,7 +127,7 @@ body {
   min-height: 380px;
   padding: 0;
   transform: translateY(0);
-  transition: transform .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform .4s ease-out;
   position: relative;
   transform-style: preserve-3d;
 }
@@ -146,7 +146,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  transition: all .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all .4s ease-out;
   overflow: hidden;
   position: relative;
   z-index: 2;
@@ -277,7 +277,7 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
   color: #fff;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-  animation: modalPop .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: modalPop .3s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
 }
 
@@ -355,7 +355,7 @@ body {
 .reveal {
   opacity: 0;
   transform: translateY(30px);
-  animation: reveal .8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: reveal .8s ease-out forwards;
   animation-delay: var(--delay, 0ms);
 }
 
