@@ -5,409 +5,133 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haikatalyst — Education Mini Games</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
-    :root {
-      --ink: #101326;
-      --muted: #5f6682;
-      --paper: #f8f4ea;
-      --mist: #e8e3f6;
-      --violet: #7468ff;
-      --aqua: #4bd8ff;
-      --coral: #ff8b79;
-      --bezier: cubic-bezier(0.32, 0.72, 0, 1);
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html {
-      min-height: 100%;
-      background: #f3efff;
-    }
-
     body {
-      min-height: 100dvh;
+      min-height: 100vh;
       font-family: 'Nunito', sans-serif;
+      display: flex;
+      flex-direction: column;
       overflow-x: hidden;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 15% 18%, rgba(255, 139, 121, 0.42), transparent 28vw),
-        radial-gradient(circle at 82% 8%, rgba(75, 216, 255, 0.48), transparent 24vw),
-        radial-gradient(circle at 72% 78%, rgba(116, 104, 255, 0.38), transparent 30vw),
-        linear-gradient(135deg, #fbf7ec 0%, #ece9ff 48%, #dceffc 100%);
+      background: #D2D2E6;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0.05;
-      background-image:
-        linear-gradient(rgba(16, 19, 38, 0.72) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(16, 19, 38, 0.72) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(circle at center, black, transparent 76%);
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 4;
-      pointer-events: none;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
-    }
-
+    /* ==============================
+       MINIMAL BACKDROP (matches robot #D2D2E6)
+       ============================== */
     .bg-gradient {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      background:
-        linear-gradient(120deg, rgba(255,255,255,0.72), transparent 38%),
-        radial-gradient(circle at 50% 45%, rgba(255,255,255,0.36), transparent 22rem);
+      background: #D2D2E6;
     }
 
-    .orb {
-      position: fixed;
-      z-index: 1;
-      pointer-events: none;
-      border-radius: 999px;
-      filter: blur(2px);
-      opacity: 0.74;
-      animation: floatMass 10s var(--bezier) infinite alternate;
-    }
-
-    .orb-one {
-      width: 16rem;
-      height: 16rem;
-      left: -5rem;
-      bottom: 5rem;
-      background: rgba(255, 139, 121, 0.26);
-    }
-
-    .orb-two {
-      width: 20rem;
-      height: 20rem;
-      right: -7rem;
-      top: 8rem;
-      background: rgba(75, 216, 255, 0.24);
-      animation-delay: -3s;
-    }
-
-    #sparkle-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .top-island {
-      position: fixed;
-      top: 24px;
-      left: 50%;
-      z-index: 20;
-      transform: translateX(-50%);
-      width: min(calc(100% - 32px), 1040px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      padding: 8px 8px 8px 18px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.52);
-      border: 1px solid rgba(255, 255, 255, 0.74);
-      box-shadow: 0 24px 80px rgba(74, 77, 128, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(22px);
-      animation: revealDown 900ms var(--bezier) both;
-    }
-
-    .brand-mark {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--ink);
-      text-decoration: none;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .brand-sigil {
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      color: white;
-      background: linear-gradient(135deg, #16192d, #6b63ff 58%, #59dcff);
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.28), 0 12px 28px rgba(93, 99, 255, 0.28);
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 14px;
-    }
-
+    /* ==============================
+       ABOUT LINK (standalone)
+       ============================== */
     .about-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: #222742;
+      position: fixed;
+      top: 20px;
+      right: clamp(20px, 4vw, 40px);
+      z-index: 100;
+      font-size: 15px;
+      font-weight: 700;
+      color: oklch(0.40 0.02 260);
       text-decoration: none;
-      padding: 12px 16px 12px 18px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.46);
-      border: 1px solid rgba(255, 255, 255, 0.78);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      transition: transform 700ms var(--bezier), background 700ms var(--bezier), color 700ms var(--bezier);
-    }
-
-    .about-link::after {
-      content: '↗';
-      display: grid;
-      place-items: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      color: white;
-      background: #171a2f;
-      transition: transform 700ms var(--bezier);
+      padding: 10px 18px;
+      border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
     }
 
     .about-link:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.68);
+      background: oklch(0.000 0.000 0 / 0.06);
     }
 
-    .about-link:hover::after {
-      transform: translate(2px, -2px) scale(1.05);
-    }
-
+    /* ==============================
+       HERO
+       ============================== */
     .hero {
       position: relative;
       z-index: 10;
-      width: min(1180px, calc(100% - 40px));
-      min-height: 100dvh;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 132px 0 48px;
-      display: grid;
-      grid-template-columns: minmax(0, 0.96fr) minmax(360px, 1.04fr);
-      gap: clamp(28px, 5vw, 72px);
-      align-items: center;
+      padding: 80px 24px 60px;
     }
 
-    .hero-copy {
-      min-width: 0;
-      animation: revealUp 950ms var(--bezier) 120ms both;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      width: fit-content;
-      margin-bottom: 22px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      color: #505877;
-      background: rgba(255, 255, 255, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.78);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #55d9ff;
-      box-shadow: 0 0 0 6px rgba(85, 217, 255, 0.15);
+    .hero-header {
+      text-align: center;
+      max-width: 720px;
+      margin-bottom: clamp(32px, 6vh, 64px);
+      animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .hero-headline {
-      max-width: 760px;
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(56px, 9vw, 118px);
-      line-height: 0.88;
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      color: var(--ink);
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(40px, 6vw, 76px);
+      line-height: 1.05;
+      font-weight: 900;
+      color: oklch(0.18 0.02 260);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
       text-wrap: balance;
     }
 
-    .hero-headline .soft {
-      display: block;
-      color: rgba(16, 19, 38, 0.58);
-    }
-
-    .play-desc {
-      max-width: 590px;
-      margin-top: 28px;
-      color: var(--muted);
-      line-height: 1.85;
-      font-size: clamp(16px, 1.45vw, 20px);
-      font-weight: 600;
-      text-wrap: pretty;
-    }
-
-    .hero-actions {
+    .hero-content {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 34px;
+      justify-content: space-between;
+      gap: clamp(24px, 4vw, 64px);
+      width: 100%;
+      margin: auto 0;
     }
 
-    .cta-btn {
-      position: relative;
-      overflow: hidden;
-      display: inline-flex;
-      align-items: center;
+    .hero-robot-col {
+      flex: 1.4;
+      display: flex;
       justify-content: center;
-      gap: 16px;
-      border: none;
-      background: #111427;
-      color: white;
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
-      font-weight: 800;
-      padding: 10px 10px 10px 24px;
-      border-radius: 999px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      box-shadow: 0 22px 50px rgba(17, 20, 39, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.18);
-      transition: transform 700ms var(--bezier), box-shadow 700ms var(--bezier), background 700ms var(--bezier);
-    }
-
-    .cta-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(110deg, transparent 10%, rgba(255,255,255,0.22), transparent 42%);
-      transform: translateX(-120%) skewX(-18deg);
-      transition: transform 1000ms var(--bezier);
-    }
-
-    .cta-label,
-    .cta-icon {
-      position: relative;
-      z-index: 1;
-    }
-
-    .cta-icon {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      color: #121529;
-      background: linear-gradient(135deg, #ffffff, #ccf5ff);
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.9), 0 12px 24px rgba(75, 216, 255, 0.25);
-      transition: transform 700ms var(--bezier);
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 30px 70px rgba(17, 20, 39, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.24);
-    }
-
-    .cta-btn:hover::before {
-      transform: translateX(150%) skewX(-18deg);
-    }
-
-    .cta-btn:hover .cta-icon {
-      transform: translate(3px, -2px) scale(1.06);
-    }
-
-    .cta-btn:active {
-      transform: translateY(-1px) scale(0.98);
-    }
-
-    .trust-strip {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      color: #4f5876;
-      background: rgba(255, 255, 255, 0.38);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      font-size: 12px;
-      font-weight: 800;
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.74);
-    }
-
-    .trust-strip span {
-      color: #111427;
-    }
-
-    .hero-stage {
-      position: relative;
-      min-width: 0;
-      animation: revealUp 1050ms var(--bezier) 260ms both;
-    }
-
-    .stage-shell {
-      position: relative;
-      padding: 10px;
-      border-radius: 42px;
-      background: rgba(255, 255, 255, 0.34);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      box-shadow: 0 34px 100px rgba(74, 77, 128, 0.20), inset 0 1px 1px rgba(255,255,255,0.86);
-    }
-
-    .stage-core {
-      position: relative;
-      min-height: clamp(430px, 54vw, 650px);
-      border-radius: 32px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.88), transparent 24%),
-        linear-gradient(145deg, rgba(255,255,255,0.62), rgba(237, 243, 255, 0.42));
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.98), inset 0 -1px 1px rgba(78, 88, 140, 0.08);
-    }
-
-    .stage-core::before {
-      content: '';
-      position: absolute;
-      inset: 18px;
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,0.76);
-      pointer-events: none;
+      animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
     }
 
     .robot-card {
-      position: absolute;
-      inset: -8% -6% 4% -7%;
+      position: relative;
+      width: 100%;
+      max-width: 680px;
+      aspect-ratio: 1 / 1;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      overflow: hidden;
     }
 
     .robot-card spline-viewer {
       width: 100%;
       height: 100%;
       display: block;
-      transform: scale(1.05);
     }
 
+    /* Menutupi badge "Built with Spline" dengan warna background */
     .spline-cover {
       position: absolute;
       right: 0;
       bottom: 0;
-      width: 230px;
-      height: 66px;
-      background: #e8eef9;
+      width: 200px;
+      height: 56px;
+      background: #D2D2E6;
       pointer-events: none;
       z-index: 5;
     }
@@ -416,236 +140,149 @@
       display: none !important;
     }
 
-    .metric-card {
-      position: absolute;
-      z-index: 6;
-      padding: 8px;
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.76);
-      box-shadow: 0 22px 60px rgba(74, 77, 128, 0.17), inset 0 1px 1px rgba(255,255,255,0.92);
-      animation: drift 8s var(--bezier) infinite alternate;
-    }
-
-    .metric-inner {
+    .hero-play-col {
+      flex: 0.6;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.64);
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.92);
+      justify-content: center;
+      gap: 20px;
+      animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
     }
 
-    .metric-icon {
-      display: grid;
-      place-items: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #fff, #d8f7ff);
-      color: #1c2746;
-      font-size: 18px;
-    }
-
-    .metric-title {
-      display: block;
-      color: var(--ink);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .metric-sub {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 11px;
+    .play-desc {
+      max-width: 340px;
+      text-align: justify;
+      text-wrap: pretty;
+      color: oklch(0.40 0.02 260);
+      line-height: 1.6;
+      font-size: clamp(18px, 2.2vw, 24px);
       font-weight: 700;
     }
 
-    .metric-one {
-      left: -28px;
-      top: 54px;
-      transform: rotate(-2deg);
+    .cta-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      background: linear-gradient(135deg, oklch(0.80 0.11 240), oklch(0.62 0.15 245));
+      color: oklch(1.000 0.000 0);
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(18px, 2vw, 22px);
+      font-weight: 900;
+      padding: 16px 48px;
+      border-radius: 16px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: transform 0.2s;
+      box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.35);
+      animation: ctaGlow 2.6s ease-in-out infinite;
     }
 
-    .metric-two {
-      right: -22px;
-      bottom: 74px;
-      transform: rotate(2deg);
-      animation-delay: -2.5s;
+    .cta-btn .cta-label {
+      position: relative;
+      z-index: 1;
     }
 
-    .lesson-rail {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 16px;
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, oklch(1.000 0.000 0 / 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: ctaShine 3.2s ease-in-out infinite;
+      pointer-events: none;
     }
 
-    .lesson-pill {
-      padding: 14px 12px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.36);
-      border: 1px solid rgba(255, 255, 255, 0.68);
-      color: #343a59;
-      box-shadow: inset 0 1px 1px rgba(255,255,255,0.78);
-      font-size: 12px;
-      font-weight: 800;
-      text-align: center;
-      animation: revealUp 900ms var(--bezier) both;
+    @keyframes ctaGlow {
+      0%, 100% { box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.30); }
+      50% { box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 14px 40px oklch(0.62 0.15 245 / 0.60); }
     }
 
-    .lesson-pill:nth-child(2) { animation-delay: 140ms; }
-    .lesson-pill:nth-child(3) { animation-delay: 260ms; }
-
-    @keyframes revealUp {
-      from { opacity: 0; transform: translateY(44px) scale(0.98); filter: blur(10px); }
-      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    @keyframes ctaShine {
+      0% { left: -60%; }
+      55%, 100% { left: 130%; }
     }
 
-    @keyframes revealDown {
-      from { opacity: 0; transform: translate(-50%, -18px) scale(0.98); }
-      to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    .cta-btn:hover {
+      transform: translateY(-4px) scale(1.03);
     }
 
-    @keyframes floatMass {
-      from { transform: translate3d(0, 0, 0) scale(1); }
-      to { transform: translate3d(18px, -22px, 0) scale(1.06); }
+    .cta-btn:active {
+      transform: translateY(3px) scale(0.98);
+      transition-duration: 0.05s;
     }
 
-    @keyframes drift {
-      from { translate: 0 0; }
-      to { translate: 0 -10px; }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(24px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @media (max-width: 920px) {
+    /* ==============================
+       RESPONSIVE
+       ============================== */
+    @media (max-width: 860px) {
       .hero {
-        width: min(100% - 32px, 680px);
-        grid-template-columns: 1fr;
-        padding-top: 118px;
-        padding-bottom: 32px;
-        gap: 34px;
+        padding-top: 100px;
       }
 
-      .hero-headline,
-      .play-desc {
-        max-width: none;
+      .hero-content {
+        flex-direction: column;
+        gap: 32px;
       }
 
-      .stage-core {
-        min-height: 520px;
-      }
-
-      .metric-one {
-        left: 12px;
-        top: 24px;
-      }
-
-      .metric-two {
-        right: 12px;
-        bottom: 26px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        background:
-          radial-gradient(circle at 12% 12%, rgba(255, 139, 121, 0.34), transparent 16rem),
-          radial-gradient(circle at 92% 16%, rgba(75, 216, 255, 0.34), transparent 15rem),
-          linear-gradient(135deg, #fbf7ec 0%, #ece9ff 58%, #dceffc 100%);
-      }
-
-      .top-island {
-        top: 14px;
-        width: calc(100% - 20px);
-        padding-left: 12px;
-      }
-
-      .brand-mark span:last-child {
-        display: none;
-      }
-
-      .about-link {
-        padding: 10px 10px 10px 12px;
-        font-size: 10px;
-      }
-
-      .about-link::after {
-        width: 22px;
-        height: 22px;
-      }
-
-      .hero {
-        width: calc(100% - 24px);
-        padding-top: 98px;
-      }
-
-      .eyebrow {
-        margin-bottom: 18px;
-      }
-
-      .hero-headline {
-        font-size: clamp(48px, 17vw, 72px);
-      }
-
-      .play-desc {
-        margin-top: 22px;
-        line-height: 1.72;
-      }
-
-      .hero-actions,
-      .cta-btn,
-      .trust-strip {
+      .hero-robot-col,
+      .hero-play-col {
+        flex: none;
         width: 100%;
       }
 
-      .cta-btn,
-      .trust-strip {
-        justify-content: space-between;
-      }
-
-      .stage-shell {
-        padding: 7px;
-        border-radius: 32px;
-      }
-
-      .stage-core {
-        min-height: 410px;
-        border-radius: 25px;
-      }
-
       .robot-card {
-        inset: -6% -22% 2% -22%;
+        max-width: 360px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 90px 20px 40px;
       }
 
-      .metric-card {
-        position: relative;
-        left: auto;
-        right: auto;
-        top: auto;
-        bottom: auto;
-        transform: none;
-        margin: 10px 0 0;
-      }
-
-      .metric-one,
-      .metric-two {
-        animation: none;
-      }
-
-      .lesson-rail {
-        grid-template-columns: 1fr;
+      .cta-btn {
+        width: 100%;
+        padding: 14px 24px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 1ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 1ms !important;
+      .bg-gradient {
+        animation: none;
+      }
+
+      .hero-header,
+      .hero-robot-col,
+      .hero-play-col {
+        animation: none;
+        opacity: 1;
+      }
+
+      .cta-btn {
+        transition: none;
+        animation: none;
+      }
+
+      .cta-btn::after {
+        animation: none;
+      }
+
+      .cta-btn:hover {
+        transform: none;
       }
     }
   </style>
@@ -653,63 +290,35 @@
 </head>
 
 <body>
+  <!-- Minimal backdrop -->
   <div class="bg-gradient" aria-hidden="true"></div>
-  <div class="orb orb-one" aria-hidden="true"></div>
-  <div class="orb orb-two" aria-hidden="true"></div>
-  <canvas id="sparkle-canvas" aria-hidden="true"></canvas>
 
-  <nav class="top-island" aria-label="Navigasi utama">
-    <a class="brand-mark" href="index.html" aria-label="Haikatalyst beranda">
-      <span class="brand-sigil">H</span>
-      <span>Haikatalyst</span>
-    </a>
-    <a class="about-link interact-btn" href="developer.html">Tentang Pembuat</a>
-  </nav>
+  <!-- About link -->
+  <a class="about-link interact-btn" href="developer.html">Tentang Pembuat</a>
 
+  <!-- Hero -->
   <main class="hero">
-    <section class="hero-copy" aria-labelledby="hero-title">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Education Mini Games</div>
-      <h1 class="hero-headline" id="hero-title">Belajar terasa <span class="soft">seperti bermain.</span></h1>
-      <p class="play-desc">
-        Jelajahi mini game interaktif yang mengubah materi sekolah menjadi pengalaman belajar yang hidup, ringan dipahami, dan terasa seperti petualangan digital untuk siswa Indonesia.
-      </p>
+    <header class="hero-header">
+      <h1 class="hero-headline">Haikatalyst</h1>
+    </header>
 
-      <div class="hero-actions">
-        <button class="cta-btn interact-btn" data-href="jenjang.html">
-          <span class="cta-label">Ayo Main</span>
-          <span class="cta-icon" aria-hidden="true">↗</span>
-        </button>
-        <div class="trust-strip" aria-label="Fitur pembelajaran"><span>3+</span> level kelas siap dimainkan</div>
-      </div>
-    </section>
-
-    <section class="hero-stage" aria-label="Pratinjau dunia belajar Haikatalyst">
-      <div class="stage-shell">
-        <div class="stage-core">
-          <div class="robot-card">
-            <spline-viewer url="https://prod.spline.design/DMpY0Y0s7JftE1LU/scene.splinecode"></spline-viewer>
-            <div class="spline-cover" aria-hidden="true"></div>
-          </div>
-          <div class="metric-card metric-one" aria-hidden="true">
-            <div class="metric-inner">
-              <span class="metric-icon">✦</span>
-              <span><span class="metric-title">Interaktif</span><span class="metric-sub">Feedback langsung</span></span>
-            </div>
-          </div>
-          <div class="metric-card metric-two" aria-hidden="true">
-            <div class="metric-inner">
-              <span class="metric-icon">◇</span>
-              <span><span class="metric-title">Menyenangkan</span><span class="metric-sub">Belajar tanpa tegang</span></span>
-            </div>
-          </div>
+    <div class="hero-content">
+      <div class="hero-robot-col">
+        <div class="robot-card">
+          <spline-viewer url="https://prod.spline.design/DMpY0Y0s7JftE1LU/scene.splinecode"></spline-viewer>
+          <div class="spline-cover" aria-hidden="true"></div>
         </div>
       </div>
-      <div class="lesson-rail" aria-label="Kategori materi">
-        <div class="lesson-pill">Matematika</div>
-        <div class="lesson-pill">Bahasa Indonesia</div>
-        <div class="lesson-pill">Petualangan Kelas</div>
+
+      <div class="hero-play-col">
+        <p class="play-desc">
+          Yuk, hidupkan suasana belajar dengan cara yang lebih seru! Jelajahi ratusan mini game interaktif yang mengubah setiap materi menjadi pengalaman belajar yang menyenangkan, lebih interaktif, dan lebih mudah dipahami.
+        </p>
+        <button class="cta-btn interact-btn" data-href="jenjang.html">
+          <span class="cta-label">AYO MAIN</span>
+        </button>
       </div>
-    </section>
+    </div>
   </main>
 
   <script>
@@ -754,54 +363,6 @@
       };
       document.addEventListener("pointerdown", startAudio);
     });
-
-    const canvas = document.getElementById('sparkle-canvas');
-    const ctx = canvas.getContext('2d');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let particles = [];
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize, { passive: true });
-    resize();
-
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 1.8 + 0.6;
-        this.speedX = Math.random() * 0.34 - 0.17;
-        this.speedY = Math.random() * 0.34 - 0.17;
-        this.opacity = Math.random() * 0.34 + 0.08;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-      }
-      draw() {
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    if (!reduceMotion) {
-      for (let i = 0; i < 52; i++) particles.push(new Particle());
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
   </script>
 </body>
 
