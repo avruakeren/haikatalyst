@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haikatalyst — Education Mini Games</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap"
     rel="stylesheet">
   <style>
     * {
@@ -17,7 +17,7 @@
 
     body {
       min-height: 100vh;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Fredoka', sans-serif;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -81,12 +81,13 @@
     }
 
     .hero-headline {
-      font-family: 'Baloo 2', cursive;
+      font-family: 'Lilita One', cursive;
       font-size: clamp(40px, 6vw, 76px);
       line-height: 1.05;
-      font-weight: 900;
+      font-weight: 400;
       color: oklch(0.18 0.02 260);
-      letter-spacing: -0.02em;
+      letter-spacing: 0.005em;
+      text-shadow: 0 4px 0 oklch(1 0 0 / 0.38);
       text-transform: uppercase;
       text-wrap: balance;
     }
@@ -170,14 +171,14 @@
       border: none;
       background: linear-gradient(135deg, oklch(0.80 0.11 240), oklch(0.62 0.15 245));
       color: oklch(1.000 0.000 0);
-      font-family: 'Baloo 2', cursive;
+      font-family: 'Lilita One', cursive;
       font-size: clamp(18px, 2vw, 22px);
-      font-weight: 900;
+      font-weight: 400;
       padding: 16px 48px;
       border-radius: 16px;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       transition: transform 0.2s;
       box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.35);
       animation: ctaGlow 2.6s ease-in-out infinite;
