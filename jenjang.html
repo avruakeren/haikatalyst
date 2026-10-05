@@ -8,84 +8,89 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Nunito:wght@500;700;800;900&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="css/tv-shell.css">
   <link rel="stylesheet" href="css/jenjang.css">
   <link rel="stylesheet" href="css/pixel-art-icons.css">
   <script src="js/pixel-art-icons.js"></script>
 </head>
 
 <body>
-  <!-- Epic Background Elements -->
-  <div class="grid-overlay"></div>
-  <div id="epic-bg" class="epic-bg"></div>
+  <!-- Kanvas tetap 1920x1080 -->
+  <div id="tv-app" class="tv-app tv-center">
+    <!-- Epic Background Elements -->
+    <div class="grid-overlay"></div>
+    <div id="epic-bg" class="epic-bg"></div>
 
-  <main class="page">
-    <section class="hero-box reveal">
-      <h1>Pilih Kelas Kamu</h1>
-      <p>
-        Yuk, pilih kelas kamu dulu! Setelah itu, tinggal pilih materi yang mau dimainkan.
-      </p>
-    </section>
+    <main class="page">
+      <section class="hero-box reveal">
+        <h1>Pilih Kelas Kamu</h1>
+        <p>
+          Yuk, pilih kelas kamu dulu! Setelah itu, tinggal pilih materi yang mau dimainkan.
+        </p>
+      </section>
 
-    <section class="card-strip" aria-label="Pilihan jenjang kelas">
-      <button class="class-btn reveal" style="--delay: 0ms" data-grade="1">
-        <span class="class-btn-inner">
-          <span class="class-label">KELAS</span>
-          <span class="class-number">1</span>
-        </span>
-      </button>
-      <button class="class-btn reveal" style="--delay: 100ms" data-grade="2">
-        <span class="class-btn-inner">
-          <span class="class-label">KELAS</span>
-          <span class="class-number">2</span>
-        </span>
-      </button>
-      <button class="class-btn reveal" style="--delay: 200ms" data-grade="3">
-        <span class="class-btn-inner">
-          <span class="class-label">KELAS</span>
-          <span class="class-number">3</span>
-        </span>
-      </button>
-      <button class="class-btn reveal" style="--delay: 300ms" data-grade="4">
-        <span class="class-btn-inner">
-          <span class="class-label">KELAS</span>
-          <span class="class-number">4</span>
-        </span>
-      </button>
-      <button class="class-btn reveal" style="--delay: 400ms" data-grade="5">
-        <span class="class-btn-inner">
-          <span class="class-label">KELAS</span>
-          <span class="class-number">5</span>
-        </span>
-      </button>
-      <button class="class-btn reveal" style="--delay: 500ms" data-grade="6">
-        <span class="class-btn-inner">
-          <span class="class-label">KELAS</span>
-          <span class="class-number">6</span>
-        </span>
-      </button>
-    </section>
+      <section class="card-strip" aria-label="Pilihan jenjang kelas">
+        <button class="class-btn reveal" style="--delay: 0ms" data-grade="1">
+          <span class="class-btn-inner">
+            <span class="class-label">KELAS</span>
+            <span class="class-number">1</span>
+          </span>
+        </button>
+        <button class="class-btn reveal" style="--delay: 100ms" data-grade="2">
+          <span class="class-btn-inner">
+            <span class="class-label">KELAS</span>
+            <span class="class-number">2</span>
+          </span>
+        </button>
+        <button class="class-btn reveal" style="--delay: 200ms" data-grade="3">
+          <span class="class-btn-inner">
+            <span class="class-label">KELAS</span>
+            <span class="class-number">3</span>
+          </span>
+        </button>
+        <button class="class-btn reveal" style="--delay: 300ms" data-grade="4">
+          <span class="class-btn-inner">
+            <span class="class-label">KELAS</span>
+            <span class="class-number">4</span>
+          </span>
+        </button>
+        <button class="class-btn reveal" style="--delay: 400ms" data-grade="5">
+          <span class="class-btn-inner">
+            <span class="class-label">KELAS</span>
+            <span class="class-number">5</span>
+          </span>
+        </button>
+        <button class="class-btn reveal" style="--delay: 500ms" data-grade="6">
+          <span class="class-btn-inner">
+            <span class="class-label">KELAS</span>
+            <span class="class-number">6</span>
+          </span>
+        </button>
+      </section>
 
-    <div class="footer-row reveal" style="--delay: 600ms">
-      <p class="hint"></p>
-      <a class="back-link" href="index.html">← Kembali ke Beranda</a>
-    </div>
-  </main>
+      <div class="footer-row reveal" style="--delay: 600ms">
+        <p class="hint"></p>
+        <a class="back-link" href="index.html">← Kembali ke Beranda</a>
+      </div>
+    </main>
 
-  <div class="overlay" id="materialOverlay">
-    <div class="modal">
-      <h2 id="modalTitle">Pilih Materi</h2>
-      <p id="modalDescription">Pilih materi yang ingin kamu mainkan, yuk!</p>
+    <div class="overlay" id="materialOverlay">
+      <div class="modal">
+        <h2 id="modalTitle">Pilih Materi</h2>
+        <p id="modalDescription">Pilih materi yang ingin kamu mainkan, yuk!</p>
 
-      <select id="materialSelect"></select>
-      <div class="status" id="materialStatus"></div>
+        <select id="materialSelect"></select>
+        <div class="status" id="materialStatus"></div>
 
-      <div class="modal-actions">
-        <button id="startMaterialBtn" type="button">Mulai Main!</button>
-        <button id="closeModalBtn" type="button">Tutup</button>
+        <div class="modal-actions">
+          <button id="startMaterialBtn" type="button">Mulai Main!</button>
+          <button id="closeModalBtn" type="button">Tutup</button>
+        </div>
       </div>
     </div>
   </div>
 
+  <script src="js/tv-fit.js"></script>
   <script src="js/sfx.js"></script>
   <script src="js/jenjang.js"></script>
   <script>

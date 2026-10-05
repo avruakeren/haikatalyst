@@ -387,3 +387,121 @@ body {
   .class-label { font-size: 24px; }
   .class-number { font-size: 80px; }
 }
+
+/* ============================================================
+   TV FIXED 1920x1080 — override untuk smart TV (kanvas shell)
+   ============================================================ */
+.tv-app .epic-bg {
+  width: 100%;
+  height: 100%;
+}
+
+.tv-app .page {
+  width: min(1720px, 100%);
+  padding: 56px 48px 60px;
+}
+
+.tv-app .hero-box {
+  width: min(1240px, 100%);
+  margin: 0 auto 56px;
+  border-radius: 44px;
+  padding: 54px 48px;
+}
+
+.tv-app .hero-box h1 {
+  font-size: clamp(96px, 5vw, 150px);
+}
+
+.tv-app .hero-box p {
+  max-width: 1100px;
+  margin-top: 22px;
+  font-size: clamp(36px, 2.4vw, 48px);
+  line-height: 1.55;
+}
+
+.tv-app .card-strip {
+  grid-template-columns: repeat(6, minmax(180px, 1fr));
+  gap: 30px;
+}
+
+.tv-app .class-btn {
+  min-height: 560px;
+  border-radius: 60px 20px 60px 20px;
+}
+
+.tv-app .class-btn-inner {
+  border-radius: 60px 20px 60px 20px;
+  gap: 28px;
+}
+
+.tv-app .class-btn-inner::before {
+  inset: 18px;
+  border-radius: 46px 14px 46px 14px;
+}
+
+.tv-app .class-btn::after {
+  border-radius: 64px 24px 64px 24px;
+}
+
+.tv-app .class-btn:hover,
+.tv-app .class-btn:focus-visible {
+  transform: translateY(-24px) scale(1.05);
+}
+
+.tv-app .class-label {
+  font-size: clamp(32px, 2.2vw, 44px);
+  letter-spacing: 0.2em;
+}
+
+.tv-app .class-number {
+  font-size: clamp(170px, 9.5vw, 240px);
+}
+
+.tv-app .footer-row {
+  margin-top: 60px;
+}
+
+.tv-app .back-link {
+  font-size: 36px;
+  padding: 22px 44px;
+}
+
+.tv-app .overlay {
+  padding: 32px;
+}
+
+.tv-app .modal {
+  width: min(860px, 100%);
+  border-radius: 44px;
+  padding: 48px;
+}
+
+.tv-app .modal h2 {
+  font-size: clamp(48px, 4vw, 64px);
+}
+
+.tv-app .modal p {
+  font-size: 30px;
+  margin-bottom: 28px;
+}
+
+.tv-app #materialSelect {
+  border-radius: 24px;
+  padding: 24px;
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+
+.tv-app .status {
+  font-size: 26px;
+}
+
+.tv-app .modal-actions {
+  gap: 22px;
+}
+
+.tv-app .modal-actions button {
+  border-radius: 24px;
+  padding: 26px;
+  font-size: 32px;
+}

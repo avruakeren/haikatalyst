@@ -453,22 +453,46 @@ h1 {
   position: sticky;
   top: 18px;
   align-self: start;
-  max-height: calc(100vh - 36px);
-  overflow-y: auto;
-  padding-right: 4px;
+  max-height: none;
+  overflow-y: visible;
 }
 
 .stat-card {
   padding: 16px;
 }
 
+.spline-wrap {
+  position: relative;
+}
+
 .spline-inline {
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 300px;
   border-radius: 14px;
   overflow: hidden;
   display: block;
+  touch-action: none;
+  margin-top: 20px;
+}
+
+spline-viewer::part(logo) {
+  display: none !important;
+}
+
+.spline-viewer::part(canvas) {
+  object-fit: contain;
+}
+
+.spline-cover {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--surface);
+  pointer-events: none;
+  z-index: 5;
 }
 
 .stat-title {
@@ -1346,4 +1370,901 @@ select:focus {
     animation-duration: 0.01ms !important;
     transition-duration: 0.1ms !important;
   }
+}
+
+/* Setup Guide specific styling */
+#setupGuidePopup .popup-card {
+  width: min(96vw, 800px);
+}
+#setupGuidePopup .tutorial-list {
+  font-size: clamp(26px, 4vw, 38px);
+}
+
+/* ============================================================
+   TV FIXED 1920x1080 — override untuk smart TV (kanvas shell)
+   ============================================================ */
+
+/* ── LAYOUT ── */
+.tv-app .game-layout {
+  max-width: none;
+  grid-template-columns: 1fr 470px;
+  gap: 24px;
+  height: 100%;
+  padding: 16px;
+}
+
+/* ── PANEL HEADER ── */
+.tv-app .panel-header {
+  margin-bottom: 12px;
+}
+
+.tv-app .eyebrow {
+  font-size: 18px;
+}
+
+.tv-app h1 {
+  font-size: 46px;
+}
+
+.tv-app .leader-wrap {
+  font-size: 18px;
+  padding: 12px 20px;
+}
+
+.tv-app .leader-wrap strong {
+  font-size: 26px;
+}
+
+/* ── BOARD ── */
+.tv-app #board {
+  width: 800px;
+  margin: 0 auto;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 26px;
+}
+
+.tv-app .block {
+  border-radius: 16px;
+  font-size: 26px;
+}
+
+.tv-app .block:nth-child(5n+1) { border-top-width: 5px; }
+.tv-app .block:nth-child(5n+2) { border-top-width: 5px; }
+.tv-app .block:nth-child(5n+3) { border-top-width: 5px; }
+.tv-app .block:nth-child(5n+4) { border-top-width: 5px; }
+.tv-app .block:nth-child(5n+0) { border-top-width: 5px; }
+
+.tv-app .hazard-tag {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.tv-app .pawn {
+  width: 24px;
+  height: 24px;
+  border-width: 3.5px;
+}
+
+/* ── PROGRESS ── */
+.tv-app .progress-wrap {
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+.tv-app .progress-track {
+  margin-top: 8px;
+  height: 16px;
+}
+
+/* ── CONTROL PANEL ── */
+.tv-app .control-panel {
+  gap: 16px;
+}
+
+.tv-app .stat-card {
+  padding: 22px;
+}
+
+.tv-app .spline-inline {
+  height: 330px;
+  margin-top: 16px;
+}
+
+.tv-app .spline-cover {
+  height: 60px;
+}
+
+.tv-app .stat-title {
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.tv-app #info {
+  font-size: 30px;
+  margin-bottom: 16px;
+}
+
+.tv-app .dice-wrap {
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.tv-app #dice {
+  font-size: 110px;
+  min-width: 64px;
+}
+
+.tv-app #lastRoll {
+  font-size: 22px;
+}
+
+/* ── BUTTONS ── */
+.tv-app .btn {
+  border-radius: 18px;
+  padding: 18px 26px;
+  font-size: 24px;
+}
+
+.tv-app #rollBtn {
+  font-size: 30px;
+  padding: 20px 28px;
+}
+
+.tv-app .action-grid {
+  gap: 12px;
+}
+
+/* ── LOG LIST ── */
+.tv-app #logList {
+  max-height: 220px;
+  font-size: 20px;
+  line-height: 1.65;
+}
+
+/* ── POPUP / OVERLAY ── */
+.tv-app .overlay {
+  padding: 32px;
+}
+
+.tv-app .popup-card {
+  width: min(94vw, 840px);
+  border-radius: 34px;
+  padding: 44px 48px 40px;
+}
+
+.tv-app .popup-card h2 {
+  font-size: 44px;
+}
+
+.tv-app .popup-card h3 {
+  font-size: 40px;
+}
+
+.tv-app .subtext {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* ── START CARD ── */
+.tv-app .start-card {
+  width: min(96vw, 1180px);
+}
+
+.tv-app .start-header {
+  gap: 24px;
+  padding: 32px 44px 28px;
+}
+
+.tv-app .start-header h2 {
+  font-size: 40px;
+}
+
+.tv-app .start-header .subtext {
+  font-size: 24px;
+}
+
+.tv-app .start-badge {
+  font-size: 84px;
+}
+
+.tv-app .setup-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.tv-app .setup-col {
+  padding: 28px 34px;
+  gap: 20px;
+}
+
+.tv-app .setup-section-card {
+  border-radius: 22px;
+  padding: 20px 24px;
+  gap: 14px;
+}
+
+.tv-app .section-label {
+  font-size: 18px;
+  gap: 8px;
+}
+
+.tv-app .section-label svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tv-app .setup-actions {
+  gap: 16px;
+  padding: 24px 34px;
+}
+
+/* ── FORM INPUTS ── */
+.tv-app input,
+.tv-app select {
+  border-radius: 18px;
+  padding: 18px 22px;
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+
+/* ── PLAYER SELECT ── */
+.tv-app .player-select {
+  margin-bottom: 16px;
+}
+
+.tv-app .player-select-trigger {
+  border-radius: 18px;
+  padding: 18px 22px;
+  font-size: 24px;
+}
+
+.tv-app .player-option {
+  border-radius: 14px;
+  font-size: 24px;
+}
+
+/* ── FREQUENCY BAR ── */
+.tv-app .freq-bar {
+  border-radius: 18px;
+  gap: 6px;
+}
+
+.tv-app .freq-btn {
+  font-size: 22px;
+  padding: 12px 8px;
+}
+
+/* ── MODE / LENGTH OPTIONS ── */
+.tv-app .mode-options.mode-cards {
+  gap: 12px;
+}
+
+.tv-app .mode-option,
+.tv-app .length-option {
+  border-radius: 20px;
+  padding: 20px 22px;
+  font-size: 22px;
+}
+
+.tv-app .mode-icon {
+  font-size: 44px;
+  margin-bottom: 10px;
+}
+
+.tv-app .mode-option small,
+.tv-app .length-option small {
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+/* ── TOGGLE ROW ── */
+.tv-app .toggle-row {
+  gap: 20px;
+  padding: 18px 22px;
+  border-radius: 20px;
+}
+
+.tv-app .toggle-row span {
+  font-size: 24px;
+}
+
+.tv-app .toggle-row small {
+  font-size: 18px;
+}
+
+.tv-app .toggle-row input[type="checkbox"] {
+  width: 66px;
+  height: 38px;
+}
+
+.tv-app .toggle-row input[type="checkbox"]::before {
+  width: 30px;
+  height: 30px;
+  top: 2px;
+  left: 2px;
+}
+
+.tv-app .toggle-row input[type="checkbox"]:checked::before {
+  transform: translateX(28px);
+}
+
+/* ── TUTORIAL / LIST ── */
+.tv-app .tutorial-list {
+  font-size: 34px;
+  line-height: 1.8;
+}
+
+.tv-app #setupGuidePopup .popup-card {
+  width: min(96vw, 1100px);
+}
+
+.tv-app #setupGuidePopup .tutorial-list {
+  font-size: 40px;
+}
+
+.tv-app .btn-row {
+  gap: 16px;
+}
+
+/* ── CAPAIAN ── */
+.tv-app .capaian-card {
+  width: min(96vw, 1520px);
+}
+
+/* ── WIN CARD ── */
+.tv-app .win-card h3 {
+  font-size: 46px;
+}
+
+/* ── PARTICLE (ikut skala kanvas) ── */
+.tv-app .particle {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── BOTTOM DECORATION (pendek agar muat 1080) ── */
+.tv-app .bottom-decoration {
+  height: 96px;
+  margin-top: -36px;
+  border-radius: 26px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODE-SPECIFIC LAYOUT — Petualangan Papan vs Ronde Kilat
+   ════════════════════════════════════════════════════════════ */
+
+/* Sembunyikan bagian yang bukan milik mode */
+body[data-mode="sprint"] .board-only { display: none; }
+body[data-mode="board"] .sprint-only { display: none; }
+body[data-mode="sprint"] #game { display: none; }
+
+/* ── STEPPER JUMLAH PEMAIN ── */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--surface2);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.stepper-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: none;
+  background: var(--cta);
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease, opacity .14s ease;
+  flex-shrink: 0;
+}
+
+.stepper-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--cta-shadow);
+}
+
+.stepper-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.stepper-value {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text);
+  min-width: 44px;
+  text-align: center;
+}
+
+.names-btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ── MODAL NAMA PEMAIN ── */
+.names-card {
+  width: min(96vw, 620px);
+}
+
+.names-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 46vh;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-num {
+  width: 34px;
+  flex-shrink: 0;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: right;
+}
+
+.name-input {
+  margin: 0;
+}
+
+.sprint-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+/* ── TURN BANNER (board + sprint) ── */
+.turn-banner {
+  margin: 0 0 12px;
+  padding: 14px 22px;
+  border-radius: 16px;
+  border: 2px solid var(--line);
+  border-left: 8px solid var(--pc, var(--primary));
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 4px 14px var(--shadow);
+}
+
+/* ── LEGEND DAFTAR PEMAIN ── */
+.legend-wrap {
+  margin-top: 14px;
+}
+
+.legend-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--surface2);
+  border: 2px solid var(--line);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.legend-chip.active {
+  border-color: var(--pc);
+  box-shadow: 0 0 0 2px var(--pc);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pc);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── PAWN NUMBER + CURRENT TURN ── */
+.pawn-num {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  line-height: 1;
+  font-size: inherit;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.pawn.current-turn {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--primary), 0 2px 10px rgba(0, 0, 0, .3);
+  z-index: 6;
+}
+
+/* ── SPRINT VIEW ── */
+.sprint-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+}
+
+.sprint-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sprint-header h1 {
+  margin: 4px 0 0;
+}
+
+.sprint-counter {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--surface2);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+.sprint-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.sprint-stage {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sprint-start {
+  font-size: 22px;
+  padding: 22px 40px;
+}
+
+.sprint-board-panel {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sprint-board-title {
+  margin: 0 0 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.sprint-board {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 12px;
+}
+
+.score-row + .score-row {
+  margin-top: 6px;
+}
+
+.score-rank {
+  width: 34px;
+  flex-shrink: 0;
+  text-align: center;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.score-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
+}
+
+.score-name {
+  flex: 1;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-pts {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--primary);
+}
+
+.score-row.current {
+  background: var(--select-bg);
+  border: 2px solid var(--primary);
+}
+
+.score-row.top .score-rank {
+  color: var(--cta);
+}
+
+/* ── QUIZ INLINE DI RONDE KILAT ── */
+.sprint-stage .qoverlay-inline {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.sprint-stage .qoverlay-inline .qbox {
+  max-height: 100%;
+}
+
+/* ── PODIUM DI POPUP MENANG ── */
+.podium-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.podium-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--surface2);
+  border: 2px solid var(--line);
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.podium-rank {
+  font-size: 20px;
+  width: 34px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.podium-name {
+  flex: 1;
+  color: var(--text);
+}
+
+/* ════════════════════════════════════════════════════════════
+   TV FIXED 1920x1080 — mode-specific overrides
+   ════════════════════════════════════════════════════════════ */
+
+.tv-app .stepper {
+  padding: 12px 16px;
+  border-radius: 20px;
+}
+
+.tv-app .stepper-btn {
+  width: 84px;
+  height: 84px;
+  border-radius: 18px;
+  font-size: 44px;
+}
+
+.tv-app .stepper-value {
+  font-size: 44px;
+}
+
+.tv-app .names-btn {
+  font-size: 22px;
+}
+
+.tv-app .names-card {
+  width: min(96vw, 900px);
+}
+
+.tv-app .name-row {
+  gap: 14px;
+}
+
+.tv-app .name-num {
+  width: 44px;
+  font-size: 22px;
+}
+
+.tv-app .name-input {
+  font-size: 24px;
+}
+
+.tv-app .sprint-note {
+  font-size: 18px;
+}
+
+.tv-app .turn-banner {
+  font-size: 30px;
+  padding: 18px 28px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  border-left-width: 10px;
+}
+
+.tv-app .legend-wrap {
+  margin-top: 16px;
+}
+
+.tv-app .legend-title {
+  font-size: 18px;
+}
+
+.tv-app .legend-list {
+  gap: 8px;
+}
+
+.tv-app .legend-chip {
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 17px;
+  border-radius: 999px;
+}
+
+.tv-app .legend-dot {
+  width: 16px;
+  height: 16px;
+}
+
+.tv-app .sprint-view {
+  gap: 20px;
+}
+
+.tv-app .sprint-header h1 {
+  font-size: 46px;
+}
+
+.tv-app .sprint-counter {
+  font-size: 30px;
+  padding: 14px 26px;
+}
+
+.tv-app .sprint-grid {
+  grid-template-columns: 1fr 560px;
+  gap: 24px;
+}
+
+.tv-app .sprint-stage {
+  min-height: 620px;
+}
+
+.tv-app .sprint-board-panel {
+  border-radius: 26px;
+  padding: 22px;
+}
+
+.tv-app .sprint-board-title {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.tv-app .score-row {
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+}
+
+.tv-app .score-rank {
+  width: 52px;
+  font-size: 26px;
+}
+
+.tv-app .score-dot {
+  width: 22px;
+  height: 22px;
+}
+
+.tv-app .score-name {
+  font-size: 24px;
+}
+
+.tv-app .score-pts {
+  font-size: 26px;
+}
+
+.tv-app .sprint-stage .qoverlay-inline {
+  padding: 20px;
+}
+
+.tv-app .sprint-stage .qbox {
+  max-width: 940px;
+  padding: 40px 44px;
+}
+
+.tv-app .sprint-stage .qsoal {
+  font-size: 30px;
+}
+
+.tv-app .sprint-stage .qchoice,
+.tv-app .sprint-stage .qnt-chip,
+.tv-app .sprint-stage .qtimb-btn,
+.tv-app .sprint-stage .quang-chip {
+  font-size: 24px;
+  padding: 20px 24px;
+}
+
+.tv-app .sprint-stage .qfeedback {
+  font-size: 26px;
+}
+
+.tv-app .podium-list li {
+  padding: 16px 20px;
+  font-size: 24px;
+  gap: 14px;
+}
+
+.tv-app .podium-rank {
+  font-size: 28px;
+  width: 52px;
 }

@@ -176,3 +176,105 @@ body {
   .stats { grid-template-columns: 1fr; }
   .word-chip { font-size: 14px; }
 }
+
+/* ============================================================
+   TV FIXED 1920x1080 — override untuk smart TV (kanvas shell)
+   ============================================================ */
+.tv-app .container {
+  width: min(1200px, 100%);
+  margin: auto;
+  gap: 22px;
+}
+
+.tv-app .card {
+  border-radius: 26px;
+  padding: 26px;
+}
+
+.tv-app .title h1 {
+  font-size: clamp(56px, 4vw, 80px);
+}
+
+.tv-app .title p {
+  font-size: 30px;
+  line-height: 1.6;
+}
+
+.tv-app .stats {
+  gap: 16px;
+}
+
+.tv-app .stat {
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.tv-app .stat small { font-size: 22px; margin-bottom: 6px; }
+.tv-app .stat strong { font-size: 40px; }
+
+.tv-app #patternTarget {
+  font-size: clamp(44px, 3.4vw, 60px);
+  margin-bottom: 12px;
+}
+
+.tv-app .hint { font-size: 26px; }
+
+.tv-app .drop-zone {
+  margin-top: 18px;
+  min-height: 140px;
+  border-radius: 22px;
+  padding: 20px;
+  gap: 12px;
+}
+
+.tv-app .drop-zone.empty::before {
+  content: 'Letakkan kata di sini sesuai urutan pola, ya!';
+  font-size: 30px;
+}
+
+.tv-app .word-bank {
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.tv-app .word-chip {
+  border-radius: 999px;
+  padding: 22px 32px;
+  font-size: 32px;
+}
+
+.tv-app .actions {
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.tv-app .btn {
+  border-radius: 18px;
+  padding: 22px 32px;
+  font-size: 28px;
+}
+
+.tv-app #feedback {
+  margin-top: 18px;
+  font-size: 28px;
+}
+
+.tv-app .row { gap: 16px; }
+.tv-app .link { font-size: 28px; }
+
+.tv-app .overlay {
+  padding: 28px;
+}
+
+.tv-app .popup-card {
+  width: min(720px, 100%);
+  border-radius: 26px;
+  padding: 40px;
+}
+
+.tv-app .popup-card h3 { font-size: 44px; }
+.tv-app .popup-card p { font-size: 28px; }
+
+.tv-app .popup-actions {
+  gap: 14px;
+}

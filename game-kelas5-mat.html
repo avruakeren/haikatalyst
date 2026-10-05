@@ -10,10 +10,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Comic+Neue:wght@300;400;700&family=Fredoka:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/game-kelas5-mat.css">
   <link rel="stylesheet" href="css/pixel-art-icons.css">
+  <link rel="stylesheet" href="css/tv-shell.css">
   <script src="js/pixel-art-icons.js"></script>
   <script type="module" src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"></script>
 </head>
 <body>
+  <!-- Kanvas tetap 1920x1080 -->
+  <div id="tv-app" class="tv-app tv-col">
   <div class="ambient" aria-hidden="true">
     <span class="orb"></span>
     <span class="orb"></span>
@@ -27,10 +30,10 @@
       <div class="start-header">
         <div>
           <p class="eyebrow">MathQuest</p>
-          <h2>Permainan Papan Matematika</h2>
-          <p class="subtext">Sebelum main, yuk atur dulu peraturan mainnya!</p>
+          <h2 id="startTitle">Permainan Papan Matematika</h2>
+          <p class="subtext" id="startSubtext">Sebelum main, yuk atur dulu peraturan mainnya!</p>
         </div>
-        <div class="start-badge">🎲</div>
+        <div class="start-badge" id="startBadge">🎲</div>
       </div>
 
       <!-- ── 2-col settings grid ── -->
@@ -43,22 +46,15 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
               Jumlah Pemain
             </p>
-            <div id="playerSelect" class="player-select" data-value="2">
-              <button id="playerSelectTrigger" class="player-select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="playerSelectLabel">
-                <span id="playerSelectLabel">2 Pemain</span>
-                <span class="player-select-arrow" aria-hidden="true">▾</span>
-              </button>
-              <ul id="playerSelectMenu" class="player-select-menu hidden" role="listbox" aria-labelledby="playerSelectLabel">
-                <li><button type="button" class="player-option selected" data-value="2" role="option" aria-selected="true">2 Pemain</button></li>
-                <li><button type="button" class="player-option" data-value="3" role="option" aria-selected="false">3 Pemain</button></li>
-                <li><button type="button" class="player-option" data-value="4" role="option" aria-selected="false">4 Pemain</button></li>
-                <li><button type="button" class="player-option" data-value="5" role="option" aria-selected="false">5 Pemain</button></li>
-                <li><button type="button" class="player-option" data-value="6" role="option" aria-selected="false">6 Pemain</button></li>
-                <li><button type="button" class="player-option" data-value="7" role="option" aria-selected="false">7 Pemain</button></li>
-              </ul>
+            <div id="playerStepper" class="stepper" data-value="2">
+              <button id="stepperMinus" class="stepper-btn" type="button" aria-label="Kurangi pemain">−</button>
+              <span id="stepperValue" class="stepper-value">2</span>
+              <button id="stepperPlus" class="stepper-btn" type="button" aria-label="Tambah pemain">+</button>
             </div>
+            <button id="openNamesBtn" class="btn secondary names-btn" type="button">✏️ Isi Nama Pemain</button>
           </div>
 
+          <div class="board-only">
           <div class="setup-section-card toggle-section">
             <label class="toggle-row" for="autoQuestionToggle">
               <span>
@@ -78,11 +74,52 @@
                </div>
             </div>
           </div>
+          </div>
+
+          <div class="setup-section-card board-only">
+            <p class="section-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              Kecepatan Soal
+            </p>
+            <div class="freq-bar" id="timerBarBoard">
+              <button type="button" class="freq-btn" data-value="60">Santai<small>60 detik</small></button>
+              <button type="button" class="freq-btn selected" data-value="40">Cepat<small>40 detik</small></button>
+              <button type="button" class="freq-btn" data-value="20">Kilat<small>20 detik</small></button>
+            </div>
+          </div>
         </div>
 
         <!-- RIGHT: mode cards -->
         <div class="setup-col setup-col-right">
-          <div class="setup-section-card" role="group" aria-label="Pilih mode board">
+          <div class="sprint-only">
+            <div class="setup-section-card" role="group" aria-label="Atur ronde kilat">
+              <p class="section-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Jumlah Ronde
+              </p>
+              <div class="freq-bar" id="roundsBar">
+                <button type="button" class="freq-btn" data-value="1">1×</button>
+                <button type="button" class="freq-btn" data-value="2">2×</button>
+                <button type="button" class="freq-btn" data-value="3">3×</button>
+                <button type="button" class="freq-btn selected" data-value="auto">Otomatis</button>
+              </div>
+            </div>
+            <div class="setup-section-card" role="group" aria-label="Atur waktu jawab">
+              <p class="section-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                Waktu Jawab
+              </p>
+              <div class="freq-bar" id="timerBarSprint">
+                <button type="button" class="freq-btn" data-value="15">15 detik</button>
+                <button type="button" class="freq-btn selected" data-value="20">20 detik</button>
+                <button type="button" class="freq-btn" data-value="30">30 detik</button>
+              </div>
+            </div>
+            <p class="sprint-note">⚡ Setiap anak menjawab soal bergiliran di layar sentuh, sesuai jumlah ronde yang dipilih. Benar = +2, salah/kehabisan waktu = 0.</p>
+          </div>
+
+          <div class="board-only">
+            <div class="setup-section-card" role="group" aria-label="Pilih mode board">
             <p class="section-label">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
               Mode Papan
@@ -113,8 +150,14 @@
                 <span class="mode-icon">🚀</span>
                 <span class="mode-text">Mode Cepat<small>Target 50 blok</small></span>
               </button>
+              <button type="button" class="length-option" data-length="30" aria-pressed="false">
+                <span class="mode-icon">⚡</span>
+                <span class="mode-text">Kilat<small>Target 30 blok</small></span>
+              </button>
             </div>
           </div>
+          </div>
+
         </div>
 
       </div><!-- /setup-grid -->
@@ -125,6 +168,19 @@
         <button id="openSetupGuide" class="btn secondary" type="button">Cara Bermain</button>
         <button id="openCapaian" class="btn secondary" type="button">Tujuan Belajar</button>
         <button id="startBtn" class="btn primary start-btn" type="button">Mulai Main</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="namesPopup" class="overlay hidden">
+    <div class="popup-card names-card">
+      <h3>✏️ Nama Pemain</h3>
+      <p class="subtext">Ketik nama singkat tiap pemain (boleh kosong, otomatis jadi "Siswa N").</p>
+      <div id="namesList" class="names-list"></div>
+      <div class="btn-row">
+        <button id="namesAutoBtn" class="btn secondary" type="button">Isi Otomatis</button>
+        <button id="namesSaveBtn" class="btn primary" type="button">Simpan</button>
+        <button id="namesCloseBtn" class="btn secondary" type="button">Batal</button>
       </div>
     </div>
   </div>
@@ -143,23 +199,15 @@
     <div class="popup-card">
       <h3>📖 Instruksi Bermain</h3>
       <ol class="tutorial-list" id="setupGuideList" start="1">
-        <li class="guide-step">Guru membagi siswa menjadi beberapa kelompok terlebih dahulu.</li>
-        <li class="guide-step hidden">Setiap kelompok mengirim satu perwakilan untuk bermain.</li>
-        <li class="guide-step hidden">Pilih jumlah pemain sesuai jumlah perwakilan kelompok, lalu pilih mode permainan.</li>
-        <li class="guide-step hidden">Aktifkan <strong>Auto Generate Soal</strong> agar blok soal muncul otomatis di papan.</li>
-        <li class="guide-step hidden">Tekan Mulai Game, lalu pemain bergantian melempar dadu.</li>
-        <li class="guide-step hidden">Jika mendarat di blok soal, akan muncul tantangan:
-<br><strong>Pilihan ganda:</strong> pilih jawaban yang benar dari 4 pilihan.
-<br><strong>Tebak Angka:</strong> baca petunjuk satu per satu, lalu tebak bilangan yang dimaksud.
-<br><strong>Susun Nilai Tempat:</strong> dengar nama bilangan, susun digitnya ke kolom yang tepat.
-<br><strong>Timbangan Bilangan:</strong> pilih angka yang membuat timbangan seimbang.
-<br><strong>Kembalian Uang:</strong> pilih pecahan uang yang pas untuk kembalian.</li>
-        <li class="guide-step hidden">Jika jawaban benar, maka pemain akan maju secara otomatis 2 langkah. Namun, jika jawaban salah, pemain akan mundur 1 langkah.</li>
-        <li class="guide-step hidden">Jika mode Gangguan Acak aktif, hindari blok berwarna merah bertanda ⚠, jika menginjak blok tersebut maka pemain akan mundur!</li>
-        <li class="guide-step hidden">Guru juga dapat menambahkan blok instruksi khusus untuk memberikan petunjuk tambahan, dengan mengklik blok manapun.</li>
-        <li class="guide-step hidden">Pemain pertama yang mencapai blok terakhir sesuai mode menjadi pemenang.</li>
-        <li class="guide-step hidden">Catatan: Instruksi di atas juga bisa disampaikan secara lisan oleh guru kepada siswa sebelum bermain.
-        <br><br>Selamat bermain dan semoga menyenangkan!</li>
+        <li class="guide-step">Bentuk kelompok dan pilih satu perwakilan juara dari setiap tim untuk bermain.</li>
+        <li class="guide-step hidden">Tentukan tantangan dengan memilih jumlah pemain dan mode permainan yang diinginkan.</li>
+        <li class="guide-step hidden">Aktifkan <strong>Auto Generate Soal</strong> agar petualangan terasa lebih seru dan tak terduga!</li>
+        <li class="guide-step hidden">Tekan Mulai dan bersiaplah melangkah dengan lemparan dadu!</li>
+        <li class="guide-step hidden">Selesaikan tantangan seru di setiap blok soal yang kamu temui.</li>
+        <li class="guide-step hidden">Jawab dengan benar untuk melaju lebih cepat, namun tetap waspada jika jawabanmu salah.</li>
+        <li class="guide-step hidden">Hindari blok gangguan jika mode aktif—tunjukkan ketangkasan timmu untuk tetap di depan!</li>
+        <li class="guide-step hidden">Manfaatkan petunjuk dari Guru di blok khusus jika kamu menemui kesulitan.</li>
+        <li class="guide-step hidden">Jadilah yang tercepat mencapai garis finis dan menangkan petualangannya!</li>
       </ol>
       <br>
       <div class="btn-row" id="setupGuideControls">
@@ -175,7 +223,7 @@
       <div class="panel-header">
         <div>
           <p class="eyebrow">MathQuest</p>
-          <h1>Arena Permainan</h1>
+          <h1 id="arenaTitle">Arena Permainan</h1>
         </div>
         <div class="leader-wrap">
           <span>Pemimpin permainan saat ini:</span>
@@ -183,7 +231,14 @@
         </div>
       </div>
 
+      <div id="turnBanner" class="turn-banner hidden"></div>
+
       <div id="board"></div>
+
+      <div id="legendWrap" class="legend-wrap hidden">
+        <span class="legend-title">👫 Daftar Pemain</span>
+        <div id="legendList" class="legend-list"></div>
+      </div>
 
       <div class="progress-wrap">
         <span>Perkembangan Permainan</span>
@@ -218,9 +273,34 @@
         <ul id="logList"></ul>
       </div>
 
-      <spline-viewer class="spline-inline" url="https://prod.spline.design/XH8q1UYJsXlh7N3L/scene.splinecode"></spline-viewer>
+      <div class="spline-wrap">
+        <spline-viewer class="spline-inline" url="https://prod.spline.design/XH8q1UYJsXlh7N3L/scene.splinecode" enable-zoom="false" enable-pan="false" enable-orbit="false"></spline-viewer>
+        <div class="spline-cover" aria-hidden="true"></div>
+      </div>
     </aside>
   </main>
+
+  <div id="sprintView" class="sprint-view hidden">
+    <div class="sprint-header">
+      <div>
+        <p class="eyebrow">MathQuest</p>
+        <h1>Ronde Kilat</h1>
+      </div>
+      <div id="sprintCounter" class="sprint-counter">Ronde 1/1</div>
+    </div>
+
+    <div id="sprintTurnBanner" class="turn-banner hidden"></div>
+
+    <div class="sprint-grid">
+      <section id="sprintStage" class="sprint-stage">
+        <button id="sprintStartBtn" class="btn primary sprint-start" type="button">🏁 Mulai Ronde Kilat</button>
+      </section>
+      <aside class="sprint-board-panel">
+        <p class="sprint-board-title">🏆 Papan Skor</p>
+        <ol id="sprintBoard" class="sprint-board"></ol>
+      </aside>
+    </div>
+  </div>
 
   <div id="instructionPopup" class="overlay hidden">
     <div class="popup-card">
@@ -277,6 +357,7 @@
   <div id="winPopup" class="overlay hidden">
     <div class="popup-card win-card">
       <h3 id="winText">Pemenang</h3>
+      <ol id="winPodium" class="podium-list"></ol>
       <p>Permainan selesai! Mau main lagi?</p>
       <div class="btn-row">
         <button id="restartBtn" class="btn primary">Main Lagi</button>
@@ -285,6 +366,9 @@
     </div>
   </div>
 
+  </div>
+
+  <script src="js/tv-fit.js"></script>
   <script src="js/sfx.js"></script>
   <script src="js/game-kelas5-mat.js"></script>
 </body>

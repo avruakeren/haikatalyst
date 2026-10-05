@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haikatalyst — Education Mini Games</title>
+  <title>Haikatalyst â€” Education Mini Games</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="css/tv-shell.css">
   <style>
     * {
       box-sizing: border-box;
@@ -40,15 +41,15 @@
        ============================== */
     .about-link {
       position: fixed;
-      top: 20px;
-      right: clamp(20px, 4vw, 40px);
+      top: 34px;
+      right: 56px;
       z-index: 100;
-      font-size: 15px;
+      font-size: 30px;
       font-weight: 700;
       color: oklch(0.40 0.02 260);
       text-decoration: none;
-      padding: 10px 18px;
-      border-radius: 10px;
+      padding: 16px 28px;
+      border-radius: 14px;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -57,7 +58,7 @@
     }
 
     /* ==============================
-       HERO
+       HERO â€” kanvas 1920x1080
        ============================== */
     .hero {
       position: relative;
@@ -67,24 +68,24 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      min-height: 100vh;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 80px 24px 60px;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 110px 120px 80px;
     }
 
     .hero-header {
       text-align: center;
-      max-width: 720px;
-      margin-bottom: clamp(32px, 6vh, 64px);
+      max-width: 1400px;
+      margin-bottom: 70px;
       animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .hero-headline {
       display: inline-block;
       font-family: 'Lilita One', cursive;
-      font-size: clamp(40px, 6vw, 76px);
-      line-height: 1.05;
+      font-size: clamp(120px, 9vw, 190px);
+      line-height: 1.02;
       font-weight: 400;
       color: transparent;
       letter-spacing: 0.01em;
@@ -93,20 +94,30 @@
       background: linear-gradient(180deg, oklch(0.24 0.04 260) 0%, oklch(0.38 0.10 255) 100%);
       -webkit-background-clip: text;
       background-clip: text;
-      text-shadow: 0 3px 0 oklch(1 0 0 / 0.42), 0 10px 24px oklch(0.35 0.10 255 / 0.14);
+      text-shadow: 0 4px 0 oklch(1 0 0 / 0.42), 0 12px 30px oklch(0.35 0.10 255 / 0.14);
+    }
+
+    .hero-logo {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: min(900px, 80vw);
+      max-height: 190px;
+      margin: 0 auto;
+      filter: drop-shadow(0 12px 30px oklch(0.35 0.10 255 / 0.14));
     }
 
     .hero-content {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: clamp(24px, 4vw, 64px);
+      gap: clamp(40px, 5vw, 90px);
       width: 100%;
       margin: auto 0;
     }
 
     .hero-robot-col {
-      flex: 1.4;
+      flex: 1.25;
       display: flex;
       justify-content: center;
       animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
@@ -114,8 +125,8 @@
 
     .robot-card {
       position: relative;
-      width: 100%;
-      max-width: 680px;
+      width: min(620px, 100%);
+      max-height: 620px;
       aspect-ratio: 1 / 1;
       background: transparent;
       border: none;
@@ -123,9 +134,23 @@
       overflow: hidden;
     }
 
-    .robot-card spline-viewer {
-      width: 100%;
-      height: 100%;
+    /* Spline dirender di stage TETAP 900x900 (framing desain asli),
+       lalu di-scale-down mengikuti ukuran kartu. Framing spline-viewer
+       berubah-ubah mengikuti ukuran elemennya â€” kalau ukuran elemen
+       yang dikecilkan, robot jadi kepotong (zoom ke muka). */
+    .robot-scaler {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 900px;
+      height: 900px;
+      transform: translate(-50%, -50%) scale(var(--robot-scale, 1));
+      transform-origin: 50% 50%;
+    }
+
+    .robot-scaler spline-viewer {
+      width: 900px;
+      height: 900px;
       display: block;
     }
 
@@ -134,8 +159,8 @@
       position: absolute;
       right: 0;
       bottom: 0;
-      width: 200px;
-      height: 56px;
+      width: 300px;
+      height: 84px;
       background: #D2D2E6;
       pointer-events: none;
       z-index: 5;
@@ -146,22 +171,22 @@
     }
 
     .hero-play-col {
-      flex: 0.6;
+      flex: 0.75;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: 36px;
       animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
     }
 
     .play-desc {
-      max-width: 340px;
+      max-width: 600px;
       text-align: justify;
       text-wrap: pretty;
       color: oklch(0.40 0.02 260);
-      line-height: 1.6;
-      font-size: clamp(18px, 2.2vw, 24px);
+      line-height: 1.55;
+      font-size: clamp(32px, 2.6vw, 40px);
       font-weight: 700;
     }
 
@@ -171,20 +196,20 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 12px;
       border: none;
       background: linear-gradient(135deg, oklch(0.80 0.11 240), oklch(0.62 0.15 245));
       color: oklch(1.000 0.000 0);
       font-family: 'Lilita One', cursive;
-      font-size: clamp(18px, 2vw, 22px);
+      font-size: clamp(38px, 3vw, 52px);
       font-weight: 400;
-      padding: 16px 48px;
-      border-radius: 16px;
+      padding: 30px 88px;
+      border-radius: 26px;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       transition: transform 0.2s;
-      box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.35);
+      box-shadow: 0 10px 0 oklch(0.48 0.14 245), 0 12px 34px oklch(0.62 0.15 245 / 0.35);
       animation: ctaGlow 2.6s ease-in-out infinite;
     }
 
@@ -207,8 +232,8 @@
     }
 
     @keyframes ctaGlow {
-      0%, 100% { box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 8px 22px oklch(0.62 0.15 245 / 0.30); }
-      50% { box-shadow: 0 6px 0 oklch(0.48 0.14 245), 0 14px 40px oklch(0.62 0.15 245 / 0.60); }
+      0%, 100% { box-shadow: 0 10px 0 oklch(0.48 0.14 245), 0 12px 34px oklch(0.62 0.15 245 / 0.30); }
+      50% { box-shadow: 0 10px 0 oklch(0.48 0.14 245), 0 20px 52px oklch(0.62 0.15 245 / 0.60); }
     }
 
     @keyframes ctaShine {
@@ -217,11 +242,11 @@
     }
 
     .cta-btn:hover {
-      transform: translateY(-4px) scale(1.03);
+      transform: translateY(-6px) scale(1.03);
     }
 
     .cta-btn:active {
-      transform: translateY(3px) scale(0.98);
+      transform: translateY(4px) scale(0.98);
       transition-duration: 0.05s;
     }
 
@@ -231,45 +256,102 @@
     }
 
     /* ==============================
-       RESPONSIVE
+       MODE RESPONSIF (tv-fit.js membuka
+       kanvas TV di laptop/HP; TV tetap
+       pakai kanvas 1920x1080)
        ============================== */
-    @media (max-width: 860px) {
-      .hero {
-        padding-top: 100px;
-      }
+    body.responsive #tv-app {
+      height: auto;
+      min-height: 100vh;
+    }
 
+    body.responsive .hero {
+      height: auto;
+      width: 100%;
+      min-height: calc(100vh - 1px);
+      margin: 0;
+      padding: clamp(56px, 8vh, 110px) clamp(20px, 6vw, 120px) clamp(40px, 6vh, 80px);
+    }
+
+    body.responsive .hero-robot-col {
+      flex: 0.9;
+    }
+
+    body.responsive .hero-play-col {
+      flex: 1.1;
+      gap: clamp(20px, 4vh, 36px);
+    }
+
+    body.responsive .cta-btn {
+      font-size: clamp(30px, 2.6vw, 46px);
+      padding: clamp(20px, 3vh, 30px) clamp(48px, 6vw, 88px);
+    }
+
+    body.responsive .hero-header {
+      margin-bottom: clamp(24px, 4vh, 70px);
+    }
+
+    body.responsive .play-desc {
+      font-size: clamp(20px, 2vw, 30px);
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    body.responsive .hero-logo {
+      width: auto;
+      max-width: min(1000px, 88vw);
+      max-height: clamp(80px, 24vh, 300px);
+    }
+
+    body.responsive .robot-card {
+      width: min(900px, 100%, 40vh);
+      max-height: none;
+    }
+
+    @media (max-width: 860px) {
       .hero-content {
         flex-direction: column;
-        gap: 32px;
+        gap: 40px;
       }
 
-      .hero-robot-col,
-      .hero-play-col {
+      body.responsive .hero-robot-col,
+      body.responsive .hero-play-col {
         flex: none;
         width: 100%;
       }
 
-      .robot-card {
-        max-width: 360px;
+      body.responsive .play-desc {
+        font-size: clamp(20px, 5vw, 30px);
+        text-align: center;
       }
     }
 
     @media (max-width: 480px) {
-      .hero {
-        padding: 90px 20px 40px;
+      .about-link {
+        top: 14px;
+        right: 14px;
+        font-size: clamp(15px, 4vw, 18px);
+        padding: 8px 14px;
+      }
+
+      body.responsive .hero-logo {
+        max-width: 90vw;
       }
 
       .cta-btn {
-        width: 100%;
-        padding: 14px 24px;
+        font-size: clamp(24px, 7vw, 32px);
+        padding: clamp(16px, 4vw, 22px) clamp(36px, 10vw, 56px);
+        border-radius: 20px;
+      }
+
+      .spline-cover {
+        width: 40vw;
+        height: 11vw;
+        min-height: 34px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .bg-gradient {
-        animation: none;
-      }
-
       .hero-header,
       .hero-robot-col,
       .hero-play-col {
@@ -295,41 +377,59 @@
 </head>
 
 <body>
-  <!-- Minimal backdrop -->
-  <div class="bg-gradient" aria-hidden="true"></div>
+  <!-- Kanvas tetap 1920x1080 -->
+  <div id="tv-app" class="tv-app tv-col">
+    <!-- Minimal backdrop -->
+    <div class="bg-gradient" aria-hidden="true"></div>
 
-  <!-- About link -->
-  <a class="about-link interact-btn" href="developer.html">Tentang Pembuat</a>
+    <!-- About link -->
+    <a class="about-link interact-btn" href="developer.html">Tentang Pembuat</a>
 
-  <!-- Hero -->
-  <main class="hero">
-    <header class="hero-header">
-      <h1 class="hero-headline">Haikatalyst</h1>
-    </header>
+    <!-- Hero -->
+    <main class="hero">
+      <header class="hero-header">
+        <h1 class="hero-headline">
+          <img class="hero-logo" src="assets/logo-haikatalyst.png" alt="Haikatalyst">
+        </h1>
+      </header>
 
-    <div class="hero-content">
-      <div class="hero-robot-col">
-        <div class="robot-card">
-          <spline-viewer url="https://prod.spline.design/DMpY0Y0s7JftE1LU/scene.splinecode"></spline-viewer>
-          <div class="spline-cover" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-robot-col">
+          <div class="robot-card">
+            <div class="robot-scaler">
+              <spline-viewer url="https://prod.spline.design/DMpY0Y0s7JftE1LU/scene.splinecode"></spline-viewer>
+            </div>
+            <div class="spline-cover" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="hero-play-col">
+          <p class="play-desc">
+            Yuk, hidupkan suasana belajar dengan cara yang lebih seru! Jelajahi ratusan mini game interaktif yang mengubah setiap materi menjadi pengalaman belajar yang menyenangkan, lebih interaktif, dan lebih mudah dipahami.
+          </p>
+          <button class="cta-btn interact-btn" data-href="jenjang.html">
+            <span class="cta-label">AYO MAIN</span>
+          </button>
         </div>
       </div>
-
-      <div class="hero-play-col">
-        <p class="play-desc">
-          Yuk, hidupkan suasana belajar dengan cara yang lebih seru! Jelajahi ratusan mini game interaktif yang mengubah setiap materi menjadi pengalaman belajar yang menyenangkan, lebih interaktif, dan lebih mudah dipahami.
-        </p>
-        <button class="cta-btn interact-btn" data-href="jenjang.html">
-          <span class="cta-label">AYO MAIN</span>
-        </button>
-      </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.querySelector('.cta-btn');
       const aboutLink = document.querySelector('.about-link');
+
+      const robotCard = document.querySelector('.robot-card');
+      const fitRobot = () => {
+        if (!robotCard) return;
+        const k = Math.min(robotCard.clientWidth, robotCard.clientHeight) / 900;
+        document.documentElement.style.setProperty('--robot-scale', String(k));
+      };
+      fitRobot();
+      if (window.ResizeObserver && robotCard) new ResizeObserver(fitRobot).observe(robotCard);
+      window.addEventListener('resize', fitRobot);
+      window.addEventListener('load', fitRobot);
 
       const handleAboutClick = (e) => {
         const href = e.currentTarget.getAttribute('href');
@@ -355,6 +455,7 @@
       }
     });
   </script>
+  <script src="js/tv-fit.js"></script>
   <script src="js/sfx.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -369,6 +470,7 @@
       document.addEventListener("pointerdown", startAudio);
     });
   </script>
+
 </body>
 
 </html>

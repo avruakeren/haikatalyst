@@ -1,0 +1,60 @@
+/* ============================================================
+   HAIKATALYST — TV SHELL (Fixed 1920x1080 design canvas)
+   Layout halaman dibuat di kanvas tetap 1920x1080 lalu di-scale
+   otomatis oleh js/tv-fit.js agar tampil IDENTIK di smart TV
+   (TV Merah Putih: Hisense 75" 4K UHD 3840x2160, ratio 16:9)
+
+   CATATAN: .tv-center / .tv-col harus didefinisikan SEBELUM
+   .tv-app. Keduanya punya specificity sama (satu class) dengan
+   .tv-app; jika didefinisikan setelah, width/height 100%-nya
+   akan menimpa kanvas 1920x1080 sehingga layout pecah di layar
+   yang bukan 16:9 persis.
+   ============================================================ */
+
+body.tv-locked {
+  overflow: hidden;
+}
+
+/* Pusatkan isi shell secara vertikal & horizontal */
+.tv-center {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* Isi shell mengisi tinggi penuh (mode kolom) */
+.tv-col {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mode responsif: buka flex column jadi block. Di flex column, anak
+   bermargin auto (mis. .game-layout margin:0 auto) TIDAK di-stretch
+   melainkan shrink-to-fit ke max-content — papan jadi sempit
+   (±858px di layar 1366). Dengan block, margin auto bekerja normal:
+   isi melebar sampai max-width lalu ditengahkan. */
+body.responsive .tv-col {
+  display: block;
+}
+
+/* Mode TV: .game-layout bermargin auto, jadi di flex column ia nggak
+   di-stretch — lebarnya jadi max-content (1370 dari kanvas 1920).
+   Paksa selebar kanvas biar panel papan lega. */
+.tv-app .game-layout {
+  width: 100%;
+}
+
+.tv-app {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  overflow: hidden;
+  z-index: 1;
+}

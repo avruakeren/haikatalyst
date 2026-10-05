@@ -1,3 +1,7 @@
+const URL_MODE = new URLSearchParams(window.location.search).get('mode') || 'board';
+const SPRINT = URL_MODE === 'sprint';
+document.body.dataset.mode = SPRINT ? 'sprint' : 'board';
+
 const board = document.getElementById('board');
 const rollBtn = document.getElementById('rollBtn');
 const dice = document.getElementById('dice');
@@ -9,10 +13,6 @@ const logList = document.getElementById('logList');
 
 const startPopup = document.getElementById('startPopup');
 const startBtn = document.getElementById('startBtn');
-const playerSelect = document.getElementById('playerSelect');
-const playerSelectTrigger = document.getElementById('playerSelectTrigger');
-const playerSelectMenu = document.getElementById('playerSelectMenu');
-const playerSelectLabel = document.getElementById('playerSelectLabel');
 const modeOptions = [...document.querySelectorAll('.mode-option')];
 const lengthOptions = [...document.querySelectorAll('.length-option')];
 const autoQuestionToggle = document.getElementById('autoQuestionToggle');
@@ -37,16 +37,34 @@ const closeSetupGuide = document.getElementById('closeSetupGuide');
 const randomBoostBtn = document.getElementById('randomBoost');
 const winPopup = document.getElementById('winPopup');
 const winText = document.getElementById('winText');
+const winPodium = document.getElementById('winPodium');
 const restartBtn = document.getElementById('restartBtn');
+
+const turnBanner = document.getElementById('turnBanner');
+const sprintTurnBanner = document.getElementById('sprintTurnBanner');
+const sprintView = document.getElementById('sprintView');
+const sprintStage = document.getElementById('sprintStage');
+const sprintBoardEl = document.getElementById('sprintBoard');
+const sprintCounterEl = document.getElementById('sprintCounter');
 
 let pendingPlayer = null;
 let pendingMove = 0;
 
 let totalBlocks = 100;
-const colors = ['#ff5d73', '#ffd166', '#06d6a0', '#6ecbff', '#b694ff', '#4d3051', '#ff9f5f'];
+const COLOR_PALETTE = ['#ff5d73', '#ffd166', '#06d6a0', '#6ecbff', '#b694ff', '#4d3051', '#ff9f5f', '#3ddad7', '#f97316', '#a3e635', '#f472b6', '#94a3b8'];
+function getPlayerColor(index) {
+  return COLOR_PALETTE[index % COLOR_PALETTE.length];
+}
 let players = [];
 let currentPlayer = 0;
 let gameFinished = false;
+
+let playerCount = 2;
+let playerNames = [];
+let quizTimer = 40;
+let sprintTimer = 20;
+let sprintRoundsSetting = 'auto';
+const sprintState = { running: false, round: 1, rounds: 1, done: 0, totalQuestions: 0 };
 
 const blockInstructions = {};
 let activeBlock = null;
@@ -58,48 +76,115 @@ let autoGenerateQuestions = false;
 let autoQuestionBlocks = {};
 let questionFrequency = 0.12;
 
-function setupPlayerSelect() {
-  if (!playerSelect || !playerSelectTrigger || !playerSelectMenu || !playerSelectLabel) return;
+function setupPlayerStepper() {
+  const minus = document.getElementById('stepperMinus');
+  const plus = document.getElementById('stepperPlus');
+  const val = document.getElementById('stepperValue');
+  if (!minus || !plus || !val) return;
 
-  const options = [...playerSelectMenu.querySelectorAll('.player-option')];
-
-  const closeMenu = () => {
-    playerSelect.classList.remove('open');
-    playerSelectMenu.classList.add('hidden');
-    playerSelectTrigger.setAttribute('aria-expanded', 'false');
+  const render = () => {
+    val.textContent = playerCount;
+    minus.disabled = playerCount <= 1;
+    plus.disabled = playerCount >= 40;
+  };
+  const clampNames = () => {
+    if (playerNames.length > playerCount) playerNames = playerNames.slice(0, playerCount);
   };
 
-  const selectValue = (value) => {
-    const activeOption = options.find((option) => option.dataset.value === String(value));
-    if (!activeOption) return;
+  minus.addEventListener('click', () => {
+    if (window.SFX) window.SFX.click();
+    if (playerCount > 1) { playerCount--; clampNames(); render(); }
+  });
+  plus.addEventListener('click', () => {
+    if (window.SFX) window.SFX.click();
+    if (playerCount < 40) { playerCount++; clampNames(); render(); }
+  });
 
-    options.forEach((option) => {
-      const isSelected = option === activeOption;
-      option.classList.toggle('selected', isSelected);
-      option.setAttribute('aria-selected', String(isSelected));
+  render();
+}
+
+function wireFreqBar(bar, onChange) {
+  if (!bar) return;
+  const btns = [...bar.querySelectorAll('.freq-btn')];
+  const select = (btn) => {
+    btns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    onChange(btn.dataset.value);
+  };
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (window.SFX) window.SFX.click();
+      select(btn);
     });
+  });
+  const preselected = bar.querySelector('.freq-btn.selected');
+  if (preselected) select(preselected);
+}
 
-    playerSelect.dataset.value = activeOption.dataset.value;
-    playerSelectLabel.textContent = activeOption.textContent;
-    closeMenu();
+function setupGameBars() {
+  wireFreqBar(document.getElementById('timerBarBoard'), (v) => { quizTimer = Number(v); });
+  wireFreqBar(document.getElementById('timerBarSprint'), (v) => { sprintTimer = Number(v); });
+  wireFreqBar(document.getElementById('roundsBar'), (v) => { sprintRoundsSetting = v; });
+}
+
+// ── NAMA PEMAIN ────────────────────────────────────────────
+const namesPopup = document.getElementById('namesPopup');
+const namesList = document.getElementById('namesList');
+
+function buildNamesList() {
+  if (!namesList) return;
+  namesList.innerHTML = '';
+  for (let i = 0; i < playerCount; i++) {
+    const row = document.createElement('div');
+    row.className = 'name-row';
+    const num = document.createElement('span');
+    num.className = 'name-num';
+    num.textContent = String(i + 1).padStart(2, '0');
+    const input = document.createElement('input');
+    input.className = 'name-input';
+    input.maxLength = 14;
+    input.placeholder = `Siswa ${i + 1}`;
+    input.value = playerNames[i] || '';
+    row.appendChild(num);
+    row.appendChild(input);
+    namesList.appendChild(row);
+  }
+}
+
+function playerLabel(i) {
+  return (playerNames[i] && playerNames[i].trim()) || `Siswa ${i + 1}`;
+}
+
+function buildNames(count) {
+  return Array.from({ length: count }, (_, i) => playerLabel(i));
+}
+
+if (document.getElementById('openNamesBtn')) {
+  document.getElementById('openNamesBtn').onclick = () => {
+    if (window.SFX) window.SFX.info();
+    buildNamesList();
+    namesPopup.classList.remove('hidden');
   };
-
-  playerSelectTrigger.addEventListener('click', () => {
-    if (window.SFX) window.SFX.toggle();
-    const isOpen = playerSelect.classList.toggle('open');
-    playerSelectMenu.classList.toggle('hidden', !isOpen);
-    playerSelectTrigger.setAttribute('aria-expanded', String(isOpen));
-  });
-
-  options.forEach((option) => {
-    option.addEventListener('click', () => { if (window.SFX) window.SFX.soft(); selectValue(option.dataset.value); });
-  });
-
-  document.addEventListener('click', (event) => {
-    if (!playerSelect.contains(event.target)) {
-      closeMenu();
-    }
-  });
+}
+if (document.getElementById('namesCloseBtn')) {
+  document.getElementById('namesCloseBtn').onclick = () => {
+    if (window.SFX) window.SFX.soft();
+    namesPopup.classList.add('hidden');
+  };
+}
+if (document.getElementById('namesSaveBtn')) {
+  document.getElementById('namesSaveBtn').onclick = () => {
+    if (window.SFX) window.SFX.soft();
+    playerNames = [...namesList.querySelectorAll('.name-input')].map((inp) => inp.value.trim());
+    namesPopup.classList.add('hidden');
+  };
+}
+if (document.getElementById('namesAutoBtn')) {
+  document.getElementById('namesAutoBtn').onclick = () => {
+    if (window.SFX) window.SFX.click();
+    playerNames = [];
+    buildNamesList();
+  };
 }
 
 function setupAutoQuestionToggle() {
@@ -570,32 +655,34 @@ function generateAutoQuestion(forcedType) {
 
 // ── POPUP CONTROLLER ────────────────────────────────────────
 
-function showQuizPopup(quiz, player) {
-  const playerColor = colors[player.index];
-  document.getElementById('quizOverlay')?.remove();
+function showQuizPopup(quiz, player, opts = {}) {
+  const playerColor = getPlayerColor(player.index);
+  document.querySelectorAll('#quizOverlay').forEach((el) => el.remove());
 
   const overlay = document.createElement('div');
   overlay.id = 'quizOverlay';
-  overlay.className = 'qoverlay';
+  overlay.className = 'qoverlay' + (opts.inline ? ' qoverlay-inline' : '');
   overlay.style.setProperty('--pc', playerColor);
+  overlay.opts = opts;
+  const timerSeconds = opts.timerSeconds || 60;
 
   const box = document.createElement('div');
   box.className = 'qbox';
-  box.style.setProperty('--pc', playerColor);
 
   // Header
   const header = document.createElement('div');
   header.className = 'qheader';
+  const qrule = opts.qrule || '✅ Benar → maju +2 &nbsp;|&nbsp; ❌ Salah → mundur -1';
   header.innerHTML = `
     <span class="qemoji">${quiz.emoji}</span>
     <div style="flex:1;">
       <div class="qtipe">${quiz.judul} — ${player.label}</div>
-      <div class="qrule">✅ Benar → maju +2 &nbsp;|&nbsp; ❌ Salah → mundur -1</div>
+      <div class="qrule">${qrule}</div>
     </div>
-    <div class="qtimer">60s</div>`;
+    <div class="qtimer">${timerSeconds}s</div>`;
 
   const timerEl = header.querySelector('.qtimer');
-  let timeLeft = 60;
+  let timeLeft = timerSeconds;
   const timerInterval = setInterval(() => {
     timeLeft--;
     timerEl.textContent = `${timeLeft}s`;
@@ -632,29 +719,38 @@ function showQuizPopup(quiz, player) {
   }
 
   overlay.appendChild(box);
-  document.body.appendChild(overlay);
+  const host = (opts.inline && opts.container) ? opts.container : (document.getElementById('tv-app') || document.body);
+  host.appendChild(overlay);
 }
 
 function selesaiQuiz(benar, quiz, player, playerColor, overlay, isTimeOut = false) {
+  const opts = overlay.opts || {};
   if (overlay.timerInterval) clearInterval(overlay.timerInterval);
 
-  const move = benar ? 2 : -1;
+  let fbText;
+  if (opts.feedback) {
+    fbText = opts.feedback(benar, quiz, player, isTimeOut);
+  } else {
+    fbText = isTimeOut
+      ? `⏰ Waktu Habis! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`
+      : benar
+        ? `🎉 Benar! ${player.label} maju +2 langkah!`
+        : `😅 Salah! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`;
+  }
   const fb = document.createElement('div');
   fb.className = `qfeedback ${benar ? 'benar' : 'salah'}`;
-  
-  if (isTimeOut) {
-    fb.textContent = `⏰ Waktu Habis! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`;
-  } else {
-    fb.textContent = benar
-      ? `🎉 Benar! ${player.label} maju +2 langkah!`
-      : `😅 Salah! Jawaban: ${quiz.jawaban}. ${player.label} mundur -1.`;
-  }
+  fb.textContent = fbText;
   overlay.querySelector('.qbox').appendChild(fb);
 
-  addLog(`${player.label} ${isTimeOut ? 'WAKTU HABIS ⏰' : (benar ? 'BENAR ✅' : 'SALAH ❌')} (${quiz.judul}) → ${move>=0?'+':''}${move} langkah.`);
+  addLog(`${player.label} ${isTimeOut ? 'WAKTU HABIS ⏰' : (benar ? 'BENAR ✅' : 'SALAH ❌')} (${quiz.judul}).`);
 
   setTimeout(() => {
     overlay.remove();
+    if (opts.onResult) {
+      opts.onResult(benar, quiz, player, isTimeOut);
+      return;
+    }
+    const move = benar ? 2 : -1;
     player.position = Math.max(1, Math.min(totalBlocks, player.position + move));
     updatePawn(player);
     updateLeader();
@@ -1250,7 +1346,7 @@ if (closeCapaian && capaianPopup) {
   });
 }
 
-function initPlayers(count) {
+function initPlayers(count, names) {
   players = [];
   currentPlayer = 0;
   gameFinished = false;
@@ -1260,10 +1356,14 @@ function initPlayers(count) {
   for (let i = 0; i < count; i++) {
     const pawn = document.createElement('div');
     pawn.className = 'pawn';
-    pawn.style.background = colors[i];
+    pawn.style.background = getPlayerColor(i);
+    const num = document.createElement('span');
+    num.className = 'pawn-num';
+    num.textContent = i + 1;
+    pawn.appendChild(num);
     board.appendChild(pawn);
 
-    players.push({ index: i, position: 1, el: pawn, label: `Pemain ${i + 1}` });
+    players.push({ index: i, position: 1, el: pawn, label: (names && names[i]) || playerLabel(i), score: 0 });
     updatePawn(players[i]);
   }
 
@@ -1285,12 +1385,46 @@ function initPlayers(count) {
   }
 }
 
+function showTurnBanner(target, label, extra) {
+  if (!target) return;
+  const cur = getPlayerColor(players[currentPlayer].index);
+  target.textContent = `🎲 GILIRAN: ${label}` + (extra ? `  ·  ${extra}` : '');
+  target.classList.remove('hidden');
+  target.style.setProperty('--pc', cur);
+}
+
 function updateTurnInfo() {
   info.textContent = `Giliran ${players[currentPlayer].label}`;
+  const next = players[(currentPlayer + 1) % players.length].label;
+  showTurnBanner(turnBanner, players[currentPlayer].label, `Selanjutnya: ${next}`);
+  if (typeof buildLegend === 'function') buildLegend();
+}
+
+function buildLegend() {
+  if (SPRINT) return;
+  const list = document.getElementById('legendList');
+  const wrap = document.getElementById('legendWrap');
+  if (!list || !wrap) return;
+  wrap.classList.remove('hidden');
+  list.innerHTML = '';
+  players.forEach((p, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'legend-chip' + (i === currentPlayer ? ' active' : '');
+    chip.style.setProperty('--pc', getPlayerColor(i));
+    const dot = document.createElement('span');
+    dot.className = 'legend-dot';
+    const name = document.createElement('span');
+    name.className = 'legend-name';
+    name.textContent = `${i + 1}. ${p.label}`;
+    chip.appendChild(dot);
+    chip.appendChild(name);
+    list.appendChild(chip);
+  });
 }
 
 function updateLeader() {
-  const leader = [...players].sort((a, b) => b.position - a.position)[0];
+  const sorted = [...players].sort((a, b) => b.position - a.position);
+  const leader = sorted[0];
   leaderText.textContent = `${leader.label} (blok ${leader.position})`;
 }
 
@@ -1302,24 +1436,29 @@ function updateProgress() {
 
 function updatePawn(player) {
   const block = document.getElementById(`block-${player.position}`);
-  const rectBoard = board.getBoundingClientRect();
-  const rectBlock = block.getBoundingClientRect();
 
-  const ringRadius = 11;
-  const angle = (Math.PI * 2 * player.index) / players.length;
+  const n = players.length;
+  const ringRadius = Math.min(24, 5 + n * 0.6);
+  const angle = (Math.PI * 2 * player.index) / n;
   const offsetX = Math.cos(angle) * ringRadius;
   const offsetY = Math.sin(angle) * ringRadius;
 
-  player.el.style.left = `${rectBlock.left - rectBoard.left + rectBlock.width / 2 - 7 + offsetX}px`;
-  player.el.style.top = `${rectBlock.top - rectBoard.top + rectBlock.height / 2 - 7 + offsetY}px`;
+  // Pawn lebih kecil saat ramai biar tidak saling menutupi
+  const size = n > 20 ? 10 : n > 12 ? 12 : 15;
+  player.el.style.width = `${size}px`;
+  player.el.style.height = `${size}px`;
+  player.el.style.fontSize = `${Math.max(6, Math.round(size * 0.5))}px`;
+
+  // Pakai offsetLeft/offsetWidth (layout px) — kebal dari scale kanvas
+  // 1920x1080, jadi pawn selalu menempel di tengah blok.
+  player.el.style.left = `${block.offsetLeft + block.offsetWidth / 2 - size / 2 + offsetX}px`;
+  player.el.style.top = `${block.offsetTop + block.offsetHeight / 2 - size / 2 + offsetY}px`;
 }
 
 function burstAtBlock(position, color = '#ffffff') {
   const block = document.getElementById(`block-${position}`);
-  const rectBoard = board.getBoundingClientRect();
-  const rectBlock = block.getBoundingClientRect();
-  const centerX = rectBlock.left - rectBoard.left + rectBlock.width / 2;
-  const centerY = rectBlock.top - rectBoard.top + rectBlock.height / 2;
+  const centerX = block.offsetLeft + block.offsetWidth / 2;
+  const centerY = block.offsetTop + block.offsetHeight / 2;
 
   for (let i = 0; i < 12; i++) {
     const particle = document.createElement('span');
@@ -1354,7 +1493,7 @@ async function movePlayer(player, steps) {
   while (moved < steps && player.position < totalBlocks) {
     player.position++;
     updatePawn(player);
-    burstAtBlock(player.position, colors[player.index]);
+    burstAtBlock(player.position, getPlayerColor(player.index));
     moved++;
     await wait(170);
   }
@@ -1378,7 +1517,7 @@ popupOk.onclick = () => { if (window.SFX) window.SFX.soft();
     updateLeader();
     updateProgress();
 
-    burstAtBlock(pendingPlayer.position, colors[pendingPlayer.index]);
+    burstAtBlock(pendingPlayer.position, getPlayerColor(pendingPlayer.index));
     addLog(`${pendingPlayer.label} kena efek ${pendingMove >= 0 ? '+' : ''}${pendingMove}.`);
   }
 
@@ -1421,7 +1560,7 @@ function handleBlock(player) {
     player.el.classList.add('shake');
     setTimeout(() => player.el.classList.remove('shake'), 320);
     addLog(`${player.label} mendapat soal di blok ${player.position}!`);
-    showQuizPopup(autoData.quiz, player);
+    showQuizPopup(autoData.quiz, player, { timerSeconds: quizTimer });
     return;
   }
 
@@ -1439,7 +1578,7 @@ function handleBlock(player) {
       // Generate quiz sesuai tipe yang dipilih
       const customQuiz = generateAutoQuestion(type);
       addLog(`${player.label} mendapat tantangan ${type.toUpperCase()} di blok ${player.position}!`);
-      showQuizPopup(customQuiz, player);
+      showQuizPopup(customQuiz, player, { timerSeconds: quizTimer });
     }
   } else {
     addLog(`${player.label} berhenti di blok ${player.position}.`);
@@ -1481,13 +1620,165 @@ startBtn.onclick = () => {
     window.SFX.start();
     window.SFX.bgmStart();
   }
-  createBoard();
-  initPlayers(Number(playerSelect?.dataset.value || 2));
+  const count = playerCount;
+  const names = buildNames(count);
   startPopup.classList.add('hidden');
   setupGuidePopup?.classList.add('hidden');
   capaianPopup?.classList.add('hidden');
-  rollBtn.disabled = false;
+  namesPopup?.classList.add('hidden');
+
+  if (SPRINT) {
+    sprintStart(count, names);
+  } else {
+    createBoard();
+    initPlayers(count, names);
+    rollBtn.disabled = false;
+  }
 };
+
+// ════════════════════════════════════════════════════════════
+// MODE 2: RONDE KILAT (quiz round-robin, tanpa papan)
+// ════════════════════════════════════════════════════════════
+const SPRINT_MEDALS = ['🥇', '🥈', '🥉', '4.', '5.', '6.', '7.', '8.', '9.', '10.'];
+
+function effectiveRounds() {
+  if (sprintRoundsSetting === 'auto') {
+    const rounds = Math.floor(70 / playerCount);
+    return Math.min(3, Math.max(1, rounds));
+  }
+  return Math.min(3, Math.max(1, Number(sprintRoundsSetting) || 1));
+}
+
+function sprintStart(count, names) {
+  sprintView.classList.remove('hidden');
+  const startBtnEl = document.getElementById('sprintStartBtn');
+  if (startBtnEl) startBtnEl.classList.add('hidden');
+
+  players = [];
+  for (let i = 0; i < count; i++) {
+    players.push({ index: i, position: 0, el: null, label: names[i] || `Siswa ${i + 1}`, score: 0 });
+  }
+  currentPlayer = 0;
+  gameFinished = false;
+  sprintState.rounds = effectiveRounds();
+  sprintState.round = 1;
+  sprintState.done = 0;
+  sprintState.totalQuestions = players.length * sprintState.rounds;
+  sprintState.running = true;
+
+  sprintCounterEl.textContent = `Ronde ${sprintState.round}/${sprintState.rounds}`;
+  renderLeaderboard();
+  addLog(`Ronde Kilat dimulai — ${count} pemain, ${sprintState.rounds} ronde (${sprintState.totalQuestions} soal).`);
+  sprintNextQuestion();
+}
+
+function hideTurnBanner(target) {
+  if (target) target.classList.add('hidden');
+}
+
+function sprintNextQuestion() {
+  if (!sprintState.running) return;
+  if (sprintState.done >= sprintState.totalQuestions) {
+    sprintFinish();
+    return;
+  }
+  const p = players[currentPlayer];
+  const next = players[(currentPlayer + 1) % players.length];
+  if (sprintTurnBanner) {
+    sprintTurnBanner.textContent = `🎯 GILIRAN: ${p.label}  ·  Berikutnya: ${next.label}`;
+    sprintTurnBanner.style.setProperty('--pc', getPlayerColor(p.index));
+    sprintTurnBanner.classList.remove('hidden');
+  }
+  renderLeaderboard();
+
+  const quiz = generateAutoQuestion();
+  showQuizPopup(quiz, p, {
+    timerSeconds: sprintTimer,
+    inline: true,
+    container: sprintStage,
+    qrule: '✅ Benar → +2 &nbsp;|&nbsp; ❌ Salah / waktu habis → 0 (tetap semangat!)',
+    feedback(benar, q, pl, isTimeOut) {
+      if (isTimeOut) return `⏰ Waktu Habis! Jawaban: ${q.jawaban}. Skor ${pl.label}: 0 poin.`;
+      return benar
+        ? `🎉 Benar! ${pl.label} dapat +2 poin.`
+        : `😅 Salah! Jawaban: ${q.jawaban}. ${pl.label} belum dapat poin.`;
+    },
+    onResult(benar, q, pl) {
+      if (benar) pl.score += 2;
+      sprintState.done++;
+      addLog(`${pl.label} ${benar ? 'BENAR ✅' : 'LEWAT ❌'} (${q.judul}) → ${benar ? '+2' : '+0'} poin.`);
+      renderLeaderboard();
+      setTimeout(() => {
+        if (!sprintState.running) return;
+        currentPlayer = (currentPlayer + 1) % players.length;
+        if (currentPlayer === 0 && sprintState.done < sprintState.totalQuestions) {
+          sprintState.round++;
+          sprintCounterEl.textContent = `Ronde ${sprintState.round}/${sprintState.rounds}`;
+        }
+        sprintNextQuestion();
+      }, 900);
+    }
+  });
+}
+
+function renderLeaderboard() {
+  if (!sprintBoardEl) return;
+  sprintBoardEl.innerHTML = '';
+  const ranked = [...players].sort((a, b) => (b.score - a.score) || (a.index - b.index));
+  ranked.forEach((p, i) => {
+    const li = document.createElement('li');
+    li.className = 'score-row' + (p.index === currentPlayer && sprintState.running ? ' current' : '')
+      + (i === 0 ? ' top' : '');
+    const rank = SPRINT_MEDALS[i] || `${i + 1}.`;
+    const dot = document.createElement('span');
+    dot.className = 'score-dot';
+    dot.style.background = getPlayerColor(p.index);
+    const name = document.createElement('span');
+    name.className = 'score-name';
+    name.textContent = p.label;
+    const pts = document.createElement('span');
+    pts.className = 'score-pts';
+    pts.textContent = p.score;
+    li.appendChild(Object.assign(document.createElement('span'), { className: 'score-rank', textContent: rank }));
+    li.appendChild(dot);
+    li.appendChild(name);
+    li.appendChild(pts);
+    sprintBoardEl.appendChild(li);
+  });
+}
+
+function sprintFinish() {
+  sprintState.running = false;
+  gameFinished = true;
+  hideTurnBanner(sprintTurnBanner);
+  if (sprintCounterEl) sprintCounterEl.textContent = 'Selesai!';
+
+  const ranked = [...players].sort((a, b) => (b.score - a.score) || (a.index - b.index));
+  const winner = ranked[0];
+  winText.textContent = `🏆 ${winner.label} Juara!`;
+  if (winPodium) {
+    winPodium.innerHTML = '';
+    ranked.slice(0, 10).forEach((p, i) => {
+      const li = document.createElement('li');
+      const rank = SPRINT_MEDALS[i] || `${i + 1}.`;
+      const dot = document.createElement('span');
+      dot.className = 'score-dot';
+      dot.style.background = getPlayerColor(p.index);
+      const name = document.createElement('span');
+      name.className = 'podium-name';
+      name.textContent = p.label;
+      const pts = document.createElement('span');
+      pts.textContent = `${p.score} poin`;
+      li.appendChild(Object.assign(document.createElement('span'), { className: 'podium-rank', textContent: rank }));
+      li.appendChild(dot);
+      li.appendChild(name);
+      li.appendChild(pts);
+      winPodium.appendChild(li);
+    });
+  }
+  winPopup.classList.remove('hidden');
+  addLog(`${winner.label} memenangkan Ronde Kilat dengan ${winner.score} poin!`);
+}
 
 restartBtn.onclick = () => { if (window.SFX) window.SFX.soft(); window.location.reload(); };
 
@@ -1496,10 +1787,22 @@ window.addEventListener('resize', () => {
 });
 
 createBoard();
-setupPlayerSelect();
+setupPlayerStepper();
 setupModeSelect();
 setupLengthSelect();
 setupAutoQuestionToggle();
+setupGameBars();
+
+if (SPRINT) {
+  const st = document.getElementById('startTitle');
+  const ss = document.getElementById('startSubtext');
+  const sb = document.getElementById('startBadge');
+  const at = document.getElementById('arenaTitle');
+  if (st) st.textContent = 'Ronde Kilat Matematika';
+  if (ss) ss.textContent = 'Jawab soal secepat kilat! Setiap anak bergiliran mengetuk jawabannya di layar.';
+  if (sb) sb.textContent = '⚡';
+  if (at) at.textContent = 'Ronde Kilat';
+}
 
 // ── THEME TOGGLE ──────────────────────────────────────────
 const themeToggleBtn = document.getElementById('themeToggleBtn');

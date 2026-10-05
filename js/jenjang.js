@@ -16,7 +16,8 @@ const gradeMaterials = {
     { label: 'Bahasa Indonesia', available: false }
   ],
   5: [
-    { label: 'Matematika', href: 'game-kelas5-mat.html', available: true },
+    { label: 'Matematika - Petualangan Papan', href: 'game-kelas5-mat.html?mode=board', available: true },
+    { label: 'Matematika - Kuis Kilat', href: 'game-kelas5-mat.html?mode=sprint', available: true },
     { label: 'IPA', available: false }
   ],
   6: [
